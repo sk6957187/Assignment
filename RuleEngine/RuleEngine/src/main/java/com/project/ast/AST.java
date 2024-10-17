@@ -14,14 +14,34 @@ public class AST {
         operators.add("OR");
         operands.add(">");
         operands.add("<");
+        operands.add("=");
     }
+
+    public ArrayList<String> getOperators() {
+        return operators;
+    }
+
+    public ArrayList<String> getOperands() {
+        return operands;
+    }
+
     private Tree addNode(Tree root, Tree node) {
         if (root == null) {
             root = node;
-        } else if (root.getRight() == null) {
-            root.setRight(node);
         } else if (root.getLeft() == null) {
-            root.setLeft(node);
+            if (operators.contains(node.getType())) {
+                node.setLeft(root);
+                root = node;
+            } else {
+                root.setLeft(node);
+            }
+        } else if (root.getRight() == null ) {
+            if (operators.contains(node.getType())) {
+                node.setRight(root);
+                root = node;
+            } else {
+                root.setRight(node);
+            }
         }
         return root;
     }
@@ -32,18 +52,26 @@ public class AST {
         String key = null, value = null;
         Tree node = null;
         Tree root = null;
+        boolean keyFound = false;
+        boolean valueFound = false;
         for (String str : rules) {
-            if (operands.contains(str)) {
+            if (operators.contains(str)) {
                 node = new Tree();
+                node.setType(str);
                 root = this.addNode(root, node);
+            } else if (operands.contains(str)) {
+                node = new Tree();
                 node.setType(str);
                 node.setKey(key);
-            } else if (key == null){
+                root = this.addNode(root, node);
+            } else if (!keyFound){
                 key = str;
+                keyFound = true;
             } else {
                 value = str;
-                if (node != null) {
+                if (node != null && keyFound) {
                     node.setValue(value);
+                    keyFound = false;
                 }
             }
         }
