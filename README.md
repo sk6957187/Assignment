@@ -37,18 +37,23 @@ Stack.push(root)
 CurrentTree = root
 Iterator on posix
 (1) ( -->
+
 (2) ) -->
 (3) Operator (AND, OR) -->
+if currentTree-->type == null
+	currentTree-->type = str
+else
+	
+
+
 
 (4) Operand (<,>,=) -->
 currentTree-->type = str
 currentTree-->key = key
 
 (5) else -->
-Key
-Value
 if (key == null) {
-	key = age;
+	key = str;
 } else {
 	currentTree-->value = str
 	key = null
@@ -65,7 +70,7 @@ if (key == null) {
 }
 
 
-r = age > 30 AND age < 50
+r = (age > 30) AND (age < 50)
 
 (2) WeatherMonitoring
 
@@ -77,9 +82,13 @@ API_KEY is part of meta data in yml file
 Store data in to oracle sql
 
 Driver: oracle.jdbc.driver.OracleDriver
-DB url: jdbc:oracle:thin:@Sumit11:1521:xe
-Username: <>
-Password: <>
-
+DB url: jdbc:oracle:thin:@<db_name>:<db_port>:xe
+Username: <db_username>
+Password: <db_password>
 Show data and store inside table.
-2. TestWeatherData --> 
+
+2. TestWeatherData --> Fetched data in table and calculate average tempurature, find minmun tempurature in hole day and find maximum tempurute of hole day.
+
+3. TestsetAlert() --> Fetched last two data(temperature) in table with respect to city and compare both the data is above in 35° then genrate Alert message.
+
+4. TemperatureConversion() --> Fetched last data(temperature) of respect to city and convert cellieus to kelvin and cellieus to fahrenheit.
