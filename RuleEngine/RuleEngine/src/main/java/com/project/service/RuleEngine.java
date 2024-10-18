@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class RuleEngine {
@@ -28,22 +29,89 @@ public class RuleEngine {
     private int convertStringToNum(String num) {
         return Integer.parseInt(num);
     }
+    public ArrayList<String> tokenizeBinary(String expression) {
+        ArrayList<String> tokens = new ArrayList<>();
+        ArrayList<String> validTokens = new ArrayList<>();
+        validTokens.add("\\(");
+        validTokens.add("\\)");
+        validTokens.addAll(operators);
+        validTokens.addAll(operands);
+        if (expression == null) {
+            return tokens;
+        }
+        String[] temp;
+        int i;
+        String t;
+        for (i=0; i<validTokens.size(); i++) {
+            t = validTokens.get(i);
+            temp = expression.split(t, -1);
+            if (i == 0) {
+                t = "(";
+            } else if (i == 1) {
+                t = ")";
+            }
+            expression = String.join(","+t+",", temp);
+        }
+        temp = expression.split(",");
+        String str;
+        for (i=0; i<temp.length; i++) {
+            str = temp[i];
+            if (str != null) {
+                str = str.trim();
+                if (!str.isEmpty()) {
+                    tokens.add(str);
+                }
+
+            }
+        }
+        return tokens;
+    }
     public ArrayList<String> tokenizeRule(String ruleValue) {
+        return this.tokenizeBinary(ruleValue);
+        /*
         if (ruleValue == null) {
             return null;
         }
-        String[] ruleItems = ruleValue.split(" ");
-        ArrayList<String> ruleItems2 = new ArrayList<>();
-        for(String str: ruleItems) {
-            if (str == null) {
-                continue;
+        ArrayList<String> tokenizePattern = new ArrayList<>();
+        tokenizePattern.add("(");
+        tokenizePattern.add(")");
+        tokenizePattern.addAll(operators);
+        tokenizePattern.addAll(operands);
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add(ruleValue);
+        String[] strings1;
+        ArrayList<String> strs;
+        for (String pattren: tokenizePattern) {
+            for (String rule: strings) {
+                strings1 = rule.split(pattren);
+                strs = new ArrayList<>();
+                strs.addAll(Arrays.asList(strings1));
+
             }
-            if (str.isEmpty()) {
-                continue;
-            }
-            ruleItems2.add(str);
         }
-        return ruleItems2;
+        String[] lines = ruleValue.split("[()]");
+        ArrayList<String> linesTrim = new ArrayList<>();
+        for (String part : lines) {
+            String trimmedPart = part.trim();
+            if (!trimmedPart.isEmpty()) {
+                linesTrim.add(trimmedPart);
+            }
+        }
+        ArrayList<String> ruleItems2 = null;
+        ruleItems2 = new ArrayList<>();
+        for (String line : linesTrim) {
+            String[] ruleItems = line.split(" ");
+            for (String str : ruleItems) {
+                if (str == null) {
+                    continue;
+                }
+                if (str.isEmpty()) {
+                    continue;
+                }
+                ruleItems2.add(str);
+            }
+        }
+        return ruleItems2;*/
     }
     private boolean isConditionTrue(String operand, String configData, String userData) {
         int configNum = 0;
@@ -129,8 +197,8 @@ public class RuleEngine {
         }
         String arg1 = null, arg2 = null, result = null;
         String str;
-        for(int i=0; i<posix.size(); i++) {
-            str = posix.get(i);
+        for (String s : posix) {
+            str = s;
             if (operators.contains(str)) {
                 result = this.getNodeResult(arg1, arg2, str);
                 arg1 = result;
