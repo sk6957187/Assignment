@@ -1,0 +1,18 @@
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    port: 8080
+    type: http
+  rootPath: /*
+
+weatherApiConfig:
+  API_KEY = "3d66b4662f9e189700ece9721f3d1d85"
+  BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q="
+
+oracleSqlConfig:
+  driver: "oracle.jdbc.driver.OracleDriver"
+  url: "jdbc:oracle:thin:@Sumit11:1521:xe"
+  username: "System"
+  password: "tiger"

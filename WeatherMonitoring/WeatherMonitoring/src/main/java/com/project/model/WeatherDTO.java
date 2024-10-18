@@ -1,7 +1,5 @@
 package com.project.model;
 
-import java.sql.Timestamp;
-
 public class WeatherDTO {
     private double temp;
     private double feelsLike;

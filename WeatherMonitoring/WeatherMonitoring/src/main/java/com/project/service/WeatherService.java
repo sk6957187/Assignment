@@ -3,10 +3,7 @@ package com.project.service;
 
 import com.project.Repository.WeatherRepository;
 import com.project.model.WeatherDTO;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class WeatherService {
 

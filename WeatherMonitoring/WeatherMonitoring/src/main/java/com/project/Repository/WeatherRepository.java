@@ -2,16 +2,18 @@ package com.project.Repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.WeatherMonitoringApplication;
-import com.project.model.DailySummary;
 import com.project.model.WeatherDTO;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import javax.mail.*;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Properties;
 
 public class WeatherRepository {
     private static final Logger logger = LoggerFactory.getLogger(WeatherRepository.class);
@@ -21,6 +23,9 @@ public class WeatherRepository {
     private static final String DB_URL = "jdbc:oracle:thin:@Sumit11:1521:xe";
     private static final String USER = "system";
     private static final String PASS = "tiger";
+    private static final String host = "192.168.0.1";
+    private static final String recipient = "sk6957187@gmail.com";
+    private static final String sender = "sumitkumarmk32@gmail.com";
     private ArrayList<Double> temperatureHistory = new ArrayList<>();
 
     public WeatherDTO fetchWeather(String city) {
@@ -44,10 +49,8 @@ public class WeatherRepository {
             double feelsLikeKelvin = root.get("main").get("feels_like").asDouble();
             String condition = root.get("weather").get(0).get("main").asText();
             long timestamp = root.get("dt").asLong();
-
             double tempCelsius = tempKelvin - 273.15;
             double feelsLikeCelsius = feelsLikeKelvin - 273.15;
-
             WeatherDTO weatherDTO = new WeatherDTO(tempCelsius, feelsLikeCelsius, condition, timestamp);
             storeWeatherData(weatherDTO, city);
             return weatherDTO;
@@ -64,7 +67,6 @@ public class WeatherRepository {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String query = "INSERT INTO WeatherData (city, temp_celsius, feels_like_celsius, condition, Added_time)\n" +
                     "VALUES (?, ?, ?, ?, TO_TIMESTAMP('1970-01-01', 'YYYY-MM-DD') + NUMTODSINTERVAL(?, 'SECOND'))";
-//                    "INSERT INTO weatherData (city, temp_celsius, feels_like_celsius, condition, Added_date) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, city);
             stmt.setDouble(2, weatherDTO.getTemp());
@@ -88,7 +90,7 @@ public class WeatherRepository {
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                temp = (rs.getDouble("TEMP_CELSIUS")); // Use column name for clarity
+                temp = (rs.getDouble("TEMP_CELSIUS"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -106,8 +108,6 @@ public class WeatherRepository {
             String query = "SELECT AVG(TEMP_CELSIUS) AS avg_temp, MAX(TEMP_CELSIUS) AS max_temp, MIN(TEMP_CELSIUS) AS min_temp, CONDITION FROM weatherData" +
                     " WHERE CITY ='" +city+ "' AND Added_time >= TRUNC(SYSDATE) GROUP BY CONDITION";
             PreparedStatement stmt = conn.prepareStatement(query);
-            //stmt.setString(1, city);
-            //logger.info(query);
             ResultSet rs = stmt.executeQuery(query);
             if(rs != null){
                 logger.info("data avail.");
@@ -135,24 +135,41 @@ public class WeatherRepository {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             String query = "SELECT TEMP_CELSIUS FROM weatherData WHERE city = '"+city+"' ORDER BY ADDED_TIME DESC FETCH FIRST 2 ROWS ONLY";
             PreparedStatement stmt = conn.prepareStatement(query);
-            //stmt.setString(1, city);
-
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                temperatureHistory.add(rs.getDouble("TEMP_CELSIUS")); // Use column name for clarity
+                temperatureHistory.add(rs.getDouble("TEMP_CELSIUS"));
             }
             if (temperatureHistory.size() >= 2) {
                 double latestTemp = temperatureHistory.get(0);
                 double previousTemp = temperatureHistory.get(1);
                 if (latestTemp > thresholdTemp && previousTemp > thresholdTemp) {
-                    return "Alert: Temperature in " + city + " has exceeded " + thresholdTemp + "°C for two consecutive updates."; // Print alert to console
+                    String alert = "Alert: Temperature in " + city + " has exceeded " + thresholdTemp + "°C for two consecutive updates.";
+                    sendEmail(alert, city);
+                    return alert;
                 }
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }
-
         return null;
+    }
+    private void sendEmail(String alertMessage, String city) {
+        Properties properties = System.getProperties();
+        properties.setProperty("mail.smtp.host", host);
+        Session session = Session.getDefaultInstance(properties);
+        if(session != null){
+            logger.info(" connected... ");
+        }
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(sender));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+            message.setSubject("Temperature Alert for " + city);
+            message.setText(alertMessage);
+            Transport.send(message);
+            logger.info("Alert email sent!");
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
