@@ -34,9 +34,7 @@ public class TestRuleEngineService {
         rule.add("<");
         rule.add("10");
         Tree tree = ast.getAST(rule);
-        tree.printInOrder(operators, operands);
-        tree.printPostOrder(operators, operands);
-        tree.printPreOrder(operators, operands);
+        Assert.assertEquals("<", tree.getType());
         //rule1 = age < 20 AND age > 5
         rule = new ArrayList<>();
         rule.add("age");
@@ -47,9 +45,9 @@ public class TestRuleEngineService {
         rule.add(">");
         rule.add("5");
         tree = ast.getAST(rule);
-        tree.printInOrder(operators, operands);
-        tree.printPostOrder(operators, operands);
-        tree.printPreOrder(operators, operands);
+        Assert.assertEquals("AND", tree.getType());
+        Assert.assertEquals("<", tree.getLeft().getType());
+        Assert.assertEquals(">", tree.getRight().getType());
     }
     @Test
     public void testGetAST2() {
@@ -57,26 +55,24 @@ public class TestRuleEngineService {
         String rule = "age < 20 AND age > 5";
         ArrayList<String> ruleItems = ruleEngine.tokenizeRule(rule);
         AST ast = new AST();
-        ArrayList<String> operators = ast.getOperators();
-        ArrayList<String> operands = ast.getOperands();
         Tree tree = ast.getAST(ruleItems);
-        tree.printInOrder(operators, operands);
-        tree.printPostOrder(operators, operands);
-        tree.printPreOrder(operators, operands);
+        Assert.assertEquals("AND", tree.getType());
+        Assert.assertEquals("<", tree.getLeft().getType());
+        Assert.assertEquals(">", tree.getRight().getType());
     }
 
     @Test
     public void testGetAST3() {
         RuleEngine ruleEngine = new RuleEngine();
-        String rule = "(age > 30 AND department = 'Marketing') AND (salary > 20000 OR experience > 5)";
+        String rule = "((age > 30 AND department = 'Marketing') AND (salary > 20000 OR experience > 5))";
         ArrayList<String> ruleItems = ruleEngine.tokenizeRule(rule);
         AST ast = new AST();
-        ArrayList<String> operators = ast.getOperators();
-        ArrayList<String> operands = ast.getOperands();
         Tree tree = ast.getAST(ruleItems);
-        tree.printInOrder(operators, operands);
-        tree.printPostOrder(operators, operands);
-        tree.printPreOrder(operators, operands);
+        Assert.assertEquals("AND", tree.getType());
+        Assert.assertEquals("30", tree.getLeft().getLeft().getValue());
+        Assert.assertEquals("OR", tree.getRight().getType());
+        Assert.assertEquals("5", tree.getRight().getRight().getValue());
+        Assert.assertEquals("20000", tree.getRight().getLeft().getValue());
     }
     @Test
     public void testEvaluateRule() {
