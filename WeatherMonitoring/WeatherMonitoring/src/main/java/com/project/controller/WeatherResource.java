@@ -1,13 +1,10 @@
 package com.project.controller;
 
-
 import com.project.model.WeatherDTO;
 import com.project.service.WeatherService;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
-import java.util.List;
 
 @Path("/api/weather")
 @Produces(MediaType.APPLICATION_JSON)

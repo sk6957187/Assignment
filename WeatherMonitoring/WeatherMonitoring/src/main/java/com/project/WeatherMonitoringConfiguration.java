@@ -6,4 +6,5 @@ import io.dropwizard.Configuration;
 import javax.validation.constraints.NotEmpty;
 
 public class WeatherMonitoringConfiguration extends Configuration {
-    }
+
+}
