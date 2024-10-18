@@ -5,7 +5,6 @@ import com.project.ast.Tree;
 import com.project.service.RuleEngine;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.util.ArrayList;
 
 public class TestRuleEngineService {
