@@ -15,6 +15,10 @@ public class Tree {
     private String value;
     private String key;
     private Boolean condition;
+    public Tree() {}
+    public Tree(String type) {
+        this.type = type;
+    }
     public Tree getNode() {
         return node;
     }
@@ -56,6 +60,41 @@ public class Tree {
             logger.info("dataPostOrder operator: {}", this.type);
         } else {
             logger.info("dataPostOrder operand: {}{}{}", this.key, this.type, this.value);
+        }
+    }
+    public Tree getLeftOrSelf(Tree currenTree) {
+        if (currenTree != null && currenTree.getLeft() != null) {
+            return currenTree.getLeft();
+        }
+        return currenTree;
+    }
+    public Tree getRightOrSelf(Tree currenTree) {
+        if (currenTree != null && currenTree.getRight() != null) {
+            return currenTree.getRight();
+        }
+        return currenTree;
+    }
+    public void insertLeft(Tree currentTree, String type) {
+        Tree newTree = new Tree(type);
+        if (currentTree == null) {
+            currentTree = newTree;
+        } else {
+            currentTree.setLeft(newTree);
+        }
+    }
+    public void insertNodeInLeft(Tree currentTree, Tree leftTree) {
+        if (currentTree == null) {
+            currentTree = leftTree;
+        } else {
+            currentTree.setLeft(leftTree);
+        }
+    }
+    public void insertRight(Tree currentTree, String type) {
+        Tree newTree = new Tree(type);
+        if (currentTree == null) {
+            currentTree = newTree;
+        } else {
+            currentTree.setRight(newTree);
         }
     }
     public void setNode(Tree node) {
