@@ -45,7 +45,7 @@ public class AST {
         }
         return root;
     }
-    public Tree getAST(ArrayList<String> rules) {
+    public Tree getASTBcp(ArrayList<String> rules) {
         if (rules == null) {
             return null;
         }
@@ -76,5 +76,51 @@ public class AST {
             }
         }
         return root;
+    }
+    public Tree getAST(ArrayList<String> posix) {
+        if (posix == null) {
+            return null;
+        }
+        Stack stack = new Stack();
+        Tree root = new Tree("");
+        stack.push(root);
+        Tree currentTree = root;
+        String temp;
+        Tree oldRight, parent, newParent;
+        boolean keyFound = false;
+        String key = null;
+        for (int i=0; i<posix.size(); i++) {
+            temp = posix.get(i);
+            if ("(".equals(temp)) {
+                currentTree.insertLeft(currentTree, "");
+                stack.push(currentTree);
+                currentTree = currentTree.getLeftOrSelf(currentTree);
+            } else if (")".equals(temp)) {
+                currentTree = (Tree) stack.pop();
+            } else if (operators.contains(temp)) {
+                if (operators.contains(currentTree.getType()) || operands.contains(currentTree.getType())) {
+                    newParent = new Tree(temp);
+                    newParent.setLeft(currentTree);
+                    currentTree = newParent;
+                } else {
+                    currentTree.setType(temp);
+                }
+                currentTree.insertRight(currentTree, "");
+                stack.push(currentTree);
+                currentTree = currentTree.getRightOrSelf(currentTree);
+            } else if (operands.contains(temp)) {
+                currentTree.setType(temp);
+                currentTree.setKey(key);
+            } else if (!keyFound){
+                key = temp;
+                keyFound = true;
+            } else {
+                currentTree.setValue(temp);
+                keyFound = false;
+                parent = (Tree) stack.pop();
+                currentTree = parent;
+            }
+        }
+        return currentTree;
     }
 }
