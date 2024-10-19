@@ -1,5 +1,8 @@
 package com.project;
 
+import com.project.filters.RequestFilter;
+import com.project.filters.ResponseFilter;
+import com.project.resources.RuleEngineController;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -19,9 +22,13 @@ public class RuleEngineApplication extends Application<RuleEngineConfiguration> 
     @Override
     public void run(RuleEngineConfiguration mvcConfiguration, Environment environment) throws Exception {
         logger.info("Application started.");
+        RuleEngineController ruleEngineController = new RuleEngineController();
+        environment.jersey().register(new RequestFilter());
+        environment.jersey().register(new ResponseFilter());
+        environment.jersey().register(ruleEngineController);
     }
     public static void main(String[] args) throws Exception {
         String server = "server";
-        new RuleEngineApplication().run(server);
+        new RuleEngineApplication().run(args);
     }
 }
