@@ -1,6 +1,8 @@
 # Assignment
 (1) Rule Engine with AST
-Limitation Each rule keyword shall be seprated by space
+Keyword
+- AND, OR, >, <, =
+Keword should not be part of rule string
 
 Data storage
 for rule: oracle sql
