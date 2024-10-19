@@ -144,7 +144,7 @@ public class WeatherRepository {
                 double previousTemp = temperatureHistory.get(1);
                 if (latestTemp > thresholdTemp && previousTemp > thresholdTemp) {
                     String alert = "Alert: Temperature in " + city + " has exceeded " + thresholdTemp + "°C for two consecutive updates.";
-                    sendEmail(alert, city);
+//                    sendEmail(alert, city);
                     return alert;
                 }
             }

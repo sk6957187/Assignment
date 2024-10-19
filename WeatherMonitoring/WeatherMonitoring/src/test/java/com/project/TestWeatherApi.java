@@ -3,6 +3,7 @@ package com.project;
 import com.project.Repository.WeatherRepository;
 import com.project.model.TemperatureConversion;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class TestWeatherApi {
     @Test
