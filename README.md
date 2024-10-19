@@ -98,6 +98,11 @@ Driver: oracle.jdbc.driver.OracleDriver
 DB url: jdbc:oracle:thin:@<db_name>:<db_port>:xe
 Username: <db_username>
 Password: <db_password>
+Sender mail: <mail>@gmail.com
+Resever mail: <mail>@gmail.com
+
+
+
 Show data and store inside table.
 
 2. TestWeatherData --> Fetched data in table and calculate average tempurature, find minmun tempurature in hole day and find maximum tempurute of hole day.
