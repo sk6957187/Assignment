@@ -77,8 +77,8 @@ public class AST {
         }
         return root;
     }
-    public Tree getAST(ArrayList<String> posix) {
-        if (posix == null) {
+    public Tree getAST(ArrayList<String> infix) {
+        if (infix == null) {
             return null;
         }
         Stack stack = new Stack();
@@ -89,8 +89,8 @@ public class AST {
         Tree oldRight, parent, newParent;
         boolean keyFound = false;
         String key = null;
-        for (int i=0; i<posix.size(); i++) {
-            temp = posix.get(i);
+        for (int i=0; i<infix.size(); i++) {
+            temp = infix.get(i);
             if ("(".equals(temp)) {
                 currentTree.insertLeft(currentTree, "");
                 stack.push(currentTree);

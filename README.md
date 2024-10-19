@@ -72,6 +72,17 @@ if (key == null) {
 
 r = (age > 30) AND (age < 50)
 
+Stack
+0,1,2,3,4
+top=4
+pop = 4
+top=3
+pop = 3
+top=2
+push=5
+top=3
+0,1,2,5
+
 (2) WeatherMonitoring
 
 1. TestWeatherApi --> Fetched data with the help of api

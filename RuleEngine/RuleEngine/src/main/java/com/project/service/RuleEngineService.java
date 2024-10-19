@@ -1,22 +1,22 @@
 package com.project.service;
 
 import com.project.ast.AST;
+import com.project.ast.Stack;
 import com.project.ast.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
-public class RuleEngine {
-    private static final Logger logger = LoggerFactory.getLogger(RuleEngine.class);
+public class RuleEngineService {
+    private static final Logger logger = LoggerFactory.getLogger(RuleEngineService.class);
     //operator AND/OR
     //operand >, <
     private final HashMap<String, String> rules;
     private final ArrayList<String> operators;
     private final ArrayList<String> operands;
-    public RuleEngine() {
+    public RuleEngineService() {
         rules = new HashMap<>();
         rules.put("cartoon", "age  < 10");//age,,<,10
         rules.put("dharmic", "age > 40");//age,>,40
@@ -129,26 +129,18 @@ public class RuleEngine {
         }
         return false;
     }
-    public void updateCondition(Tree root, String department, String age, String salary, String experience) {
-        if (root == null) {
+    public void updateCondition(Tree root, HashMap<String, String> userInput) {
+        if (root == null || userInput == null) {
             return;
         }
-        if (!operators.contains(root.getType())) {
-            if ("age".equals(root.getKey())) {
-                root.setCondition(this.isConditionTrue(root.getType(), root.getValue(), age));
-            } if ("salary".equals(root.getKey())) {
-                root.setCondition(this.isConditionTrue(root.getType(), root.getValue(), salary));
-            } if ("experience".equals(root.getKey())) {
-                root.setCondition(this.isConditionTrue(root.getType(), root.getValue(), experience));
-            } else if ("department".equals(root.getKey())) {
-                root.setCondition(this.isConditionTrue(root.getType(), root.getValue(), department));
-            }
+        if (!operators.contains(root.getType()) && root.getType() != null && !root.getType().isEmpty()) {
+            root.setCondition(this.isConditionTrue(root.getType(), root.getValue(), userInput.get(root.getKey())));
         }
         if (root.getLeft() != null) {
-            this.updateCondition(root.getLeft(), department, age, salary, experience);
+            this.updateCondition(root.getLeft(), userInput);
         }
         if (root.getRight() != null) {
-            this.updateCondition(root.getRight(), department, age, salary, experience);
+            this.updateCondition(root.getRight(), userInput);
         }
     }
     private ArrayList<String> convertTreeToStack(Tree root, ArrayList<String> result) {
@@ -192,30 +184,27 @@ public class RuleEngine {
         return Boolean.toString(result);
     }
     private boolean getFinalValue(ArrayList<String> posix) {
-        if (posix == null || posix.isEmpty() || posix.size() < 3) {
+        if (posix == null || posix.isEmpty()) {
             return false;
         }
-        String arg1 = null, arg2 = null, result = null;
+        Stack stack = new Stack();
+        String arg1, arg2, result = null;
         String str;
         for (String s : posix) {
             str = s;
             if (operators.contains(str)) {
+                arg1 = (String) stack.pop();
+                arg2 = (String) stack.pop();
                 result = this.getNodeResult(arg1, arg2, str);
-                arg1 = result;
-                arg2 = null;
-                continue;
-            }
-            if (arg1 == null) {
-                arg1 = str;
-                continue;
-            }
-            if (arg2 == null) {
-                arg2 = str;
+                stack.push(result);
+            } else {
+                stack.push(str);
             }
         }
-        return result == "true";
+        result = (String) stack.pop();
+        return "true".equals(result);
     }
-    public boolean evaluateRule(String ruleName, String department, String age, String salary, String experience) {
+    public boolean evaluateRule(String ruleName, HashMap<String, String> userInput) {
         if (ruleName == null) {
             return false;
         }
@@ -229,7 +218,7 @@ public class RuleEngine {
         }
         AST ast = new AST();
         Tree root = ast.getAST(ruleItems2);
-        this.updateCondition(root, department, age, salary, experience);
+        this.updateCondition(root, userInput);
         ArrayList<String> posix = this.convertTreeToStack(root, null);
         boolean finalResult = this.getFinalValue(posix);
         logger.info("Final result: {}", finalResult);
