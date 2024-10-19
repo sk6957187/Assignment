@@ -70,7 +70,7 @@ const WeatherMonitor = () => {
                     <p>Temperature: {weather.temp.toFixed(2)}°C</p>
                     <p>Feels Like: {weather.feelsLike.toFixed(2)}°C</p>
                     <p>Condition: {weather.condition}</p>
-                    <p>Wind Speed: {weather.windSpeed} m/s</p>
+                    <p>Wind Speed: {weather.windSpeed} km/s</p>
                     <p>Humidity: {weather.humidity}%</p>
                     <p>Sea Level: {weather.seaLevel} hPa</p>
                     <p>Visibility: {(weather.visibility / 1000).toFixed(2)} km</p>
