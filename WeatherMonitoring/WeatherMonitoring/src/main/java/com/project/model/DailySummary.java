@@ -48,5 +48,16 @@ public class DailySummary {
     public List<WeatherDTO> getHourlyData() {
         return hourlyData;
     }
+
+    @Override
+    public String toString() {
+        return "DailySummary{" +
+                "avgTemp=" + avgTemp +
+                ", maxTemp=" + maxTemp +
+                ", minTemp=" + minTemp +
+                ", dominantCondition='" + dominantCondition + '\'' +
+                ", hourlyData=" + hourlyData +
+                '}';
+    }
 }
 

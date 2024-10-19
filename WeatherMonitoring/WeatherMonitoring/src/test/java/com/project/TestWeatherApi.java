@@ -9,12 +9,12 @@ public class TestWeatherApi {
     @Test
     public void TestWeatherApi() {
         WeatherRepository weatherRepository = new WeatherRepository();
-        weatherRepository.fetchWeather("PATNA");
+        weatherRepository.fetchWeather("DElhi");
     }
     @Test
     public void TestWeatherData(){
         WeatherRepository weatherRepository = new WeatherRepository();
-        weatherRepository.getDailySummary("patna");
+        weatherRepository.getDailySummary("Gaya");
     }
     @Test
     public void TestSetAlert(){
