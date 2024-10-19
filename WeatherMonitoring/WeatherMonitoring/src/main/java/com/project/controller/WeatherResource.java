@@ -32,7 +32,7 @@ public class WeatherResource {
 
     @POST
     @Path("/set-alert/{city}")
-    public String setAlert(@QueryParam("city") String city, @QueryParam("25.05") double thresholdTemp) {
+    public String setAlert(@QueryParam("city") String city, @QueryParam("threshold") double thresholdTemp) {
         city = city.toUpperCase();
         return weatherService.setAlert(city, thresholdTemp);
     }

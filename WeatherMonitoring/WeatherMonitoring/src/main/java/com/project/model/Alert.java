@@ -20,5 +20,12 @@ public class Alert {
     public double getThresholdTemp() {
         return thresholdTemp;
     }
+    @Override
+    public String toString() {
+        return "Alert{" +
+                "city='" + city + '\'' +
+                ", thresholdTemp=" + thresholdTemp +
+                '}';
+    }
 }
 

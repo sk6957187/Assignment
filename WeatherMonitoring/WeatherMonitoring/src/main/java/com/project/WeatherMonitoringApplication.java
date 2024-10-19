@@ -2,6 +2,8 @@ package com.project;
 
 import com.project.Repository.WeatherRepository;
 import com.project.controller.WeatherResource;
+import com.project.filters.RequestFilter;
+import com.project.filters.ResponseFilter;
 import com.project.service.WeatherService;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -30,7 +32,8 @@ public class WeatherMonitoringApplication extends Application<WeatherMonitoringC
 
         final WeatherService weatherService = new WeatherService(new WeatherRepository());
         final WeatherResource  weatherResource = new WeatherResource(weatherService);
-
+        environment.jersey().register(new ResponseFilter());
+        environment.jersey().register(new RequestFilter());
         environment.jersey().register(weatherResource);
     }
 }
