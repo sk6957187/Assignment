@@ -2,31 +2,31 @@ package com.project;
 
 import com.project.ast.AST;
 import com.project.ast.Tree;
-import com.project.service.RuleEngine;
+import com.project.service.RuleEngineService;
 import org.junit.Assert;
 import org.junit.Test;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class TestRuleEngineService {
+public class TestRuleEngineServiceService {
     @Test
     public void testRuleEngine1() {
-        RuleEngine ruleEngine = new RuleEngine();
+        RuleEngineService ruleEngineService = new RuleEngineService();
         String ruleName = "cartoon";
-        String department = "department";
-        String age = "9";
-        String salary = "30000";
-        String experience = "6";
-        boolean status = ruleEngine.evaluateRule(ruleName, department, age, salary, experience);
+        HashMap<String, String> userInput = new HashMap<>();
+        userInput.put("department", "department");
+        userInput.put("age", "9");
+        userInput.put("salary", "30000");
+        userInput.put("experience", "6");
+        boolean status = ruleEngineService.evaluateRule(ruleName, userInput);
         Assert.assertEquals(true, status);
-        age = "12";
-        status = ruleEngine.evaluateRule(ruleName, department, age, salary, experience);
+        userInput.put("age", "12");
+        status = ruleEngineService.evaluateRule(ruleName, userInput);
         Assert.assertEquals(false, status);
     }
     @Test
     public void testGetAST() {
         AST ast = new AST();
-        ArrayList<String> operators = ast.getOperators();
-        ArrayList<String> operands = ast.getOperands();
 
         ArrayList<String> rule = new ArrayList<>();
         //rule1= age < 10
@@ -51,9 +51,9 @@ public class TestRuleEngineService {
     }
     @Test
     public void testGetAST2() {
-        RuleEngine ruleEngine = new RuleEngine();
+        RuleEngineService ruleEngineService = new RuleEngineService();
         String rule = "age < 20 AND age > 5";
-        ArrayList<String> ruleItems = ruleEngine.tokenizeRule(rule);
+        ArrayList<String> ruleItems = ruleEngineService.tokenizeRule(rule);
         AST ast = new AST();
         Tree tree = ast.getAST(ruleItems);
         Assert.assertEquals("AND", tree.getType());
@@ -63,9 +63,9 @@ public class TestRuleEngineService {
 
     @Test
     public void testGetAST3() {
-        RuleEngine ruleEngine = new RuleEngine();
+        RuleEngineService ruleEngineService = new RuleEngineService();
         String rule = "((age > 30 AND department = 'Marketing') AND (salary > 20000 OR experience > 5))";
-        ArrayList<String> ruleItems = ruleEngine.tokenizeRule(rule);
+        ArrayList<String> ruleItems = ruleEngineService.tokenizeRule(rule);
         AST ast = new AST();
         Tree tree = ast.getAST(ruleItems);
         Assert.assertEquals("AND", tree.getType());
@@ -76,19 +76,22 @@ public class TestRuleEngineService {
     }
     @Test
     public void testEvaluateRule() {
-        RuleEngine ruleEngine = new RuleEngine();
+        RuleEngineService ruleEngineService = new RuleEngineService();
         String ruleName = "learning";
-        boolean ruleCondition = ruleEngine.evaluateRule(ruleName, null, "20", null, null);
+        HashMap<String, String> userInput = new HashMap<>();
+        userInput.put("age", "20");
+        boolean ruleCondition = ruleEngineService.evaluateRule(ruleName, userInput);
         Assert.assertEquals(true, ruleCondition);
-
-        ruleCondition = ruleEngine.evaluateRule(ruleName, null, "45", null, null);
+        userInput.put("age", "45");
+        ruleCondition = ruleEngineService.evaluateRule(ruleName, userInput);
         Assert.assertEquals(false, ruleCondition);
-
-        ruleCondition = ruleEngine.evaluateRule(ruleName, null, "40", null, null);
+        userInput.put("age", "40");
+        ruleCondition = ruleEngineService.evaluateRule(ruleName, userInput);
         Assert.assertEquals(false, ruleCondition);
 
         ruleName = "rule4";
-        ruleCondition = ruleEngine.evaluateRule(ruleName, "'Sales'", "40", null, null);
+        userInput.put("department", "'Sales'");
+        ruleCondition = ruleEngineService.evaluateRule(ruleName, userInput);
         Assert.assertEquals(true, ruleCondition);
     }
 }
