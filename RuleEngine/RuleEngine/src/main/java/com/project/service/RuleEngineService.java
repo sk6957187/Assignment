@@ -21,13 +21,30 @@ public class RuleEngineService {
         rules.put("cartoon", "age  < 10");//age,,<,10
         rules.put("dharmic", "age > 40");//age,>,40
         rules.put("learning", "age > 15 AND age < 40");
-        rules.put("rule4", "age > 30 AND department = 'Sales'");
+        rules.put("rule1", "((age > 30 AND department = Sales) OR (age < 25 AND department = Marketing)) AND (salary > 50000 OR experience > 5)");
+        rules.put("rule2","((age > 30 AND department = Marketing)) AND (salary > 20000 OR experience > 5)");
+        rules.put("rule4", "age > 30 AND department = Sales");
         AST ast = new AST();
         operands = ast.getOperands();
         operators = ast.getOperators();
     }
+    private String getRuleValue(String ruleName) {
+        if (ruleName == null) {
+            return null;
+        }
+        return rules.get(ruleName);
+    }
     private int convertStringToNum(String num) {
-        return Integer.parseInt(num);
+        if (num == null || num.isEmpty()) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(num);
+        } catch (Exception e) {
+            logger.info("Error in parsing string to num: {}", num);
+        }
+        return 0;
+
     }
     public ArrayList<String> tokenizeBinary(String expression) {
         ArrayList<String> tokens = new ArrayList<>();
@@ -68,50 +85,6 @@ public class RuleEngineService {
     }
     public ArrayList<String> tokenizeRule(String ruleValue) {
         return this.tokenizeBinary(ruleValue);
-        /*
-        if (ruleValue == null) {
-            return null;
-        }
-        ArrayList<String> tokenizePattern = new ArrayList<>();
-        tokenizePattern.add("(");
-        tokenizePattern.add(")");
-        tokenizePattern.addAll(operators);
-        tokenizePattern.addAll(operands);
-        ArrayList<String> strings = new ArrayList<>();
-        strings.add(ruleValue);
-        String[] strings1;
-        ArrayList<String> strs;
-        for (String pattren: tokenizePattern) {
-            for (String rule: strings) {
-                strings1 = rule.split(pattren);
-                strs = new ArrayList<>();
-                strs.addAll(Arrays.asList(strings1));
-
-            }
-        }
-        String[] lines = ruleValue.split("[()]");
-        ArrayList<String> linesTrim = new ArrayList<>();
-        for (String part : lines) {
-            String trimmedPart = part.trim();
-            if (!trimmedPart.isEmpty()) {
-                linesTrim.add(trimmedPart);
-            }
-        }
-        ArrayList<String> ruleItems2 = null;
-        ruleItems2 = new ArrayList<>();
-        for (String line : linesTrim) {
-            String[] ruleItems = line.split(" ");
-            for (String str : ruleItems) {
-                if (str == null) {
-                    continue;
-                }
-                if (str.isEmpty()) {
-                    continue;
-                }
-                ruleItems2.add(str);
-            }
-        }
-        return ruleItems2;*/
     }
     private boolean isConditionTrue(String operand, String configData, String userData) {
         int configNum = 0;
@@ -208,7 +181,7 @@ public class RuleEngineService {
         if (ruleName == null) {
             return false;
         }
-        String ruleValue = rules.get(ruleName);
+        String ruleValue = this.getRuleValue(ruleName);
         if (ruleValue == null) {
             return false;
         }
