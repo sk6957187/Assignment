@@ -2,7 +2,6 @@ package com.project.ast;
 
 import java.util.ArrayList;
 
-//Abstract syntax tree
 public class AST {
 
     private final ArrayList<String> operators;

@@ -1,9 +1,7 @@
 package com.project.ast;
 
-import com.project.RuleEngineApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 
 public class Tree {
