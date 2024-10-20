@@ -28,7 +28,6 @@ public class RuleEngineApplication extends Application<RuleEngineConfiguration> 
         environment.jersey().register(ruleEngineController);
     }
     public static void main(String[] args) throws Exception {
-        String server = "server";
         new RuleEngineApplication().run(args);
     }
 }

@@ -197,4 +197,15 @@ public class RuleEngineService {
         logger.info("Final result: {}", finalResult);
         return finalResult;
     }
+
+    public boolean combineRule(HashMap<String, String> userData) {
+        logger.info("combineRule data: {}",userData);
+        return false;
+    }
+
+
+    public boolean createRule(HashMap<String, String> userData) {
+        logger.info("createRule data : {}",userData);
+        return false;
+    }
 }

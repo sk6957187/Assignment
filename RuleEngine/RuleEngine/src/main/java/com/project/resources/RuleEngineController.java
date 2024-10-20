@@ -17,16 +17,17 @@ public class RuleEngineController {
     private static final Logger logger = LoggerFactory.getLogger(RuleEngineController.class);
 
     private final RuleEngineService ruleEngineService;
+    ApiResponse apiResponse = new ApiResponse();
 
     public RuleEngineController() {
         this.ruleEngineService = new RuleEngineService();
     }
 
+    // Evaluate Rule
     @POST
     @Path("/evaluate")
     public Response evaluateRule(HashMap<String, String> userData) {
         logger.info("Evaluate: {}", userData);
-        ApiResponse apiResponse = new ApiResponse();
         if (userData != null) {
             String ruleName = userData.get("rule_name");
             if (ruleName == null) {
@@ -37,6 +38,38 @@ public class RuleEngineController {
                 apiResponse.setStatus("SUCCESS");
                 apiResponse.setData(Boolean.toString(result));
             }
+        } else {
+            apiResponse.setStatus("FAILURE");
+            apiResponse.setError("User data is null");
+        }
+        return Response.ok(apiResponse.toJsonString()).build();
+    }
+
+    // Combine Rule
+    @POST
+    @Path("/combine")
+    public Response combineRule(HashMap<String, String> userData) {
+        logger.info("Combine: {}", userData);
+        if (userData != null) {
+                boolean result = ruleEngineService.combineRule(userData);
+                apiResponse.setStatus("SUCCESS");
+                apiResponse.setData(Boolean.toString(result));
+        } else {
+            apiResponse.setStatus("FAILURE");
+            apiResponse.setError("User data is null");
+        }
+        return Response.ok(apiResponse.toJsonString()).build();
+    }
+
+
+    @POST
+    @Path("/create-rule")
+    public Response createRule(HashMap<String, String> userData){
+        logger.info("create Rule: {}", userData);
+        if (userData != null) {
+            boolean result = ruleEngineService.createRule(userData);
+            apiResponse.setStatus("SUCCESS");
+            apiResponse.setData(Boolean.toString(result));
         } else {
             apiResponse.setStatus("FAILURE");
             apiResponse.setError("User data is null");
