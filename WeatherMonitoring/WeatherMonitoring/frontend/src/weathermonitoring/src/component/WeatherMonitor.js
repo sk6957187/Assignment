@@ -31,7 +31,7 @@ const WeatherMonitor = () => {
     const setTemperatureAlert = async () => {
         try {
             const response = await axios.post(`http://localhost:8080/api/weather/set-alert/${city}`, {
-                thresholdTemp: Number(threshold),
+                threshold: Number(threshold),
             });
             setAlertMessage(response.data);
             console.log(`resp {} : ${response.data}`);
@@ -90,13 +90,15 @@ const WeatherMonitor = () => {
 
             <div>
                 <h3>Set Temperature Alert</h3>
-                <input
-                    type="number"
-                    value={threshold}
-                    onChange={(e) => setThreshold(e.target.value)}
-                />
-                <button onClick={setTemperatureAlert}>Set Alert</button>
-                {alertMessage && <p>{alertMessage}</p>}
+                <div>
+                    <input
+                        type="number"
+                        value={threshold}
+                        onChange={(e) => setThreshold(e.target.value)}
+                    />
+                    <button type="button" class="btn btn-primary " onClick={setTemperatureAlert}>Set Alert</button>
+                </div>
+                {alertMessage && <p className="badge bg-danger">{alertMessage}</p>}
             </div>
         </div>
     );
