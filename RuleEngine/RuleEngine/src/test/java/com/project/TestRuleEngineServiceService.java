@@ -2,9 +2,13 @@ package com.project;
 
 import com.project.ast.AST;
 import com.project.ast.Tree;
+import com.project.data.Data;
 import com.project.service.RuleEngineService;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -93,5 +97,15 @@ public class TestRuleEngineServiceService {
         userInput.put("department", "'Sales'");
         ruleCondition = ruleEngineService.evaluateRule(ruleName, userInput);
         Assert.assertEquals(true, ruleCondition);
+    }
+    @Test
+    public void sqlTest() throws SQLException {
+        Data data = new Data();
+        ArrayList<String> rule = new ArrayList<>();
+        rule.add("CARTOON");
+        rule.add("age>200");
+//        Connection conn = data.createConn();
+        data.checkRule(rule);
+        data.loadData(rule);
     }
 }
