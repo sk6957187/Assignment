@@ -53,7 +53,7 @@ class RuleTake extends Component {
   render() {
     return (
       <div>
-        <h3>Take Rule</h3>
+        <h3>Create Rule</h3>
         <form onSubmit={this.handleSubmit}>
           <table>
             <tbody>

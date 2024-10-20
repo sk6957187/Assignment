@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import RuleTake from './RuleTake';
+import CombineRule from './CombineRule';
 
 class RuleForm extends Component {
   constructor(props) {
@@ -8,12 +9,14 @@ class RuleForm extends Component {
     this.state = {
       ruleName: '',
       availableRules: ['rule1', 'rule2', 'cartoon', 'rule4'],
-      showRuleTake: false
+      showRuleTake: false,
+      showCombineRule: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.toggleRuleTake = this.toggleRuleTake.bind(this);
     this.updateRuleList = this.updateRuleList.bind(this);
+    this.toggleCombineRule = this.toggleCombineRule.bind(this);
   }
 
   handleChange = (e) => {
@@ -58,7 +61,11 @@ class RuleForm extends Component {
 
   toggleRuleTake() {
     this.setState({ showRuleTake: !this.state.showRuleTake });
-  }
+  };
+
+  toggleCombineRule() {
+    this.setState({ showCombineRule: !this.state.showCombineRule});
+  };
 
   updateRuleList(newRule) {
     this.setState(prevState => ({
@@ -107,7 +114,8 @@ class RuleForm extends Component {
               <tr>
                 <td></td>
                 <td>
-                  <button type="button" onClick={this.toggleRuleTake}>Open RuleTake</button>
+                  <button className="btn btn-secondary mx-1" type="button" onClick={this.toggleRuleTake}>Open Create Rule</button>
+                  <button className ="btn btn-secondary mx-1" type="button" onClick={this.toggleCombineRule}>Open Combine Rule</button>
                 </td>
               </tr>
             </tbody></table>
@@ -116,6 +124,11 @@ class RuleForm extends Component {
           <RuleTake
             availableRules={this.state.availableRules}
             updateRuleList={this.updateRuleList}
+          />
+        )}
+        {this.state.showCombineRule && (
+          <CombineRule 
+          availableRules={this.state.availableRules}
           />
         )}
       </div>
