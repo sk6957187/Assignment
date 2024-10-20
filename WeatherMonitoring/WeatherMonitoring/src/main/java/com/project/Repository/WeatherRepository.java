@@ -98,15 +98,17 @@ public class WeatherRepository {
     public double getTemp(String city){
         city = city.toUpperCase();
         double temp = 0.0;
+        String st = null;
         try{
             Class.forName(driver);
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String query = "SELECT TEMP_CELSIUS FROM weatherData WHERE city = '"+city+"' ORDER BY ADDED_TIME DESC FETCH FIRST 1 ROWS ONLY";
+            String query = "SELECT ROUND(TEMP_CELSIUS, 2) as TEMP_CELSIUS FROM weatherData WHERE city = '"+city+"' ORDER BY ADDED_TIME DESC FETCH FIRST 1 ROWS ONLY";
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 temp = (rs.getDouble("TEMP_CELSIUS"));
             }
+            logger.info("gfhg : {}",st);
         }catch (Exception e){
             e.printStackTrace();
         }

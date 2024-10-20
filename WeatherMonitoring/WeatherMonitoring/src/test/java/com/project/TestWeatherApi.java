@@ -25,10 +25,10 @@ public class TestWeatherApi {
     @Test
     public void testTemperatureConversion(){
         TemperatureConversion temperatureConversion = new TemperatureConversion();
-        double rs = temperatureConversion.celliusToFran("Delhi");
-        System.out.println(rs);
+        double rs = temperatureConversion.celliusToKel("Delhi");
+        System.out.println("Temp in kel:- "+rs+"k");
         rs = temperatureConversion.celliusToFran("Kolkata");
-        System.out.println(rs);
+        System.out.println("Temp in Fahrenheit: "+ rs+"°F");
 
     }
 }
