@@ -19,7 +19,7 @@ public class TestWeatherApi {
     @Test
     public void TestSetAlert(){
         WeatherRepository weatherRepository = new WeatherRepository();
-        String rs = weatherRepository.setAlert("Delhi", 25);
+        String rs = weatherRepository.setAlert("Delhi", 21);
         System.out.println(rs);
     }
     @Test

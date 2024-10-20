@@ -120,7 +120,7 @@ public class WeatherRepository {
             Class.forName(driver);
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            String query = "SELECT AVG(TEMP_CELSIUS) AS avg_temp, MAX(TEMP_CELSIUS) AS max_temp, MIN(TEMP_CELSIUS) AS min_temp, CONDITION FROM weatherData" +
+            String query = "SELECT ROUND(AVG(TEMP_CELSIUS),2) AS avg_temp, MAX(TEMP_CELSIUS) AS max_temp, MIN(TEMP_CELSIUS) AS min_temp, CONDITION FROM weatherData" +
                     " WHERE CITY ='" +city+ "' AND Added_time >= TRUNC(SYSDATE) GROUP BY CONDITION FETCH FIRST 1 ROW ONLY";
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery(query);

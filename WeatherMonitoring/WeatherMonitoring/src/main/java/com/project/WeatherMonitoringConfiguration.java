@@ -1,9 +1,9 @@
 package com.project;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.dropwizard.Configuration;
 
-import javax.validation.constraints.NotEmpty;
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class WeatherMonitoringConfiguration extends Configuration {
 

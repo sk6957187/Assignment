@@ -15,9 +15,6 @@ import org.slf4j.LoggerFactory;
 
 public class WeatherMonitoringApplication extends Application<WeatherMonitoringConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeatherMonitoringApplication.class);
-    public static void main(String[] args) throws Exception {
-        new WeatherMonitoringApplication().run(args);
-    }
 
     @Override
     public void initialize(Bootstrap<WeatherMonitoringConfiguration> bootstrap) {
@@ -35,5 +32,8 @@ public class WeatherMonitoringApplication extends Application<WeatherMonitoringC
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(weatherResource);
+    }
+    public static void main(String[] args) throws Exception {
+        new WeatherMonitoringApplication().run(args);
     }
 }
