@@ -7,7 +7,8 @@ class RuleTake extends Component {
     this.state = {
       ruleName: '',
       ruleValue: '',
-      errorMessage: ''
+      errorMessage: '',
+      responseMessage: ''  // New state for response message
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,30 +24,35 @@ class RuleTake extends Component {
     const { ruleName, ruleValue } = this.state;
 
     if (!ruleName || !ruleValue) {
-      this.setState({ errorMessage: 'Both Rule Name and Rule Value are required.' });
+      this.setState({ errorMessage: 'Both Rule Name and Rule Value are required.', responseMessage: '' });
       return;
     }
 
     if (this.props.availableRules.includes(ruleName)) {
-      this.setState({ errorMessage: 'Rule is available.' });
+      this.setState({ errorMessage: 'Rule is available.', responseMessage: '' });
       return;
     }
 
-    this.setState({ errorMessage: '' });
+    this.setState({ errorMessage: '', responseMessage: '' });
 
     const formData = {
       ruleName: ruleName,
       ruleValue: ruleValue
     };
 
-    axios.post('http://localhost:8080/api/rule-take/submit', formData)
+    axios.post('http://localhost:8080/api/rule-engine/create-rule', formData)
       .then(response => {
-        alert('Rule submitted successfully!');
+        // Set response message on successful submission
+        this.setState({
+          responseMessage: 'Rule submitted successfully!',
+          ruleName: '',
+          ruleValue: ''
+        });
         this.props.updateRuleList(ruleName);
-        this.setState({ ruleName: '', ruleValue: '' });
       })
       .catch(error => {
-        alert('Error submitting rule: ' + error.message);
+        // Set response message on error
+        this.setState({ responseMessage: 'Error submitting rule: ' + error.message });
       });
   };
 
@@ -79,11 +85,23 @@ class RuleTake extends Component {
                   />
                 </td>
               </tr>
-            </tbody></table>
+            </tbody>
+          </table>
           {this.state.errorMessage && (
-            <p style={{ color: 'red' }}>{this.state.errorMessage}</p>
+            <p className="badge rounded-pill bg-danger" >{this.state.errorMessage}</p>
           )}
           <button type="submit">Submit</button>
+          {/* Display response message below the button */}
+          {this.state.responseMessage && (
+            <p style={{ color: this.state.responseMessage.startsWith('Error') ? 'red' : 'green' }}>
+              {this.state.responseMessage}
+            </p>
+          )}
+          {this.state.responseMessage && (
+            <p className={this.state.responseMessage.startsWith('Error') ? "badge rounded-pill bg-danger" : "badge rounded-pill bg-success"}>
+              {this.state.responseMessage}
+            </p>
+          )}
         </form>
       </div>
     );
