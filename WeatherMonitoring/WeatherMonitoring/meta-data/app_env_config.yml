@@ -12,10 +12,8 @@ logging:
       timeZone: UTC
       archive: true
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      archivedLogFilenamePattern: A:/java-log/weather-monitoring/application-%d{yyyy-MM-dd}.log
-      currentLogFilename: A:/java-log/weather-monitoring/application.log
-      #      archivedLogFilenamePattern: F:/ftp-app/log/application-%d{yyyy-MM-dd}-%i.log
-      #      maxFileSize: 1MB
+      archivedLogFilenamePattern: C:/log/java/application-%d{yyyy-MM-dd}.log
+      currentLogFilename: C:/log/java/application.log
       archivedFileCount: 5 #Number of day archived file to be present
 
 server:
@@ -28,8 +26,8 @@ server:
   rootPath: /*
 
 weatherApiConfig:
-  API_KEY = "3d66b4662f9e189700ece9721f3d1d85"
-  BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q="
+  apiKey: "3d66b4662f9e189700ece9721f3d1d85"
+  baseUrl: "http://api.openweathermap.org/data/2.5/weather?q="
 
 oracleSqlConfig:
   driver: "oracle.jdbc.driver.OracleDriver"
