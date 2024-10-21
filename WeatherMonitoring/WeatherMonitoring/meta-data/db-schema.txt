@@ -1,0 +1,33 @@
+create table WeatherData(
+    id number ,
+    city VARCHAR2(50) NOT NULL,
+    temp_celsius NUMBER(5, 2),
+    feels_like_celsius NUMBER(5, 2),
+    condition VARCHAR2(50),
+    Added_time TIMESTAMP,
+    pressure NUMBER,
+    humidity NUMBER,
+    sea_level NUMBER,
+    visibility NUMBER,
+    wind_speed NUMBER
+);
+
+//id auto update--->
+CREATE SEQUENCE weatherData_id
+START WITH 1
+INCREMENT BY 1;
+CREATE OR REPLACE TRIGGER weatherData_id_trigger
+BEFORE INSERT ON WeatherData
+FOR EACH ROW
+WHEN (NEW.id IS NULL)
+BEGIN
+  SELECT weatherData_id.NEXTVAL INTO :NEW.id FROM dual;
+END;
+
+//timeStamp auto update--->
+CREATE OR REPLACE TRIGGER Added_time_trigger
+BEFORE UPDATE ON weatherData
+FOR EACH ROW
+BEGIN
+  :NEW.Added_time:= CURRENT_TIMESTAMP;
+END;

@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.Repository.WeatherRepository;
+import com.project.model.WeatherRepository;
 import com.project.WeatherMonitoringConfiguration;
 import com.project.model.WeatherDTO;
 import com.project.service.WeatherService;

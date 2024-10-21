@@ -1,10 +1,8 @@
 package com.project;
 
-import com.project.Repository.WeatherRepository;
 import com.project.controller.WeatherResource;
 import com.project.filters.RequestFilter;
 import com.project.filters.ResponseFilter;
-import com.project.service.WeatherService;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;

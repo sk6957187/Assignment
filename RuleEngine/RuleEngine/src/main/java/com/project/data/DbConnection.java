@@ -2,11 +2,9 @@ package com.project.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.events.Event;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Data {
     private static final String driver = "oracle.jdbc.driver.OracleDriver";
@@ -27,25 +25,30 @@ public class Data {
         }
         return conn;
     }
-    public void loadData(ArrayList<String> userData) throws SQLException {
+    public boolean insertRuleInTable(String ruleName, String ruleDetail) throws SQLException {
+        if(ruleName == null || ruleDetail == null || ruleName.isEmpty() || ruleDetail.isEmpty()){
+            logger.info("Invalid ruleName or ruleDetail: {}, {}", ruleName,ruleDetail);
+            return false;
+        }
+        ruleName = ruleName.toUpperCase();
         Connection conn = createConn();
         if (conn == null) {
             logger.info("Failed to make connection!");
-            return;
+            return false;
         }
-        String rule = userData.get(0);
-        String details = userData.get(1);
         try {
             String query = "Insert INTO ruletable (RULE, DETAILS) values (?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, rule);
-            stmt.setString(2, details);
+            stmt.setString(1, ruleName);
+            stmt.setString(2, ruleDetail);
             stmt.executeUpdate();
             stmt = conn.prepareStatement("COMMIT");
             stmt.executeUpdate();
         } catch (Exception e){
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public ArrayList<String> checkRule(ArrayList<String> userData) {
