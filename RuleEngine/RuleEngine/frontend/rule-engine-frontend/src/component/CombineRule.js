@@ -5,9 +5,8 @@ class CombineRule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      combineRuleName1: '',
-      combineRuleName2: '',
-      combineRuleName3: 'OR', // Default value set to 'AND'
+      combinedRuleName: '',
+      combinedRuleValue: '',
       errorMessage: '',
       successMessage: ''
     };
@@ -20,9 +19,8 @@ class CombineRule extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const data = {
-      rule1: this.state.combineRuleName1,
-      rule2: this.state.combineRuleName2,
-      rule3: this.state.combineRuleName3 // This will be either 'AND' or 'OR'
+      combinedRuleName: this.state.combinedRuleName,
+      combinedRuleValue: this.state.combinedRuleValue
     };
 
     axios.post('http://localhost:8080/api/rule-engine/combine', data)
@@ -42,27 +40,19 @@ class CombineRule extends Component {
           <table>
             <tbody>
               <tr>
-                <td><label>Rule 1:</label></td>
+                <td><label>Combined Rule Name :</label></td>
                 <td>
                   <input
-                    type="text" name="combineRuleName1" value={this.state.combineRuleName1} onChange={this.handleChange} required
+                    type="text" name="combinedRuleName" value={this.state.combineRuleName1} onChange={this.handleChange} required
                   />
                 </td>
-                <td><label>Rule 2:</label></td>
+                </tr>
+                <tr>
+                <td><label>Rule value:</label></td>
                 <td>
                   <input
-                    type="text" name="combineRuleName2" value={this.state.combineRuleName2} onChange={this.handleChange} required
+                    type="text" name="combinedRuleValue" value={this.state.combineRuleName2} onChange={this.handleChange} required
                   />
-                </td>
-              </tr>
-              <tr>
-                <td><label>Operator:</label></td>
-                <td>
-                  <select
-                    name="combineRuleName3" value={this.state.combineRuleName3}onChange={this.handleChange} required >
-                    <option value="AND">AND</option>
-                    <option value="OR">OR</option>
-                  </select>
                 </td>
               </tr>
             </tbody>
