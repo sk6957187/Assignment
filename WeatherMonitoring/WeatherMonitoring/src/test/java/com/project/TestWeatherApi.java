@@ -1,10 +1,8 @@
 package com.project;
 
-import com.project.Repository.WeatherRepository;
-import com.project.model.TemperatureConversion;
+import com.project.model.WeatherRepository;
 import com.project.service.WeatherService;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class TestWeatherApi {
     public WeatherMonitoringConfiguration getAppConfig() {
@@ -20,7 +18,7 @@ public class TestWeatherApi {
     @Test
     public void TestWeatherData(){
         WeatherRepository weatherRepository = new WeatherRepository(this.getAppConfig().getWeatherApiConfig());
-        weatherRepository.getDailySummary("Gaya");
+        weatherRepository.getDailySummary("DELHI");
     }
     @Test
     public void TestSetAlert(){
@@ -28,16 +26,5 @@ public class TestWeatherApi {
         String rs = weatherRepository.setAlert("Delhi", 21);
         System.out.println(rs);
     }
-    @Test
-    public void testTemperatureConversion(){
-        /*
-        TemperatureConversion temperatureConversion = new TemperatureConversion();
-        double tempInCelcious =
-        double rs = temperatureConversion.celliusToKel(tempInCelcious);
-        System.out.println("Temp in kel:- "+rs+"k");
 
-        rs = temperatureConversion.celliusToFran(tempInCelcious);
-        System.out.println("Temp in Fahrenheit: "+ rs+"°F");
-        */
-    }
 }

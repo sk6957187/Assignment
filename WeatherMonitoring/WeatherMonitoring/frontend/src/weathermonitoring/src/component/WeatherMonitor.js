@@ -5,7 +5,7 @@ class WeatherMonitor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            city: 'DELHI',
+            city: '',
             weather: null,
             summary: [],
             threshold: 35,
@@ -13,9 +13,22 @@ class WeatherMonitor extends Component {
         };
     }
 
+    componentDidMount() {
+        this.fetchCurrentWeather();
+        this.fetchDailySummary();
+        this.interval = setInterval(() => {
+            this.fetchCurrentWeather();
+        }, 300000); // 300000 ms = 5 minutes
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     fetchCurrentWeather = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/weather/current/${this.state.city}`);
+            const { city } = this.state;
+            const response = await axios.get(`http://localhost:8080/api/weather/current/${city}`);
             this.setState({ weather: response.data });
             console.log(response.data);
         } catch (error) {
@@ -25,7 +38,8 @@ class WeatherMonitor extends Component {
 
     fetchDailySummary = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/weather/daily-summary/${this.state.city}`);
+            const { city } = this.state;
+            const response = await axios.get(`http://localhost:8080/api/weather/daily-summary/${city}`);
             this.setState({ summary: response.data });
             console.log(response.data);
         } catch (error) {
@@ -35,25 +49,27 @@ class WeatherMonitor extends Component {
 
     setTemperatureAlert = async () => {
         try {
-            const response = await axios.post(`http://localhost:8080/api/weather/set-alert/${this.state.city}`, {
-                threshold: Number(this.state.threshold),
+            const { city, threshold } = this.state;
+            const response = await axios.post(`http://localhost:8080/api/weather/set-alert/${city}`, {
+                threshold: Number(threshold),
             });
             this.setState({ alertMessage: response.data });
-            console.log(`resp {} : ${response.data}`);
+            console.log(`Response: ${response.data}`);
         } catch (error) {
             console.error('Error setting alert:', error);
         }
     };
 
-    componentDidMount() {
-        this.fetchCurrentWeather();
-        this.fetchDailySummary();
-        this.interval = setInterval(this.fetchCurrentWeather, 300000); // 300000 ms = 5 minutes
-    }
+    handleCityChange = (event) => {
+        this.setState({ city: event.target.value.toUpperCase() }, () => {
+            this.fetchCurrentWeather();
+            this.fetchDailySummary();
+        });
+    };
 
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
+    handleThresholdChange = (event) => {
+        this.setState({ threshold: event.target.value });
+    };
 
     render() {
         const { city, weather, summary, threshold, alertMessage } = this.state;
@@ -63,7 +79,7 @@ class WeatherMonitor extends Component {
                 <h1>Weather Monitoring</h1>
                 <div>
                     <label>Select City: </label>
-                    <select value={city} onChange={(e) => this.setState({ city: e.target.value.toUpperCase() })}>
+                    <select value={city} onChange={this.handleCityChange}>
                         <option value="DELHI">Delhi</option>
                         <option value="MUMBAI">Mumbai</option>
                         <option value="CHENNAI">Chennai</option>
@@ -103,7 +119,7 @@ class WeatherMonitor extends Component {
                         <input
                             type="number"
                             value={threshold}
-                            onChange={(e) => this.setState({ threshold: e.target.value })}
+                            onChange={this.handleThresholdChange}
                         />
                         <button type="button" className="btn btn-primary" onClick={this.setTemperatureAlert}>
                             Set Alert

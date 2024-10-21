@@ -3,7 +3,7 @@ package com.project.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.project.Repository.WeatherRepository;
+import com.project.model.WeatherRepository;
 import com.project.WeatherMonitoringConfiguration;
 import com.project.model.WeatherDTO;
 import org.slf4j.Logger;

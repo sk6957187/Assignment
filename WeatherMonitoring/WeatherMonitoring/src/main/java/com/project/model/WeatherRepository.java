@@ -1,9 +1,7 @@
-package com.project.Repository;
+package com.project.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.WeatherMonitoringConfiguration;
-import com.project.model.WeatherDTO;
 import com.project.obj.WeatherApiConfig;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
@@ -23,20 +21,26 @@ import java.util.Properties;
 
 public class WeatherRepository {
     private static final Logger logger = LoggerFactory.getLogger(WeatherRepository.class);
-//    private static final String API_KEY = "3d66b4662f9e189700ece9721f3d1d85";
+//    private final String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
+//    private final String API_KEY = "3d66b4662f9e189700ece9721f3d1d85";
+    private final String driver  = "oracle.jdbc.driver.OracleDriver";
+//    private final String DB_URL  = "jdbc:oracle:thin:@Sumit11:1521:xe";
+//    private final String USER = "system";
+//    private final String PASS  = "tiger";
     private final String API_KEY;
     private final String BASE_URL;
-    private static final String driver = "oracle.jdbc.driver.OracleDriver";
-    private static final String DB_URL = "jdbc:oracle:thin:@Sumit11:1521:xe";
-    private static final String USER = "system";
-    private static final String PASS = "tiger";
-    private static final String host = "192.168.0.1";
-    private static final String recipient = "sk6957187@gmail.com";
-    private static final String sender = "sumitkumarmk32@gmail.com";
+//    private final String driver;
+    private final String DB_URL;
+    private final String USER;
+    private final String PASS;
     private final ArrayList<Double> temperatureHistory = new ArrayList<>();
     public WeatherRepository(WeatherApiConfig weatherApiConfig) {
         API_KEY = weatherApiConfig.getApiKey();
         BASE_URL = weatherApiConfig.getBaseUrl();
+//        driver = weatherApiConfig.getDriver();
+        DB_URL = weatherApiConfig.getDb_url();
+        USER = weatherApiConfig.getUser();
+        PASS = weatherApiConfig.getPass();
     }
     public WeatherDTO fetchWeather(String city) {
         city = city.toUpperCase();
@@ -54,7 +58,6 @@ public class WeatherRepository {
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(response);
-
             double tempKelvin = root.get("main").get("temp").asDouble();
             double feelsLikeKelvin = root.get("main").get("feels_like").asDouble();
             double pressure = root.get("main").get("pressure").asDouble();
@@ -81,8 +84,6 @@ public class WeatherRepository {
         try {
             Class.forName(driver);
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-//            String query = "INSERT INTO WeatherData (city, temp_celsius, feels_like_celsius, condition, pressure, humidity, sea_level, visibility, wind_speed, added_time) " +
-//                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, TO_TIMESTAMP('1970-01-01', 'YYYY-MM-DD') + NUMTODSINTERVAL(?, 'SECOND'))";
             String query = "INSERT INTO WeatherData (city, temp_celsius, feels_like_celsius, condition, pressure, humidity, sea_level, visibility, wind_speed, added_time)" +
                     " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, FROM_TZ(TO_TIMESTAMP('1970-01-01', 'YYYY-MM-DD') + NUMTODSINTERVAL(?, 'SECOND'), 'UTC') AT TIME ZONE 'Asia/Kolkata')";
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -179,6 +180,7 @@ public class WeatherRepository {
     }
     private void sendEmail(String alertMessage, String city) {
         Properties properties = System.getProperties();
+        String host = "192.168.0.1";
         properties.setProperty("mail.smtp.host", host);
         Session session = Session.getDefaultInstance(properties);
         if(session != null){
@@ -186,7 +188,9 @@ public class WeatherRepository {
         }
         try {
             Message message = new MimeMessage(session);
+            String sender = "sumitkumarmk32@gmail.com";
             message.setFrom(new InternetAddress(sender));
+            String recipient = "sk6957187@gmail.com";
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("Temperature Alert for " + city);
             message.setText(alertMessage);
@@ -197,3 +201,4 @@ public class WeatherRepository {
         }
     }
 }
+
