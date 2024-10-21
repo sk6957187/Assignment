@@ -2,23 +2,30 @@ package com.project.Repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.WeatherMonitoringConfiguration;
 import com.project.model.WeatherDTO;
+import com.project.obj.WeatherApiConfig;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.mail.*;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Properties;
 
 public class WeatherRepository {
     private static final Logger logger = LoggerFactory.getLogger(WeatherRepository.class);
-    private static final String API_KEY = "3d66b4662f9e189700ece9721f3d1d85";
-    private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
+//    private static final String API_KEY = "3d66b4662f9e189700ece9721f3d1d85";
+    private final String API_KEY;
+    private final String BASE_URL;
     private static final String driver = "oracle.jdbc.driver.OracleDriver";
     private static final String DB_URL = "jdbc:oracle:thin:@Sumit11:1521:xe";
     private static final String USER = "system";
@@ -27,7 +34,10 @@ public class WeatherRepository {
     private static final String recipient = "sk6957187@gmail.com";
     private static final String sender = "sumitkumarmk32@gmail.com";
     private final ArrayList<Double> temperatureHistory = new ArrayList<>();
-
+    public WeatherRepository(WeatherApiConfig weatherApiConfig) {
+        API_KEY = weatherApiConfig.getApiKey();
+        BASE_URL = weatherApiConfig.getBaseUrl();
+    }
     public WeatherDTO fetchWeather(String city) {
         city = city.toUpperCase();
         try {
@@ -98,7 +108,6 @@ public class WeatherRepository {
     public double getTemp(String city){
         city = city.toUpperCase();
         double temp = 0.0;
-        String st = null;
         try{
             Class.forName(driver);
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -108,7 +117,6 @@ public class WeatherRepository {
             while (rs.next()) {
                 temp = (rs.getDouble("TEMP_CELSIUS"));
             }
-            logger.info("gfhg : {}",st);
         }catch (Exception e){
             e.printStackTrace();
         }
