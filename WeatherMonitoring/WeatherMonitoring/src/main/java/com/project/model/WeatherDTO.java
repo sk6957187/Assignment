@@ -1,6 +1,5 @@
 package com.project.model;
 
-import com.project.WeatherMonitoringApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

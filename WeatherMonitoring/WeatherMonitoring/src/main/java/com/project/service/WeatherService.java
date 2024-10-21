@@ -1,12 +1,16 @@
 package com.project.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.project.Repository.WeatherRepository;
-import com.project.controller.WeatherResource;
+import com.project.WeatherMonitoringConfiguration;
 import com.project.model.WeatherDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,5 +47,18 @@ public class WeatherService {
             }
         }
         return thresholdTemp;
+    }
+    public static WeatherMonitoringConfiguration getAppConfig(String configPath) {
+        if (configPath == null) {
+            return null;
+        }
+        WeatherMonitoringConfiguration configuration = null;
+        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+        try {
+            configuration = objectMapper.readValue(new File(configPath), WeatherMonitoringConfiguration.class);
+        } catch (IOException ioe) {
+            logger.info("IOE: for file: " + configPath);
+        }
+        return configuration;
     }
 }
