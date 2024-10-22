@@ -12,17 +12,20 @@ public class TestWeatherApi {
     }
     @Test
     public void TestWeatherApi() {
-        WeatherRepository weatherRepository = new WeatherRepository(this.getAppConfig().getWeatherApiConfig());
+        WeatherMonitoringConfiguration configuration = this.getAppConfig();
+        WeatherRepository weatherRepository = new WeatherRepository(configuration.getWeatherApiConfig(),configuration.getOracleSqlConfig());
         weatherRepository.fetchWeather("DElhi");
     }
     @Test
     public void TestWeatherData(){
-        WeatherRepository weatherRepository = new WeatherRepository(this.getAppConfig().getWeatherApiConfig());
+        WeatherMonitoringConfiguration configuration = this.getAppConfig();
+        WeatherRepository weatherRepository = new WeatherRepository(configuration.getWeatherApiConfig(),configuration.getOracleSqlConfig());
         weatherRepository.getDailySummary("DELHI");
     }
     @Test
     public void TestSetAlert(){
-        WeatherRepository weatherRepository = new WeatherRepository(this.getAppConfig().getWeatherApiConfig());
+        WeatherMonitoringConfiguration configuration = this.getAppConfig();
+        WeatherRepository weatherRepository = new WeatherRepository(configuration.getWeatherApiConfig(),configuration.getOracleSqlConfig());
         String rs = weatherRepository.setAlert("Delhi", 21);
         System.out.println(rs);
     }

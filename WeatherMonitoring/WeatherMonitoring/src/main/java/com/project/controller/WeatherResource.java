@@ -1,6 +1,5 @@
 package com.project.controller;
 
-import com.project.model.WeatherRepository;
 import com.project.WeatherMonitoringConfiguration;
 import com.project.model.WeatherDTO;
 import com.project.service.WeatherService;
@@ -20,7 +19,7 @@ public class WeatherResource {
     private final WeatherService weatherService;
 
     public WeatherResource(WeatherMonitoringConfiguration weatherMonitoringConfiguration) {
-        this.weatherService = new WeatherService(new WeatherRepository(weatherMonitoringConfiguration.getWeatherApiConfig()));
+        this.weatherService = new WeatherService(weatherMonitoringConfiguration);
     }
 
     @GET

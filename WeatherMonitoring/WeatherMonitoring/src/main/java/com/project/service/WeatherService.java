@@ -3,9 +3,9 @@ package com.project.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.project.model.WeatherRepository;
 import com.project.WeatherMonitoringConfiguration;
 import com.project.model.WeatherDTO;
+import com.project.model.WeatherRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +18,9 @@ public class WeatherService {
     private static final Logger logger = LoggerFactory.getLogger(WeatherService.class);
     private final WeatherRepository weatherRepository;
 
-    public WeatherService(WeatherRepository weatherRepository) {
-        this.weatherRepository = weatherRepository;
+    public WeatherService(WeatherMonitoringConfiguration weatherMonitoringConfiguration) {
+        this.weatherRepository = new WeatherRepository(weatherMonitoringConfiguration.getWeatherApiConfig(),
+                weatherMonitoringConfiguration.getOracleSqlConfig());
     }
 
     public WeatherDTO getWeather(String city) {
@@ -49,6 +50,19 @@ public class WeatherService {
         return thresholdTemp;
     }
     public static WeatherMonitoringConfiguration getAppConfig(String configPath) {
+        if (configPath == null) {
+            return null;
+        }
+        WeatherMonitoringConfiguration configuration = null;
+        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+        try {
+            configuration = objectMapper.readValue(new File(configPath), WeatherMonitoringConfiguration.class);
+        } catch (IOException ioe) {
+            logger.info("IOE: for file: " + configPath);
+        }
+        return configuration;
+    }
+    public static WeatherMonitoringConfiguration getOracleSqlConfig(String configPath) {
         if (configPath == null) {
             return null;
         }

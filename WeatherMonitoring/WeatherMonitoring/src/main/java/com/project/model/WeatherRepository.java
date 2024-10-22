@@ -2,12 +2,14 @@ package com.project.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.obj.OracleSqlConfig;
 import com.project.obj.WeatherApiConfig;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.mail.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -21,26 +23,20 @@ import java.util.Properties;
 
 public class WeatherRepository {
     private static final Logger logger = LoggerFactory.getLogger(WeatherRepository.class);
-//    private final String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-//    private final String API_KEY = "3d66b4662f9e189700ece9721f3d1d85";
-    private final String driver  = "oracle.jdbc.driver.OracleDriver";
-//    private final String DB_URL  = "jdbc:oracle:thin:@Sumit11:1521:xe";
-//    private final String USER = "system";
-//    private final String PASS  = "tiger";
     private final String API_KEY;
     private final String BASE_URL;
-//    private final String driver;
+    private final String driver;
     private final String DB_URL;
     private final String USER;
     private final String PASS;
     private final ArrayList<Double> temperatureHistory = new ArrayList<>();
-    public WeatherRepository(WeatherApiConfig weatherApiConfig) {
+    public WeatherRepository(WeatherApiConfig weatherApiConfig, OracleSqlConfig oracleSqlConfig) {
         API_KEY = weatherApiConfig.getApiKey();
         BASE_URL = weatherApiConfig.getBaseUrl();
-//        driver = weatherApiConfig.getDriver();
-        DB_URL = weatherApiConfig.getDb_url();
-        USER = weatherApiConfig.getUser();
-        PASS = weatherApiConfig.getPass();
+        driver = oracleSqlConfig.getDriver();
+        DB_URL = oracleSqlConfig.getUrl();
+        USER =  oracleSqlConfig.getUsername();
+        PASS = oracleSqlConfig.getPassword();
     }
     public WeatherDTO fetchWeather(String city) {
         city = city.toUpperCase();
@@ -103,25 +99,6 @@ public class WeatherRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-    public double getTemp(String city){
-        city = city.toUpperCase();
-        double temp = 0.0;
-        try{
-            Class.forName(driver);
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            String query = "SELECT ROUND(TEMP_CELSIUS, 2) as TEMP_CELSIUS FROM weatherData WHERE city = '"+city+"' ORDER BY ADDED_TIME DESC FETCH FIRST 1 ROWS ONLY";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                temp = (rs.getDouble("TEMP_CELSIUS"));
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return temp;
     }
 
     public ArrayList<ArrayList<String>> getDailySummary(String city) {

@@ -6,12 +6,12 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Data {
+public class DbConnection {
     private static final String driver = "oracle.jdbc.driver.OracleDriver";
     private static final String url = "jdbc:oracle:thin:@Sumit11:1521:xe";
     private static final String user = "system";
     private static final String pass = "tiger";
-    private static final Logger logger = LoggerFactory.getLogger(Data.class);
+    private static final Logger logger = LoggerFactory.getLogger(DbConnection.class);
 
     public Connection createConn() {
         Connection conn = null;
