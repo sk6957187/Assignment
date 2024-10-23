@@ -34,3 +34,6 @@ oracleSqlConfig:
   url: "jdbc:oracle:thin:@Sumit11:1521:xe"
   username: "System"
   password: "tiger"
+
+uiConfig:
+  uiBaseApi: "http://localhost:8080"
