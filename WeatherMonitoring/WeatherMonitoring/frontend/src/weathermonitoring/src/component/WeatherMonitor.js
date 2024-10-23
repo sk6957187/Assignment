@@ -5,13 +5,15 @@ class WeatherMonitor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            city: '',
+            city: "DELHI",
             weather: null,
             summary: [],
             threshold: 35,
             alertMessage: '',
         };
+        this.baseApi = "http://localhost:8080";
     }
+
 
     componentDidMount() {
         this.fetchCurrentWeather();
@@ -28,35 +30,35 @@ class WeatherMonitor extends Component {
     fetchCurrentWeather = async () => {
         try {
             const { city } = this.state;
-            const response = await axios.get(`http://localhost:8080/api/weather/current/${city}`);
+            const response = await axios.get(`${this.baseApi}/api/weather/current/${city}`);
             this.setState({ weather: response.data });
             console.log(response.data);
         } catch (error) {
-            console.error('Error fetching current weather:', error);
+            console.log('Error fetching current weather:', error);
         }
     };
 
     fetchDailySummary = async () => {
         try {
             const { city } = this.state;
-            const response = await axios.get(`http://localhost:8080/api/weather/daily-summary/${city}`);
+            const response = await axios.get(`${this.baseApi}/api/weather/daily-summary/${city}`);
             this.setState({ summary: response.data });
             console.log(response.data);
         } catch (error) {
-            console.error('Error fetching daily summary:', error);
+            console.log('Error fetching daily summary:', error);
         }
     };
 
     setTemperatureAlert = async () => {
         try {
             const { city, threshold } = this.state;
-            const response = await axios.post(`http://localhost:8080/api/weather/set-alert/${city}`, {
+            const response = await axios.post(`${this.baseApi}/api/weather/set-alert/${city}`, {
                 threshold: Number(threshold),
             });
             this.setState({ alertMessage: response.data });
             console.log(`Response: ${response.data}`);
         } catch (error) {
-            console.error('Error setting alert:', error);
+            console.log('Error setting alert:', error);
         }
     };
 
