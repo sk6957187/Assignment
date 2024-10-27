@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,11 +16,18 @@ import java.util.HashMap;
 @Produces(MediaType.APPLICATION_JSON)
 public class WeatherResource {
     private static final Logger logger = LoggerFactory.getLogger(WeatherResource.class);
-
     private final WeatherService weatherService;
 
     public WeatherResource(WeatherMonitoringConfiguration weatherMonitoringConfiguration) {
         this.weatherService = new WeatherService(weatherMonitoringConfiguration);
+    }
+
+    @GET
+    @Path("/base-api")
+    public Response getBaseApi() {
+        String baseApi = weatherService.getUiBaseApi();
+//        String baseApi = "http://localhost:8080";
+        return Response.ok(baseApi).build();
     }
 
     @GET
@@ -38,7 +46,7 @@ public class WeatherResource {
 
     @POST
     @Path("/set-alert/{city}")
-    public String setAlert(@PathParam("city") String city, HashMap<String, String> userData) {
+    public ArrayList<String> setAlert(@PathParam("city") String city, HashMap<String, String> userData) {
         logger.info("setAlert: City: {}, Threshold: {}", city, userData);
         double thresholdTemp = weatherService.getThresholdTempFromUserInput(userData);
         if (city != null) {
