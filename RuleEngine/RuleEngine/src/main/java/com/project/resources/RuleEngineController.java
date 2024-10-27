@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 @Path("/api/rule-engine")
@@ -48,7 +49,7 @@ public class RuleEngineController {
     // Combine Rule
     @POST
     @Path("/combine")
-    public Response combineRule(HashMap<String, String> userData) {
+    public Response combineRule(HashMap<String, String> userData) throws SQLException {
         logger.info("Combine: {}", userData);
         if (userData != null) {
                 boolean result = ruleEngineService.combineRule(userData);
@@ -64,7 +65,7 @@ public class RuleEngineController {
 
     @POST
     @Path("/create-rule")
-    public Response createRule(HashMap<String, String> userData){
+    public Response createRule(HashMap<String, String> userData) throws SQLException {
         logger.info("create Rule: {}", userData);
         if (userData != null) {
             boolean result = ruleEngineService.createRule(userData);

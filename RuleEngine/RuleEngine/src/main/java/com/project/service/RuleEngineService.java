@@ -1,11 +1,18 @@
 package com.project.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.project.RuleEngineConfiguration;
 import com.project.ast.AST;
 import com.project.ast.Stack;
 import com.project.ast.Tree;
+import com.project.dbConnection.DbConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,6 +23,10 @@ public class RuleEngineService {
     private final HashMap<String, String> rules;
     private final ArrayList<String> operators;
     private final ArrayList<String> operands;
+
+    RuleEngineConfiguration ruleEngineConfig = new RuleEngineConfiguration();
+    DbConnection dbConn = new DbConnection(ruleEngineConfig);
+
     public RuleEngineService() {
         rules = new HashMap<>();
         rules.put("cartoon", "age  < 10");//age,,<,10
@@ -24,6 +35,7 @@ public class RuleEngineService {
         rules.put("rule1", "((age > 30 AND department = Sales) OR (age < 25 AND department = Marketing)) AND (salary > 50000 OR experience > 5)");
         rules.put("rule2","((age > 30 AND department = Marketing)) AND (salary > 20000 OR experience > 5)");
         rules.put("rule4", "age > 30 AND department = Sales");
+        rules.put("rule3", "(age > 10) AND  (age > 20 and department = Store)");
         AST ast = new AST();
         operands = ast.getOperands();
         operators = ast.getOperators();
@@ -198,14 +210,38 @@ public class RuleEngineService {
         return finalResult;
     }
 
-    public boolean combineRule(HashMap<String, String> userData) {
+    public boolean combineRule(HashMap<String, String> userData) throws SQLException {
         logger.info("combineRule data: {}",userData);
-        return false;
+        if(userData == null){
+            return false;
+        }
+        String combinedRuleName = userData.get("combinedRuleName");
+        String combinedRuleValue = userData.get("combinedRuleValue");
+        if(combinedRuleValue == null || combinedRuleName == null || combinedRuleName.isEmpty() || combinedRuleValue.isEmpty()){
+            logger.info("Invalid Rule Name or rule data: {},{}", combinedRuleName, combinedRuleValue);
+            return false;
+        }
+        return dbConn.combineRule(combinedRuleName,combinedRuleValue);
     }
 
-
-    public boolean createRule(HashMap<String, String> userData) {
+    public boolean createRule(HashMap<String, String> userData) throws SQLException {
         logger.info("createRule data : {}",userData);
-        return false;
+        String ruleName = userData.get("ruleName");
+        String ruleValue = userData.get("ruleValue");
+        return dbConn.insertRuleInTable(ruleName,ruleValue);
+    }
+
+    public static RuleEngineConfiguration getOracleSqlConfig(String configPath) {
+        if (configPath == null) {
+            return null;
+        }
+        RuleEngineConfiguration configuration = null;
+        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+        try {
+            configuration = objectMapper.readValue(new File(configPath), RuleEngineConfiguration.class);
+        } catch (IOException ioe) {
+            logger.info("IOE: for file: " + configPath);
+        }
+        return configuration;
     }
 }
