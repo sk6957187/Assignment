@@ -20,7 +20,10 @@ public class WeatherService {
 
     public WeatherService(WeatherMonitoringConfiguration weatherMonitoringConfiguration) {
         this.weatherRepository = new WeatherRepository(weatherMonitoringConfiguration.getWeatherApiConfig(),
-                weatherMonitoringConfiguration.getOracleSqlConfig());
+                weatherMonitoringConfiguration.getOracleSqlConfig(),weatherMonitoringConfiguration.getUiConfig());
+    }
+    public String getUiBaseApi() {
+        return weatherRepository.getUiBaseApi();
     }
 
     public WeatherDTO getWeather(String city) {
@@ -31,7 +34,7 @@ public class WeatherService {
         return weatherRepository.getDailySummary(city);
     }
 
-    public String setAlert(String city, double thresholdTemp) {
+    public ArrayList<String> setAlert(String city, double thresholdTemp) {
         return weatherRepository.setAlert(city, thresholdTemp);
     }
     public double getThresholdTempFromUserInput(HashMap<String, String> userData) {
@@ -75,4 +78,7 @@ public class WeatherService {
         }
         return configuration;
     }
+
+
+
 }

@@ -3,6 +3,7 @@ package com.project.model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.obj.OracleSqlConfig;
+import com.project.obj.UiConfig;
 import com.project.obj.WeatherApiConfig;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
@@ -29,15 +30,21 @@ public class WeatherRepository {
     private final String DB_URL;
     private final String USER;
     private final String PASS;
+    private final String uiBaseApi;
     private final ArrayList<Double> temperatureHistory = new ArrayList<>();
-    public WeatherRepository(WeatherApiConfig weatherApiConfig, OracleSqlConfig oracleSqlConfig) {
+    public WeatherRepository(WeatherApiConfig weatherApiConfig, OracleSqlConfig oracleSqlConfig, UiConfig uiConfig) {
         API_KEY = weatherApiConfig.getApiKey();
         BASE_URL = weatherApiConfig.getBaseUrl();
         driver = oracleSqlConfig.getDriver();
         DB_URL = oracleSqlConfig.getUrl();
         USER =  oracleSqlConfig.getUsername();
         PASS = oracleSqlConfig.getPassword();
+        uiBaseApi = uiConfig.getUiBaseApi();
     }
+    public String getUiBaseApi() {
+        return uiBaseApi;
+    }
+
     public WeatherDTO fetchWeather(String city) {
         city = city.toUpperCase();
         try {
@@ -130,7 +137,7 @@ public class WeatherRepository {
         return summaries;
     }
 
-    public String setAlert(String city, double thresholdTemp) {
+    public ArrayList<String> setAlert(String city, double thresholdTemp) {
         city = city.toUpperCase();
         try {
             Class.forName(driver);
@@ -144,11 +151,21 @@ public class WeatherRepository {
             if (temperatureHistory.size() >= 2) {
                 double latestTemp = temperatureHistory.get(0);
                 double previousTemp = temperatureHistory.get(1);
+                String alert ;
+                String status;
+                ArrayList<String> res = new ArrayList<>();
                 if (latestTemp > thresholdTemp && previousTemp > thresholdTemp) {
-                    String alert = "Alert: Temperature in " + city + " has exceeded " + thresholdTemp + "°C for two consecutive updates.";
+                     alert = "Alert: Temperature in " + city + " has exceeded " + thresholdTemp + "°C for two consecutive updates.";
+                     status = "NO";
 //                    sendEmail(alert, city);
-                    return alert;
+
+                }else{
+                     alert = "Good";
+                     status = "YES";
                 }
+                res.add(alert);
+                res.add(status);
+                return res;
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -177,5 +194,10 @@ public class WeatherRepository {
             throw new RuntimeException(e);
         }
     }
+
+
+
+//    public Response getBaseApi() {
+//    }
 }
 
