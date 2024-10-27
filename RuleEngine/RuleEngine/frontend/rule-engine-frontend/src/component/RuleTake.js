@@ -23,16 +23,25 @@ class RuleTake extends Component {
 
     const { ruleName, ruleValue } = this.state;
 
+    // Validate if both ruleName and ruleValue are provided
     if (!ruleName || !ruleValue) {
-      this.setState({ errorMessage: 'Both Rule Name and Rule Value are required.', responseMessage: '' });
+      this.setState({
+        errorMessage: 'Both Rule Name and Rule Value are required.',
+        responseMessage: ''
+      });
       return;
     }
 
+    // Check if rule is already available
     if (this.props.availableRules.includes(ruleName)) {
-      this.setState({ errorMessage: 'Rule is available.', responseMessage: '' });
+      this.setState({
+        errorMessage: 'Rule is already available.',
+        responseMessage: ''
+      });
       return;
     }
 
+    // Clear error and response messages before submission
     this.setState({ errorMessage: '', responseMessage: '' });
 
     const formData = {
@@ -40,19 +49,27 @@ class RuleTake extends Component {
       ruleValue: ruleValue
     };
 
+    // Post form data to the backend
     axios.post('http://localhost:8080/api/rule-engine/create-rule', formData)
       .then(response => {
-        // Set response message on successful submission
+        // Update response message upon successful submission
         this.setState({
-          responseMessage: 'Rule submitted successfully!',
+          responseMessage: 'Rule created successfully!',  // Updated success message
           ruleName: '',
-          ruleValue: ''
+          ruleValue: '',
+          errorMessage: ''
         });
+        console.log("Response:", response.data);
+
+        // Update parent component's rule list with the new rule
         this.props.updateRuleList(ruleName);
       })
       .catch(error => {
-        // Set response message on error
-        this.setState({ responseMessage: 'Error submitting rule: ' + error.message });
+        // Handle error during submission
+        this.setState({
+          errorMessage: 'Error submitting rule. Please try again: ' + error.message,
+          responseMessage: ''
+        });
       });
   };
 
@@ -67,7 +84,8 @@ class RuleTake extends Component {
                 <td><label>Rule Name:</label></td>
                 <td>
                   <input
-                    type="text" name="ruleName"
+                    type="text"
+                    name="ruleName"
                     value={this.state.ruleName}
                     onChange={this.handleChange}
                     required
@@ -78,7 +96,8 @@ class RuleTake extends Component {
                 <td><label>Rule Value:</label></td>
                 <td>
                   <input
-                    type="text" name="ruleValue"
+                    type="text"
+                    name="ruleValue"
                     value={this.state.ruleValue}
                     onChange={this.handleChange}
                     required
@@ -87,21 +106,20 @@ class RuleTake extends Component {
               </tr>
             </tbody>
           </table>
+
+          {/* Display error message if exists */}
           {this.state.errorMessage && (
-            <p className="badge rounded-pill bg-danger" >{this.state.errorMessage}</p>
+            <p className="badge rounded-pill bg-danger">{this.state.errorMessage}</p>
           )}
+
           <button type="submit">Submit</button>
-          {/* Display response message below the button */}
-          {this.state.responseMessage && (
-            <p style={{ color: this.state.responseMessage.startsWith('Error') ? 'red' : 'green' }}>
-              {this.state.responseMessage}
-            </p>
-          )}
-          {this.state.responseMessage && (
-            <p className={this.state.responseMessage.startsWith('Error') ? "badge rounded-pill bg-danger" : "badge rounded-pill bg-success"}>
-              {this.state.responseMessage}
-            </p>
-          )}
+
+          {/* Display response message after submission */}
+          <div>
+            {this.state.responseMessage && (
+              <p className="badge rounded-pill bg-success">{this.state.responseMessage}</p>
+            )}
+          </div>
         </form>
       </div>
     );
