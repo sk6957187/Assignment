@@ -10,29 +10,45 @@ class WeatherMonitor extends Component {
             summary: [],
             threshold: 35,
             alertMessage: '',
+            alertMessageClass: ""
         };
-        this.baseApi = "http://localhost:8080";
+        this.baseApi= '';
+        this.staticDataApi="http://localhost:8080/api/weather/base-api";
     }
-
 
     componentDidMount() {
-        this.fetchCurrentWeather();
-        this.fetchDailySummary();
-        this.interval = setInterval(() => {
-            this.fetchCurrentWeather();
-        }, 300000); // 300000 ms = 5 minutes
+        this.fetchBaseApi();  // Fetch base API first, then other data
     }
-
+    
     componentWillUnmount() {
         clearInterval(this.interval);
     }
+    
+    fetchBaseApi = async () => {
+        try {
+            const response = await axios.get(this.staticDataApi);
+            this.baseApi = response.data;
+            
+            // Fetch current weather and daily summary once
+            await this.fetchCurrentWeather();
+            await this.fetchDailySummary();
+            
+            // Set interval to fetch weather every 5 minutes
+            this.interval = setInterval(this.fetchCurrentWeather, 300000); 
+        } catch (error) {
+            console.log('Error fetching base API:', error);
+        }
+    };
+    
 
     fetchCurrentWeather = async () => {
         try {
-            const { city } = this.state;
-            const response = await axios.get(`${this.baseApi}/api/weather/current/${city}`);
-            this.setState({ weather: response.data });
-            console.log(response.data);
+            const { city, baseApi } = this.state;
+            if (this.baseApi) {
+                const response = await axios.get(`${this.baseApi}/api/weather/current/${city}`);
+                this.setState({ weather: response.data });
+                console.log(response.data);
+            }
         } catch (error) {
             console.log('Error fetching current weather:', error);
         }
@@ -40,10 +56,12 @@ class WeatherMonitor extends Component {
 
     fetchDailySummary = async () => {
         try {
-            const { city } = this.state;
-            const response = await axios.get(`${this.baseApi}/api/weather/daily-summary/${city}`);
-            this.setState({ summary: response.data });
-            console.log(response.data);
+            const { city, baseApi } = this.state;
+            if (this.baseApi) {
+                const response = await axios.get(`${this.baseApi}/api/weather/daily-summary/${city}`);
+                this.setState({ summary: response.data });
+                console.log(response.data);
+            }
         } catch (error) {
             console.log('Error fetching daily summary:', error);
         }
@@ -51,12 +69,26 @@ class WeatherMonitor extends Component {
 
     setTemperatureAlert = async () => {
         try {
-            const { city, threshold } = this.state;
-            const response = await axios.post(`${this.baseApi}/api/weather/set-alert/${city}`, {
-                threshold: Number(threshold),
-            });
-            this.setState({ alertMessage: response.data });
-            console.log(`Response: ${response.data}`);
+            const { city, threshold, baseApi } = this.state;
+            if (this.baseApi) {
+                const response = await axios.post(`${this.baseApi}/api/weather/set-alert/${city}`, {
+                    threshold: Number(threshold),
+                });
+                var messageClass = "badge ";
+                var message = "";
+                var status ="";
+                if(response.data && response.data.length === 2){
+                    message = response.data[0];
+                    status = response.data[1];
+                }
+                if(status === "YES"){
+                    messageClass = messageClass + "bg-success";
+                } else if(status === "NO"){
+                    messageClass = messageClass + "bg-danger";
+                }
+                this.setState({ alertMessage: message, alertMessageClass: messageClass });
+                console.log(`Response: ${response.data}`);
+            }
         } catch (error) {
             console.log('Error setting alert:', error);
         }
@@ -127,7 +159,7 @@ class WeatherMonitor extends Component {
                             Set Alert
                         </button>
                     </div>
-                    {alertMessage && <p className="badge bg-danger">{alertMessage}</p>}
+                    {alertMessage && <p className={this.state.alertMessageClass}>{alertMessage}</p>}
                 </div>
             </div>
         );
