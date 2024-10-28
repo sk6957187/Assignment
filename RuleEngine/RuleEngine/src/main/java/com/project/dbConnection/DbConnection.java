@@ -30,7 +30,7 @@ public class DbConnection {
 //       String driver = ruleEngineConfiguration.getOracleSqlConfig().getDriver();
 //       String url = ruleEngineConfiguration.getOracleSqlConfig().getUrl();
 //       String user = ruleEngineConfiguration.getOracleSqlConfig().getUsername();
-//       String pass = ruleEngineConfiguration.getOracleSqlConfig().getPassword()
+//       String pass = ruleEngineConfiguration.getOracleSqlConfig().getPassword();
     }
 
 
