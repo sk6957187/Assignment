@@ -34,7 +34,7 @@ public class TestWeatherApi {
     public void TestSetAlert(){
         WeatherMonitoringConfiguration configuration = this.getAppConfig();
         WeatherRepository weatherRepository = new WeatherRepository(configuration.getWeatherApiConfig(),configuration.getOracleSqlConfig(), configuration.getUiConfig());
-        String rs = weatherRepository.setAlert("Delhi", 21);
+        String rs = String.valueOf(weatherRepository.setAlert("Delhi", 21));
         System.out.println(rs);
     }
 

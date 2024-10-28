@@ -14,13 +14,21 @@ class WeatherMonitor extends Component {
         };
         this.baseApi= '';
         this.staticDataApi="http://localhost:8080/api/weather/base-api";
+        this.dataFeatchStatus="No";
     }
+    
 
     componentDidMount() {
-        this.fetchBaseApi();  // Fetch base API first, then other data
+        if(this.dataFeatchStatus==="No"){
+            this.dataFeatchStatus="Yes";
+            this.fetchBaseApi();
+            
+        }
+        
     }
     
     componentWillUnmount() {
+        console.log(2);
         clearInterval(this.interval);
     }
     
@@ -28,13 +36,9 @@ class WeatherMonitor extends Component {
         try {
             const response = await axios.get(this.staticDataApi);
             this.baseApi = response.data;
-            
-            // Fetch current weather and daily summary once
             await this.fetchCurrentWeather();
             await this.fetchDailySummary();
-            
-            // Set interval to fetch weather every 5 minutes
-            this.interval = setInterval(this.fetchCurrentWeather, 300000); 
+            this.interval = setInterval(this.fetchCurrentWeather, 300000);      // fetch weather every 5 minutes
         } catch (error) {
             console.log('Error fetching base API:', error);
         }
@@ -53,10 +57,9 @@ class WeatherMonitor extends Component {
             console.log('Error fetching current weather:', error);
         }
     };
-
-    fetchDailySummary = async () => {
+    fetchDailySummary =  async () => {
         try {
-            const { city, baseApi } = this.state;
+            var { city, baseApi } = this.state;
             if (this.baseApi) {
                 const response = await axios.get(`${this.baseApi}/api/weather/daily-summary/${city}`);
                 this.setState({ summary: response.data });
@@ -129,7 +132,7 @@ class WeatherMonitor extends Component {
                         <p>Temperature: {weather.temp.toFixed(2)}°C</p>
                         <p>Feels Like: {weather.feelsLike.toFixed(2)}°C</p>
                         <p>Condition: {weather.condition}</p>
-                        <p>Wind Speed: {weather.windSpeed} km/s</p>
+                        <p>Wind Speed: {(weather.windSpeed * (18/5)).toFixed(2)} km/hr</p>
                         <p>Humidity: {weather.humidity}%</p>
                         <p>Sea Level: {weather.seaLevel} hPa</p>
                         <p>Visibility: {(weather.visibility / 1000).toFixed(2)} km</p>
