@@ -8,7 +8,7 @@ class RuleForm extends Component {
     super(props);
     this.state = {
       ruleName: '',
-      availableRules: ['RULE1', 'rule2', 'rule3', 'cartoon', 'rule4'],
+      availableRules: ['rule1', 'rule2', 'rule3', 'cartoon', 'rule4'],
       showRuleTake: false,
       showCombineRule: false
     };
