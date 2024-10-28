@@ -1,0 +1,9 @@
+Edit configuration config parameter
+(1) server meta-data/app_env_config.yml
+
+To build project(jar file build)
+mvn clean install
+
+To run build jar files
+Go to current directory and run following command
+java -jar HelloWorld-1.0.0-SNAPSHOT.jar server meta-data/app_env_config.yml
