@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class WeatherRepository {
-    private static final Logger logger = LoggerFactory.getLogger(WeatherRepository.class);
+    private final Logger logger = LoggerFactory.getLogger(WeatherRepository.class);
     private final String API_KEY;
     private final String BASE_URL;
     private final String driver;
