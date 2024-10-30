@@ -5,23 +5,21 @@ import io.dropwizard.Configuration;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-public class HelloWorldConfiguration extends Configuration {
-    private String message;
+public class HelloWorldConfiguration  extends Configuration {
+    private String userMessage;
 
-    public String getMessage() {
-        return message;
+    public String getUserMessage() {
+        return userMessage;
     }
 
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setUserMessage(String userMessage) {
+        this.userMessage = userMessage;
     }
 
     @Override
     public String toString() {
-        return "HelloWorldConfiguration{" +
-                "message='" + message + '\'' +
+        return "SampleConfiguration{" +
+                "userMessage='" + userMessage + '\'' +
                 '}';
     }
 }
-
