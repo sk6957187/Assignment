@@ -10,7 +10,7 @@
     <div class="container">
         <center>
             <div>Requested page does not exist</div>
-            <div><b><a href="/hello-world/">Go to Home page</a></b></div>
+            <div><b><a href="/">Go to Home page</a></b></div>
             <div><b><a href="/hello-world/app/view">Go to App View</a></b></div>
         </center>
     </div>

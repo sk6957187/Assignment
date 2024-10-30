@@ -47,7 +47,7 @@ import javax.ws.rs.core.Response;
 //    }
 //}
 //
-@Path("/hello-world")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class HelloWorldResource {
@@ -57,7 +57,7 @@ public class HelloWorldResource {
         this.configuration = configuration;
     }
     @GET
-    @Path("/app/view")
+    @Path("/hello-world/app/view")
     @Produces(MediaType.TEXT_HTML)
     public Response appView(@Context HttpServletRequest request) {
         logger.info("Loading/helloWorld/view");
