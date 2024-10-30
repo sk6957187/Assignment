@@ -40,6 +40,13 @@ public class RuleEngineService {
         operands = ast.getOperands();
         operators = ast.getOperators();
     }
+    public RuleEngineService(String name){
+        rules = new HashMap<>();
+        rules.put(name, dbConn.fetchedValue(name));
+        AST ast = new AST();
+        operands = ast.getOperands();
+        operators = ast.getOperators();
+    }
     private String getRuleValue(String ruleName) {
         if (ruleName == null) {
             return null;

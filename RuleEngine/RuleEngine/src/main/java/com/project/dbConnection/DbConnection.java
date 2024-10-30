@@ -97,6 +97,31 @@ public class DbConnection {
         return true;
     }
 
+    public String fetchedValue(String name){
+        String res=null;
+        if(name == null){
+            return res;
+        }
+        Connection conn = createConn();
+        try {
+            String query = "select DETAILS from ruleTable where rule= upper(?)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                res = rs.getString("DETAILS");
+//                summary.add(rs.getString("RULE"));
+//                summary.add(rs.getString("DETAILS"));
+                logger.info("Fetched data: {},{}", name,res);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return res;
+        }
+        return res;
+    }
+
     public ArrayList<String> checkRule(ArrayList<String> userData) {
         ArrayList<String> summary = new ArrayList<>();
         Connection conn = createConn();
@@ -110,7 +135,6 @@ public class DbConnection {
         try {
             String query = "SELECT * FROM ruletable WHERE RULE = ? ";
             PreparedStatement stmt = conn.prepareStatement(query);
-
             stmt.setString(1, rule);
             ResultSet rs = stmt.executeQuery();
 
