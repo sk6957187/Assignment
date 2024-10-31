@@ -9,19 +9,26 @@ import com.project.model.WeatherRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Position;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class WeatherService {
+
+public class WeatherService{
     private static final Logger logger = LoggerFactory.getLogger(WeatherService.class);
     private final WeatherRepository weatherRepository;
 
-    public WeatherService(WeatherMonitoringConfiguration weatherMonitoringConfiguration) {
+    public WeatherService( WeatherMonitoringConfiguration weatherMonitoringConfiguration) {
         this.weatherRepository = new WeatherRepository(weatherMonitoringConfiguration.getWeatherApiConfig(),
-                weatherMonitoringConfiguration.getOracleSqlConfig(),weatherMonitoringConfiguration.getUiConfig());
+                                    weatherMonitoringConfiguration.getOracleSqlConfig(),
+                                    weatherMonitoringConfiguration.getUiConfig());
     }
+
+
     public String getUiBaseApi() {
         return weatherRepository.getUiBaseApi();
     }
@@ -78,7 +85,5 @@ public class WeatherService {
         }
         return configuration;
     }
-
-
 
 }
