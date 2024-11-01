@@ -143,9 +143,9 @@ class WeatherMonitor extends Component {
                     <h2>Daily Summary for {city}</h2>
                     <ul>
                         {summary.map((day, index) => (
-                            <li key={index}>
+                            <ul key={index}>
                                 Avg Temp: {day[0]}°C, Max Temp: {day[1]}°C, Min Temp: {day[2]}°C, Condition: {day[3]}
-                            </li>
+                            </ul>
                         ))}
                     </ul>
                 </div>

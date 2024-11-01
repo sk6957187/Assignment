@@ -26,7 +26,6 @@ public class WeatherResource {
         this.weatherService = new WeatherService(weatherMonitoringConfiguration);
     }
 
-
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/app-view")
