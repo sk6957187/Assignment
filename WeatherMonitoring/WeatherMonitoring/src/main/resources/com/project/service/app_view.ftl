@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <link rel="stylesheet" type="text/css" href="/assets/libs/react-build-1.0.0/script2.js"/>
-    <link rel="stylesheet" type="text/css" href="/assets/libs/react-build-1.0.0/script1.js"/>
+    <script type="text/javascript" src="/assets/libs/react-build-1.0.0/script1.js"></script>
+    <script type="text/javascript" src="/assets/libs/react-build-1.0.0/script2.js"></script>
 </body>
 </html>
