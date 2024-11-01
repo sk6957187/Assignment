@@ -10,3 +10,10 @@ java -jar target/weather-monitoringV2-1.0.0-SNAPSHOT.jar server meta-data/app_en
 
 Render .ftl -->
 create separate AppView class and import dropwizard-views-freemarker
+
+Build jar file -->
+goto file -> project structure -> artifacts -> jar -> from modules with dependencies  -> select main class
+
+Run jar file -->
+java -jar out/artifacts/WeatherMonitoring_jar/WeatherMonitoring.jar server meta-data/app_env_config.yml
+(is not work properly)
