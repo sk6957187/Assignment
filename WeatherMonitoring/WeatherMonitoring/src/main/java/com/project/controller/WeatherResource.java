@@ -12,6 +12,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -66,6 +68,12 @@ public class WeatherResource {
         return weatherService.setAlert(city, thresholdTemp);
     }
 
+    @GET
+    @Path("/favicon.ico")
+    @Produces("image/x-icon")
+    public Response LoadFaviconIcon() throws URISyntaxException {
+        return Response.seeOther(new URI("/assets/favicon.ico")).build();
+    }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
