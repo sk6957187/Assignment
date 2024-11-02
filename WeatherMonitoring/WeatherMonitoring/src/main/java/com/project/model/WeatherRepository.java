@@ -195,9 +195,5 @@ public class WeatherRepository {
         }
     }
 
-
-
-//    public Response getBaseApi() {
-//    }
 }
 

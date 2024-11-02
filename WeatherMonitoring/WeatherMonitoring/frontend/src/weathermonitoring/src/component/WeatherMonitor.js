@@ -10,60 +10,56 @@ class WeatherMonitor extends Component {
             summary: [],
             threshold: 35,
             alertMessage: '',
-            alertMessageClass: ""
+            alertMessageClass: '',
+            baseApi: '',
         };
-        this.baseApi= '';
-        this.staticDataApi="http://localhost:8080/api/weather/base-api";
-        this.dataFeatchStatus="No";
+        this.baseApi = window.Global.baseApi;
+        this.dataFetchStatus = "No";
     }
-    
 
     componentDidMount() {
-        if(this.dataFeatchStatus==="No"){
-            this.dataFeatchStatus="Yes";
+        if (this.dataFetchStatus === "No") {
+            this.dataFetchStatus = "Yes";
             this.fetchBaseApi();
-            
         }
-        
     }
-    
+
     componentWillUnmount() {
-        console.log(2);
         clearInterval(this.interval);
     }
-    
+
     fetchBaseApi = async () => {
         try {
-            const response = await axios.get(this.staticDataApi);
-            this.baseApi = response.data;
-            await this.fetchCurrentWeather();
-            await this.fetchDailySummary();
-            this.interval = setInterval(this.fetchCurrentWeather, 300000);      // fetch weather every 5 minutes
+            this.setState({ baseApi: this.baseApi }, () => {
+                this.fetchCurrentWeather();
+                this.fetchDailySummary();
+                this.interval = setInterval(this.fetchCurrentWeather, 300000); // fetch every 5 minutes
+            });
         } catch (error) {
             console.log('Error fetching base API:', error);
         }
     };
-    
 
     fetchCurrentWeather = async () => {
         try {
             const { city, baseApi } = this.state;
-            if (this.baseApi) {
-                const response = await axios.get(`${this.baseApi}/api/weather/current/${city}`);
+            if (baseApi) {
+                const response = await axios.get(`${baseApi}/api/weather/current/${city}`);
                 this.setState({ weather: response.data });
-                console.log(response.data);
+                console.log("Current weather:", response.data);
             }
         } catch (error) {
             console.log('Error fetching current weather:', error);
         }
     };
-    fetchDailySummary =  async () => {
+
+    fetchDailySummary = async () => {
         try {
-            var { city, baseApi } = this.state;
-            if (this.baseApi) {
-                const response = await axios.get(`${this.baseApi}/api/weather/daily-summary/${city}`);
+            const { city, baseApi } = this.state;
+            if (baseApi) {
+                const response = await axios.get(`${baseApi}/api/weather/daily-summary/${city}`);
                 this.setState({ summary: response.data });
-                console.log(response.data);
+                console.log("Daily summary:", response.data);
             }
         } catch (error) {
             console.log('Error fetching daily summary:', error);
@@ -73,24 +69,14 @@ class WeatherMonitor extends Component {
     setTemperatureAlert = async () => {
         try {
             const { city, threshold, baseApi } = this.state;
-            if (this.baseApi) {
-                const response = await axios.post(`${this.baseApi}/api/weather/set-alert/${city}`, {
-                    threshold: Number(threshold),
-                });
-                var messageClass = "badge ";
-                var message = "";
-                var status ="";
-                if(response.data && response.data.length === 2){
-                    message = response.data[0];
-                    status = response.data[1];
-                }
-                if(status === "YES"){
-                    messageClass = messageClass + "bg-success";
-                } else if(status === "NO"){
-                    messageClass = messageClass + "bg-danger";
-                }
+            if (baseApi) {
+                const response = await axios.post(`${baseApi}/api/weather/set-alert/${city}`, { threshold: Number(threshold) });
+                let messageClass = "badge ";
+                const [message, status] = response.data || ["", ""];
+
+                messageClass += status === "YES" ? "bg-success" : "bg-danger";
                 this.setState({ alertMessage: message, alertMessageClass: messageClass });
-                console.log(`Response: ${response.data}`);
+                console.log(`Alert Response: ${response.data}`);
             }
         } catch (error) {
             console.log('Error setting alert:', error);
@@ -98,7 +84,8 @@ class WeatherMonitor extends Component {
     };
 
     handleCityChange = (event) => {
-        this.setState({ city: event.target.value.toUpperCase() }, () => {
+        const city = event.target.value.toUpperCase();
+        this.setState({ city }, () => {
             this.fetchCurrentWeather();
             this.fetchDailySummary();
         });
@@ -109,10 +96,10 @@ class WeatherMonitor extends Component {
     };
 
     render() {
-        const { city, weather, summary, threshold, alertMessage } = this.state;
+        const { city, weather, summary, threshold, alertMessage, alertMessageClass } = this.state;
 
         return (
-            <div>
+            <div className="text-center">
                 <h1>Weather Monitoring</h1>
                 <div>
                     <label>Select City: </label>
@@ -127,19 +114,19 @@ class WeatherMonitor extends Component {
                 </div>
 
                 {weather && (
-                    <div className="row">
+                    <div className="weather-info">
                         <h2>Current Weather in {city}</h2>
                         <p>Temperature: {weather.temp.toFixed(2)}°C</p>
                         <p>Feels Like: {weather.feelsLike.toFixed(2)}°C</p>
                         <p>Condition: {weather.condition}</p>
-                        <p>Wind Speed: {(weather.windSpeed * (18/5)).toFixed(2)} km/hr</p>
+                        <p>Wind Speed: {(weather.windSpeed * (18 / 5)).toFixed(2)} km/hr</p>
                         <p>Humidity: {weather.humidity}%</p>
                         <p>Sea Level: {weather.seaLevel} hPa</p>
                         <p>Visibility: {(weather.visibility / 1000).toFixed(2)} km</p>
                     </div>
                 )}
 
-                <div>
+                <div className="daily-summary">
                     <h2>Daily Summary for {city}</h2>
                     <ul>
                         {summary.map((day, index) => (
@@ -150,7 +137,7 @@ class WeatherMonitor extends Component {
                     </ul>
                 </div>
 
-                <div>
+                <div className="temperature-alert">
                     <h3>Set Temperature Alert</h3>
                     <div>
                         <input
@@ -161,8 +148,8 @@ class WeatherMonitor extends Component {
                         <button type="button" className="btn btn-primary" onClick={this.setTemperatureAlert}>
                             Set Alert
                         </button>
-                    </div>
-                    {alertMessage && <p className={this.state.alertMessageClass}>{alertMessage}</p>}
+                        </div>
+                    {alertMessage && <p className={alertMessageClass}>{alertMessage}</p>}
                 </div>
             </div>
         );
