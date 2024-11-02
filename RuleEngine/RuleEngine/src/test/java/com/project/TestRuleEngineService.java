@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TestRuleEngineServiceService {
-
+    private RuleEngineConfiguration configuration;
     public RuleEngineConfiguration getOracleConfig() {
         String configPath = "A:/workspace/Assignment/RuleEngine/RuleEngine/meta-data/app_env_config.yml";
         return RuleEngineService.getOracleSqlConfig(configPath);
@@ -22,14 +22,14 @@ public class TestRuleEngineServiceService {
     @Test
     public void getOracleConfig1() {
         String configPath = "A:/workspace/Assignment/RuleEngine/RuleEngine/meta-data/app_env_config_test.yml";
-        RuleEngineConfiguration configuration = RuleEngineService.getOracleSqlConfig(configPath);
+        this.configuration = RuleEngineService.getOracleSqlConfig(configPath);
 //        return configuration;
         configuration.getOracleSqlConfig();
     }
 
     @Test
     public void testRuleEngine1() {
-        RuleEngineService ruleEngineService = new RuleEngineService();
+        RuleEngineService ruleEngineService = new RuleEngineService(configuration);
         String ruleName = "cartoon";
         HashMap<String, String> userInput = new HashMap<>();
         userInput.put("department", "department");
@@ -73,7 +73,7 @@ public class TestRuleEngineServiceService {
 
     @Test
     public void testGetAST2() {
-        RuleEngineService ruleEngineService = new RuleEngineService();
+        RuleEngineService ruleEngineService = new RuleEngineService(configuration);
         String rule = "age < 20 AND age > 5";
         ArrayList<String> ruleItems = ruleEngineService.tokenizeRule(rule);
 
@@ -86,7 +86,7 @@ public class TestRuleEngineServiceService {
 
     @Test
     public void testGetAST3() {
-        RuleEngineService ruleEngineService = new RuleEngineService();
+        RuleEngineService ruleEngineService = new RuleEngineService(configuration);
         String rule = "((age > 30 AND department = 'Marketing') AND (salary > 20000 OR experience > 5))";
         ArrayList<String> ruleItems = ruleEngineService.tokenizeRule(rule);
 
@@ -102,7 +102,7 @@ public class TestRuleEngineServiceService {
     // Test generating an AST with a rule having multiple AND conditions
     @Test
     public void testGetAST4() {
-        RuleEngineService ruleEngineService = new RuleEngineService();
+        RuleEngineService ruleEngineService = new RuleEngineService(configuration);
         String rule = "age > 10 AND age > 20 AND department = Store";
         ArrayList<String> ruleItems = ruleEngineService.tokenizeRule(rule);
 
@@ -118,7 +118,7 @@ public class TestRuleEngineServiceService {
     // Test evaluating a rule
     @Test
     public void testEvaluateRule() {
-        RuleEngineService ruleEngineService = new RuleEngineService();
+        RuleEngineService ruleEngineService = new RuleEngineService(configuration);
         String ruleName = "learning";
         HashMap<String, String> userInput = new HashMap<>();
         userInput.put("age", "20");
@@ -174,7 +174,7 @@ public class TestRuleEngineServiceService {
         HashMap<String, String> hm = new HashMap<>();
         hm.put("combinedRuleName", "Rule3");
         hm.put("combinedRuleValue", "Rule1 AND Rule2");
-        RuleEngineController ruleEngCon = new RuleEngineController();
+        RuleEngineController ruleEngCon = new RuleEngineController(configuration);
         ruleEngCon.combineRule(hm);
 //        Assert.assertFalse(status);
     }
