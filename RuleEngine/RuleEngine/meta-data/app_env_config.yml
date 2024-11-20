@@ -12,8 +12,8 @@ logging:
       timeZone: UTC
       archive: true
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      archivedLogFilenamePattern: C:/log/java-weather/application-%d{yyyy-MM-dd}.log
-      currentLogFilename: C:/log/java-weather/application.log
+      archivedLogFilenamePattern: C:/log/java-RuleEngine/application-%d{yyyy-MM-dd}.log
+      currentLogFilename: C:/log/java-RuleEngine/application.log
       archivedFileCount: 5 #Number of day archived file to be present
 
 server:
@@ -30,3 +30,6 @@ oracleSqlConfig:
   url: "jdbc:oracle:thin:@Sumit11:1521:xe"
   username: "System"
   password: "tiger"
+
+uiConfig:
+  uiBaseApi: "http://localhost:8080"
