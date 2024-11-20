@@ -23,11 +23,13 @@ public class RuleEngineService {
     private final HashMap<String, String> rules;
     private final ArrayList<String> operators;
     private final ArrayList<String> operands;
+    private final DbConnection dbConn;
 
     RuleEngineConfiguration ruleEngineConfig = new RuleEngineConfiguration();
-    DbConnection dbConn = new DbConnection(ruleEngineConfig);
+//    DbConnection dbConn = new DbConnection(ruleEngineConfig);
 
-    public RuleEngineService() {
+    public RuleEngineService(RuleEngineConfiguration ruleEngineConfig) {
+        this.dbConn = new DbConnection(ruleEngineConfig.getOracleSqlConfig());
         rules = new HashMap<>();
         rules.put("cartoon", "age  < 10");//age,,<,10
         rules.put("dharmic", "age > 40");//age,>,40
@@ -40,20 +42,19 @@ public class RuleEngineService {
         operands = ast.getOperands();
         operators = ast.getOperators();
     }
-    public RuleEngineService(String name){
-        rules = new HashMap<>();
-        rules.put(name, dbConn.fetchedValue(name));
-        AST ast = new AST();
-        operands = ast.getOperands();
-        operators = ast.getOperators();
+
+    public String getUiBaseApi() {
+        return ruleEngineConfig.getUiConfig().getUiBaseApi();
     }
-    private String getRuleValue(String ruleName) {
+
+    public String getRuleValue(String ruleName) {
         if (ruleName == null) {
             return null;
         }
-        return rules.get(ruleName);
+//        return rules.get(ruleName);
+        return dbConn.fetchedValue(ruleName);
     }
-    private int convertStringToNum(String num) {
+    public int convertStringToNum(String num) {
         if (num == null || num.isEmpty()) {
             return 0;
         }
@@ -126,6 +127,7 @@ public class RuleEngineService {
             return;
         }
         if (!operators.contains(root.getType()) && root.getType() != null && !root.getType().isEmpty()) {
+            String str = userInput.get(root.getKey());
             root.setCondition(this.isConditionTrue(root.getType(), root.getValue(), userInput.get(root.getKey())));
         }
         if (root.getLeft() != null) {

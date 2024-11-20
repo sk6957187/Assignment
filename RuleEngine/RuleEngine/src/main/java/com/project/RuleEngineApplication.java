@@ -20,9 +20,9 @@ public class RuleEngineApplication extends Application<RuleEngineConfiguration> 
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets"));
     }
     @Override
-    public void run(RuleEngineConfiguration mvcConfiguration, Environment environment) throws Exception {
+    public void run(RuleEngineConfiguration ruleEngineConfiguration, Environment environment) throws Exception {
         logger.info("Application started.");
-        RuleEngineController ruleEngineController = new RuleEngineController();
+        RuleEngineController ruleEngineController = new RuleEngineController(ruleEngineConfiguration);
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(ruleEngineController);

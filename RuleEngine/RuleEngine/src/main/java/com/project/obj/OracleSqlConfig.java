@@ -11,6 +11,7 @@ public class OracleSqlConfig {
     private String password;
 
     public String getDriver() {
+        System.out.println("get driver"+driver);
         return driver;
     }
 
@@ -19,6 +20,7 @@ public class OracleSqlConfig {
     }
 
     public String getUrl() {
+        System.out.println("get url "+url);
         return url;
     }
 
@@ -27,6 +29,7 @@ public class OracleSqlConfig {
     }
 
     public String getUsername() {
+        System.out.println("get name "+username);
         return username;
     }
 
@@ -35,6 +38,7 @@ public class OracleSqlConfig {
     }
 
     public String getPassword() {
+        System.out.println("get pass: "+ password);
         return password;
     }
 
