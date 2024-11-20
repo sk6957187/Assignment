@@ -8,10 +8,12 @@ class RuleTake extends Component {
       ruleName: '',
       ruleValue: '',
       errorMessage: '',
-      responseMessage: ''  // New state for response message
+      responseMessage: ''  // State for response message
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.baseApi = window.Global.baseApi;
+    this.staticDataApi = `${this.baseApi}/api/rule-engine/base-api`;
   }
 
   handleChange = (e) => {
@@ -32,7 +34,7 @@ class RuleTake extends Component {
       return;
     }
 
-    // Check if rule is already available
+    // Check if rule already exists in the parent component's availableRules
     if (this.props.availableRules.includes(ruleName)) {
       this.setState({
         errorMessage: 'Rule is already available.',
@@ -41,28 +43,33 @@ class RuleTake extends Component {
       return;
     }
 
-    // Clear error and response messages before submission
+    // Clear previous messages before submission
     this.setState({ errorMessage: '', responseMessage: '' });
 
     const formData = {
-      ruleName: ruleName,
-      ruleValue: ruleValue
+      ruleName,
+      ruleValue
     };
 
     // Post form data to the backend
-    axios.post('http://localhost:8080/api/rule-engine/create-rule', formData)
+    axios.post(`${this.baseApi}/api/rule-engine/create-rule`, formData)
       .then(response => {
-        // Update response message upon successful submission
-        this.setState({
-          responseMessage: 'Rule created successfully!',  // Updated success message
-          ruleName: '',
-          ruleValue: '',
-          errorMessage: ''
-        });
-        console.log("Response:", response.data);
-
-        // Update parent component's rule list with the new rule
-        this.props.updateRuleList(ruleName);
+        console.log(response.data)
+        if (response.data) {
+          this.setState({
+            responseMessage: 'Rule created successfully!',
+            ruleName: '',
+            ruleValue: '',
+            errorMessage: ''
+          });
+          this.props.updateRuleList(ruleName);
+        } else {
+          // Show error message if response data is false
+          this.setState({
+            errorMessage: 'Failed to create rule. Please try again.',
+            responseMessage: ''
+          });
+        }
       })
       .catch(error => {
         // Handle error during submission
@@ -107,14 +114,14 @@ class RuleTake extends Component {
             </tbody>
           </table>
 
-          {/* Display error message if exists */}
+          {/* Display error message if present */}
           {this.state.errorMessage && (
             <p className="badge rounded-pill bg-danger">{this.state.errorMessage}</p>
           )}
 
           <button type="submit">Submit</button>
 
-          {/* Display response message after submission */}
+          {/* Display response message if present */}
           <div>
             {this.state.responseMessage && (
               <p className="badge rounded-pill bg-success">{this.state.responseMessage}</p>

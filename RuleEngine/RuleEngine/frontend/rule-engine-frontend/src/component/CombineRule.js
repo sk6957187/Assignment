@@ -10,6 +10,8 @@ class CombineRule extends Component {
       errorMessage: '',
       successMessage: ''
     };
+    this.baseApi = window.Global.baseApi;
+    this.staticDataApi = `${this.baseApi}/api/rule-engine/base-api`;
   }
 
   handleChange = (e) => {
@@ -23,9 +25,14 @@ class CombineRule extends Component {
       combinedRuleValue: this.state.combinedRuleValue
     };
 
-    axios.post('http://localhost:8080/api/rule-engine/combine', data)
+    axios.post(`${this.baseApi}/api/rule-engine/combine`, data)
       .then(response => {
+        if(response.data){
         this.setState({ successMessage: 'Rules combined successfully!', errorMessage: '' });
+        } else {
+        this.setState({ successMessage: 'Rules not combined successfully!', errorMessage: '' });
+        }
+
       })
       .catch(error => {
         this.setState({ errorMessage: 'Failed to combine the rules. Please try again.', successMessage: '' });
@@ -40,18 +47,18 @@ class CombineRule extends Component {
           <table>
             <tbody>
               <tr>
-                <td><label>Combined Rule Name :</label></td>
+                <td><label>Combined Rule Name:</label></td>
                 <td>
                   <input
-                    type="text" name="combinedRuleName" value={this.state.combineRuleName1} onChange={this.handleChange} required
+                    type="text" name="combinedRuleName" value={this.state.combinedRuleName} onChange={this.handleChange} required
                   />
                 </td>
-                </tr>
-                <tr>
-                <td><label>Rule value:</label></td>
+              </tr>
+              <tr>
+                <td><label>Rule Value:</label></td>
                 <td>
                   <input
-                    type="text" name="combinedRuleValue" value={this.state.combineRuleName2} onChange={this.handleChange} required
+                    type="text" name="combinedRuleValue" value={this.state.combinedRuleValue} onChange={this.handleChange} required
                   />
                 </td>
               </tr>

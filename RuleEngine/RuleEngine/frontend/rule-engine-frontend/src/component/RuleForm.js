@@ -8,7 +8,7 @@ class RuleForm extends Component {
     super(props);
     this.state = {
       ruleName: '',
-      availableRules: ['rule1', 'rule2', 'rule3', 'cartoon', 'rule4'],
+      availableRules: ['Rule1', 'Rule2', 'Rule3', 'cartoon', 'Rule4'],
       showRuleTake: false,
       showCombineRule: false
     };
@@ -17,6 +17,8 @@ class RuleForm extends Component {
     this.toggleRuleTake = this.toggleRuleTake.bind(this);
     this.updateRuleList = this.updateRuleList.bind(this);
     this.toggleCombineRule = this.toggleCombineRule.bind(this);
+    this.baseApi = window.Global.baseApi;
+    this.staticDataApi = `${this.baseApi}/api/rule-engine/base-api`;
   }
 
   handleChange = (e) => {
@@ -35,8 +37,8 @@ class RuleForm extends Component {
       salary: this.state.salary,
       experience: this.state.experience
     };
-    
-    axios.post('http://localhost:8080/api/rule-engine/evaluate', formData)
+
+    axios.post(`${this.baseApi}/api/rule-engine/evaluate`, formData)
       .then(response => {
         let responseClassName = "badge rounded-pill";
         let responseData = "Response data: ";
@@ -127,7 +129,7 @@ class RuleForm extends Component {
           />
         )}
         {this.state.showCombineRule && (
-          <CombineRule 
+          <CombineRule
           availableRules={this.state.availableRules}
           />
         )}
