@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 //@Path("/hello-world")
 //@Produces(MediaType.TEXT_PLAIN)
@@ -62,6 +64,13 @@ public class HelloWorldResource {
     public Response appView(@Context HttpServletRequest request) {
         logger.info("Loading/helloWorld/view");
         return Response.ok(new AppView("app_view.ftl", configuration)).build();
+    }
+    @GET
+    @Path("/favicon.ico")
+    @Produces("image/x-icon")
+    public Response LoadFaviconIcon() throws URISyntaxException {
+        System.out.println("favicon loaded");
+        return Response.seeOther(new URI("assets/favicon.ico")).build();
     }
     @GET
     @Produces(MediaType.TEXT_HTML)
