@@ -72,6 +72,8 @@ public class WeatherResource {
     @Path("/favicon.ico")
     @Produces("image/x-icon")
     public Response LoadFaviconIcon() throws URISyntaxException {
+        System.out.println("Favicon loaded");
+        System.out.println();
         return Response.seeOther(new URI("/assets/favicon.ico")).build();
     }
 

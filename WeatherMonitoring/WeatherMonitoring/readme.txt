@@ -15,4 +15,9 @@ create separate AppView class and import dropwizard-views-freemarker
 
 after creating jar file in react copy js file in build/static/js and store create new file build-1.0.0 (in react)
 
+In react add configuration -->
+index.html,
+
+react jar file add in assets
+
 
