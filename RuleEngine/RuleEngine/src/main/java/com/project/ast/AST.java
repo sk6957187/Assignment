@@ -1,11 +1,13 @@
 package com.project.ast;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class AST {
 
     private final ArrayList<String> operators;
     private final ArrayList<String> operands;
+
     public AST() {
         operators = new ArrayList<>();
         operands = new ArrayList<>();
@@ -34,7 +36,7 @@ public class AST {
             } else {
                 root.setLeft(node);
             }
-        } else if (root.getRight() == null ) {
+        } else if (root.getRight() == null) {
             if (operators.contains(node.getType())) {
                 node.setRight(root);
                 root = node;
@@ -44,6 +46,7 @@ public class AST {
         }
         return root;
     }
+
     public Tree getASTBcp(ArrayList<String> rules) {
         if (rules == null) {
             return null;
@@ -52,7 +55,7 @@ public class AST {
         Tree node = null;
         Tree root = null;
         boolean keyFound = false;
-        boolean valueFound = false;
+
         for (String str : rules) {
             if (operators.contains(str)) {
                 node = new Tree();
@@ -63,7 +66,7 @@ public class AST {
                 node.setType(str);
                 node.setKey(key);
                 root = this.addNode(root, node);
-            } else if (!keyFound){
+            } else if (!keyFound) {
                 key = str;
                 keyFound = true;
             } else {
@@ -76,29 +79,31 @@ public class AST {
         }
         return root;
     }
+
     public Tree getAST(ArrayList<String> infix) {
         if (infix == null) {
             return null;
         }
-        Stack stack = new Stack();
+        Stack<Tree> stack = new Stack<>();
         Tree root = new Tree("");
         stack.push(root);
         Tree currentTree = root;
         String temp;
-        Tree oldRight, parent, newParent;
+        Tree parent;
         boolean keyFound = false;
         String key = null;
-        for (int i=0; i<infix.size(); i++) {
-            temp = infix.get(i);
+
+        for (String token : infix) {
+            temp = token;
             if ("(".equals(temp)) {
                 currentTree.insertLeft(currentTree, "");
                 stack.push(currentTree);
                 currentTree = currentTree.getLeftOrSelf(currentTree);
             } else if (")".equals(temp)) {
-                currentTree = (Tree) stack.pop();
+                currentTree = stack.pop();
             } else if (operators.contains(temp)) {
                 if (operators.contains(currentTree.getType()) || operands.contains(currentTree.getType())) {
-                    newParent = new Tree(temp);
+                    Tree newParent = new Tree(temp);
                     newParent.setLeft(currentTree);
                     currentTree = newParent;
                 } else {
@@ -110,16 +115,48 @@ public class AST {
             } else if (operands.contains(temp)) {
                 currentTree.setType(temp);
                 currentTree.setKey(key);
-            } else if (!keyFound){
+            } else if (!keyFound) {
                 key = temp;
                 keyFound = true;
             } else {
                 currentTree.setValue(temp);
                 keyFound = false;
-                parent = (Tree) stack.pop();
+                parent = stack.pop();
                 currentTree = parent;
             }
         }
         return currentTree;
+    }
+
+    public ArrayList<String> infixToPostfix(ArrayList<String> infix) {
+        if (infix == null) {
+            return null;
+        }
+        ArrayList<String> postfixList = new ArrayList<>();
+        Stack<String> opStack = new Stack<>();
+
+        for (String token : infix) {
+            if (token.chars().allMatch(Character::isDigit)) {
+                postfixList.add(token);
+            } else if ("(".equals(token)) {
+                opStack.push(token);
+            } else if (")".equals(token)) {
+                while (!"(".equals(opStack.peek())) {
+                    postfixList.add(opStack.pop());
+                }
+                opStack.pop();
+            } else if (operators.contains(token)) {
+                while (!opStack.isEmpty() && operators.contains(opStack.peek())) {
+                    postfixList.add(opStack.pop());
+                }
+                opStack.push(token);
+            }
+        }
+
+        while (!opStack.isEmpty()) {
+            postfixList.add(opStack.pop());
+        }
+
+        return postfixList;
     }
 }

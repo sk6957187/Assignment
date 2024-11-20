@@ -8,39 +8,31 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DbConnection {
-//    private final String driver;// = "oracle.jdbc.driver.OracleDriver";
-//    private final String url;// = "jdbc:oracle:thin:@Sumit11:1521:xe";
-//    private final String user;// = "system";
-//    private final String pass;// = "tiger";
-    private final Logger logger = LoggerFactory.getLogger(DbConnection.class);
+import static com.project.service.RuleEngineService.getOracleSqlConfig;
 
-    private RuleEngineConfiguration ruleEngineConfiguration;
-    private OracleSqlConfig oracleSqlConfig;
-    public DbConnection(RuleEngineConfiguration ruleEngineConfiguration) {
-        this.ruleEngineConfiguration = ruleEngineConfiguration;
-        this.oracleSqlConfig = new OracleSqlConfig();
-        oracleSqlConfig.setDriver("oracle.jdbc.driver.OracleDriver");
-        oracleSqlConfig.setUrl("jdbc:oracle:thin:@Sumit11:1521:xe");
-        oracleSqlConfig.setPassword("tiger");
-        oracleSqlConfig.setUsername("system");
-    }
+public class DbConnection {
+    private final Logger logger = LoggerFactory.getLogger(DbConnection.class);
+    private final String driver;// = "oracle.jdbc.driver.OracleDriver";
+    private final String url;// = "jdbc:oracle:thin:@Sumit11:1521:xe";
+    private final String user;// = "system";
+    private final String pass;// = "tiger";
+
 
     public DbConnection(OracleSqlConfig oracleSqlConfig) {
-//       String driver = ruleEngineConfiguration.getOracleSqlConfig().getDriver();
-//       String url = ruleEngineConfiguration.getOracleSqlConfig().getUrl();
-//       String user = ruleEngineConfiguration.getOracleSqlConfig().getUsername();
-//       String pass = ruleEngineConfiguration.getOracleSqlConfig().getPassword();
+       this.driver = oracleSqlConfig.getDriver();
+       this.url = oracleSqlConfig.getUrl();
+       this.user = oracleSqlConfig.getUsername();
+       this.pass = oracleSqlConfig.getPassword();
     }
 
 
     public Connection createConn() {
         Connection conn = null;
         try {
-            String driver = oracleSqlConfig.getDriver();
-            String url = oracleSqlConfig.getUrl();
-            String user = oracleSqlConfig.getUsername();
-            String pass = oracleSqlConfig.getPassword();
+            String driver = this.driver;
+            String url = this.url;
+            String user = this.user;
+            String pass = this.pass;
             Class.forName(driver);
             conn = DriverManager.getConnection(url, user, pass);
             logger.info("Connection established!");
@@ -62,7 +54,7 @@ public class DbConnection {
             return false;
         }
         try {
-            String query = "Insert INTO ruletable (RULE, DETAILS) values (UPPER(?), ?)";
+            String query = "Insert INTO ruletable (RULE, DETAILS) values (UPPER(?), UPPER(?))";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, ruleName);
             stmt.setString(2, ruleDetail);
@@ -104,15 +96,13 @@ public class DbConnection {
         }
         Connection conn = createConn();
         try {
-            String query = "select DETAILS from ruleTable where rule= upper(?)";
+            String query = "select DETAILS from RULETABLE where RULE= upper(?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 res = rs.getString("DETAILS");
-//                summary.add(rs.getString("RULE"));
-//                summary.add(rs.getString("DETAILS"));
                 logger.info("Fetched data: {},{}", name,res);
             }
         }catch (Exception e){
