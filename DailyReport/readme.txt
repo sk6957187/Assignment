@@ -1,4 +1,4 @@
-i) 	    show data
+i) 	    Display data
 ii)	    Upload data
 iii) 	if required then update the data
 iv)	    delete the data
