@@ -80,7 +80,7 @@ class DailyReport extends Component {
     const { data, editingRowIndex, editedRow } = this.state;
 
     return (
-      <table border="1" style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table className="table">
         <thead>
           <tr>
             <th>SNO</th>
