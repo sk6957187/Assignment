@@ -27,13 +27,22 @@ public class DailyReportController {
         return Response.ok(data).build();
     }
     @POST
+    @Path("/daily-report/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addRecord(ArrayList<String> addData){
+        lOGGER.info("Data for add: {}",addData);
+        String status = "Ok";
+        status = dailyReportService.addRecord(addData);
+        return Response.ok(status).build();
+    }
+    @POST
     @Path("/daily-report/update")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateRecord(ArrayList<String> rowData) {
         lOGGER.info("Data fro update: {}", rowData);
         String status ="ok";
-        //System.out.println(rowData.get("sno"));
-        //status = dailyReportService.update(rowData);
+//        System.out.println(rowData.get("sno"));
+        status = dailyReportService.update(rowData);
         return Response.ok(status).build();
     }
     @GET

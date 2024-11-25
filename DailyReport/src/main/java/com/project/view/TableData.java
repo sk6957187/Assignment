@@ -69,6 +69,42 @@ public class TableData {
         return data;
     }
 
+    public String addRecordSql(ArrayList<String> addData){
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = sqlConn();
+            String sql = "INSERT INTO daily_report (START_DATE, USERID, SUB, TOPIC, TOPIC_DETAILS, COMPLETED) VALUES (?, ?, ?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, addData.get(0));               // START_DATE
+            pstmt.setString(2, addData.get(1));               // USERID
+            pstmt.setString(3, addData.get(2));               // SUB
+            pstmt.setString(4, addData.get(3));               // TOPIC
+            pstmt.setString(5, addData.get(4));               // TOPIC_DETAILS
+            pstmt.setString(6, addData.get(5));               // COMPLETED (assuming YES/NO, adjust as needed)
+            int rowsInserted = pstmt.executeUpdate();
+            pstmt = conn.prepareStatement("commit");
+            pstmt.executeUpdate();
+            if (rowsInserted > 0) {
+                return "Record added successfully!";
+            } else {
+                return "Failed to add record.";
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: " + e.getMessage();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public String updateSql(ArrayList<String> rowData) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -102,7 +138,6 @@ public class TableData {
         } catch (SQLException e){
             e.printStackTrace();
         }
-
         return "OK";
     }
 }
