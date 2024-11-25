@@ -9,15 +9,17 @@ import java.util.ArrayList;
 
 public class DailyReportService {
     private static final Logger lOGGER = LoggerFactory.getLogger(DailyReportApplication.class);
-
+    TableData tableData = new TableData();
     public DailyReportService() {}
     public ArrayList<ArrayList<String>> getRecord(){
-        TableData tableData = new TableData();
         return tableData.sqlData();
     }
 
+    public String addRecord(ArrayList<String> addData){
+        return tableData.addRecordSql(addData);
+    }
+
     public String update(ArrayList<String> rowData) {
-        TableData tableData = new TableData();
         return tableData.updateSql(rowData);
     }
 }
