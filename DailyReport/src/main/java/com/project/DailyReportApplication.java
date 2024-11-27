@@ -25,7 +25,7 @@ public class DailyReportApplication extends Application<DailyReportConfiguration
         lOGGER.info("Registering REST resources: {}", configuration);
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new RequestFilter());
-        environment.jersey().register(new DailyReportController());
+        environment.jersey().register(new DailyReportController(configuration));
     }
 
     public static void main(String[] args) throws Exception {

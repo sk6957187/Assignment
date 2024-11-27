@@ -1,22 +1,41 @@
 package com.project.view;
 
+import com.project.model.OracleSqlConfig;
+import com.project.model.UiConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class TableData {
-    private static final Logger lOGGER = LoggerFactory.getLogger(TableData.class);
+public class TableDataRepository {
+    private static final Logger lOGGER = LoggerFactory.getLogger(TableDataRepository.class);
+//    Class.forName();
+//    String url = "jdbc:oracle:thin:@Sumit11:1521:xe";
+//    String username = "System";
+//    String password = "tiger";
+    private final String driver;// = "oracle.jdbc.driver.OracleDriver";
+    private final String username;
+    private final String pass;
+    private final String url;
+
+    public TableDataRepository(OracleSqlConfig oracleSqlConfig){
+        driver = "oracle.jdbc.driver.OracleDriver";   //oracleSqlConfig.getDriver();
+        username = "System"; //oracleSqlConfig.getUsername();
+        pass = "tiger";//oracleSqlConfig.getPassword();
+        url = "jdbc:oracle:thin:@Sumit11:1521:xe"; // oracleSqlConfig.getUrl();
+
+    }
 
     public Connection sqlConn() {
         Connection con = null;
+        System.out.println(this.driver);
+        System.out.println(this.url);
+        System.out.println(this.username);
+        System.out.println(this.pass);
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            String url = "jdbc:oracle:thin:@Sumit11:1521:xe";
-            String username = "System";
-            String password = "tiger";
-            con = DriverManager.getConnection(url, username, password);
+            Class.forName(this.driver);
+            con = DriverManager.getConnection(this.url, this.username, this.pass);
             if (con != null) {
                 System.out.println("Connection established..");
             } else {
