@@ -233,7 +233,7 @@ class DailyReport extends Component {
     return (
       <div>
         <h1>Daily Report</h1>
-        <button type="button" class="btn btn-secondary"  onClick={() => this.handleAddClick()}>Add Information</button>
+        <button type="button" class="btn btn-outline-secondary"  onClick={() => this.handleAddClick()}>Add Information</button>
         {showAddRow && this.renderAddForm()}
         {this.renderTable()}
       </div>
