@@ -1,27 +1,43 @@
 package com.project.controller;
 
+import com.project.DailyReportConfiguration;
 import com.project.service.DailyReportService;
-import com.project.view.TableData;
+import com.project.view.AppView;
+import com.project.view.TableDataRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class DailyReportController {
-    private static final Logger lOGGER = LoggerFactory.getLogger(TableData.class);
-    DailyReportService dailyReportService = new DailyReportService();
+    private static final Logger lOGGER = LoggerFactory.getLogger(TableDataRepository.class);
+    private final DailyReportConfiguration configuration;
+    private final DailyReportService dailyReportService;
 
-    public DailyReportController() {}
+    public DailyReportController(DailyReportConfiguration configuration) {
+        this.configuration = configuration;
+        this.dailyReportService = new DailyReportService(configuration);
+    }
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/app-view")
+    public Response appView(@Context HttpServletRequest request) {
+        return Response.ok( new AppView("app_view.ftl")).build();
+    }
 
     @GET
     @Path("/daily-report/view")
-    public Response viewDailyReport() {
+    public Response viewDailyReport(@Context HttpServletRequest request) {
         ArrayList<ArrayList<String>> data = dailyReportService.getRecord();
         lOGGER.info("SQL data return : {}",data);
         return Response.ok(data).build();
@@ -45,9 +61,19 @@ public class DailyReportController {
         status = dailyReportService.update(rowData);
         return Response.ok(status).build();
     }
+
     @GET
-    @Path("{default: .*}")
-    public Response getDailyReport() {
-        return Response.ok("Hello from Daily Report Service").build();
+    @Path("/favicon.ico")
+    @Produces("image/x-icon")
+    public Response LoadFaviconIcon() throws URISyntaxException {
+        return Response.seeOther(new URI("/assets/favicon1.ico")).build();
     }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("{default: .*}")
+    public Response defaultMethod(@Context HttpServletRequest request) {
+        return Response.ok( new AppView("file_not_found.ftl")).build();
+    }
+
 }
