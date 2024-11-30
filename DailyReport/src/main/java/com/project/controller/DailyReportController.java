@@ -61,6 +61,14 @@ public class DailyReportController {
         status = dailyReportService.update(rowData);
         return Response.ok(status).build();
     }
+    @POST
+    @Path("daily-report/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteRecord(int sno) {
+        lOGGER.info("Request to delete row with SNO: {}", sno);
+        String status = dailyReportService.deleteRec(sno);
+        return Response.ok(status).build();
+    }
 
     @GET
     @Path("/favicon.ico")

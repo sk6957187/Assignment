@@ -15,15 +15,15 @@ public class TableDataRepository {
 //    String username = "System";
 //    String password = "tiger";
     private final String driver;// = "oracle.jdbc.driver.OracleDriver";
-    private final String username;
-    private final String pass;
-    private final String url;
+    private final String username; //"System";
+    private final String pass; //"oracle.jdbc.driver.OracleDriver";
+    private final String url; //"tiger";
 
     public TableDataRepository(OracleSqlConfig oracleSqlConfig){
-        driver = "oracle.jdbc.driver.OracleDriver";   //oracleSqlConfig.getDriver();
-        username = "System"; //oracleSqlConfig.getUsername();
-        pass = "tiger";//oracleSqlConfig.getPassword();
-        url = "jdbc:oracle:thin:@Sumit11:1521:xe"; // oracleSqlConfig.getUrl();
+        driver =    oracleSqlConfig.getDriver();
+        username =  oracleSqlConfig.getUsername();
+        pass = oracleSqlConfig.getPassword();
+        url =  oracleSqlConfig.getUrl();
 
     }
 
@@ -158,5 +158,28 @@ public class TableDataRepository {
             e.printStackTrace();
         }
         return "OK";
+    }
+    public String deleteSql(int n){
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try{
+            conn = sqlConn();
+            if(conn != null){
+                String stmt= "delete daily_report where sno= ?";
+                pstmt = conn.prepareStatement(stmt);
+                pstmt.setInt(1,n);
+                int rowsUpdated = pstmt.executeUpdate();
+                pstmt = conn.prepareStatement("commit");
+                pstmt.executeUpdate();
+                if (rowsUpdated > 0) {
+                    return "Delete successful!";
+                } else {
+                    return "No rows updated. Check the SNO value.";
+                }
+            }
+        }  catch (SQLException e){
+            e.printStackTrace();
+        }
+        return "something wrong";
     }
 }

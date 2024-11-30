@@ -25,19 +25,12 @@ public class DailyReportService {
             lOGGER.error("Config path is null or empty.");
             return null;
         }
-
         DailyReportConfiguration configuration = null;
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-
         try {
             File ref = new File(configPath);
-            if (ref.exists() && ref.canRead()) {
-                lOGGER.info("Reading configuration file: {}", configPath);
-                configuration = objectMapper.readValue(ref, DailyReportConfiguration.class);
-                lOGGER.info("Configuration successfully loaded: {}", configuration);
-            } else {
-                lOGGER.error("Configuration file does not exist or is not readable: {}", configPath);
-            }
+            configuration = objectMapper.readValue(ref, DailyReportConfiguration.class);
+            lOGGER.info("Configuration successfully loaded: {}", configuration);
         } catch (IOException e) {
             lOGGER.error("Error reading configuration file: {}", configPath, e);
         }
@@ -56,5 +49,8 @@ public class DailyReportService {
 
     public String update(ArrayList<String> rowData) {
         return tableData.updateSql(rowData);
+    }
+    public String deleteRec(int n){
+        return tableData.deleteSql(n);
     }
 }
