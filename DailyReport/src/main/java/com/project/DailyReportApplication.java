@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DailyReportApplication extends Application<DailyReportConfiguration> {
-    private static final Logger lOGGER = LoggerFactory.getLogger(DailyReportApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(DailyReportApplication.class);
 
     @Override
     public void initialize(Bootstrap<DailyReportConfiguration> bootstrap) {
@@ -22,7 +22,7 @@ public class DailyReportApplication extends Application<DailyReportConfiguration
 
     @Override
     public void run(DailyReportConfiguration configuration, Environment environment) throws Exception {
-        lOGGER.info("Registering REST resources: {}", configuration);
+        logger.info("Registering REST resources");
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new DailyReportController(configuration));

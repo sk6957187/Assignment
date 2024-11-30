@@ -7,8 +7,8 @@ class DailyReport extends Component {
       data: [],
       isLoading: true,
       error: null,
-      editingRowIndex: null, // Tracks which row is being edited
-      editedRow: null,       // Stores the data being edited
+      editingRowIndex: null,
+      editedRow: null,
       showAddRow: false,
       newRow: [],
     };
@@ -56,9 +56,10 @@ class DailyReport extends Component {
     this.setState({ newRow: updatedRow });
   };
 
+
   handleAddRowSubmit = async () => {
     const { data, newRow } = this.state;
-  
+
     try {
       console.log("Added data: ",newRow);
       const response = await fetch("http://localhost:8080/daily-report/add", {
@@ -68,7 +69,7 @@ class DailyReport extends Component {
         },
         body: JSON.stringify(newRow),
       });
-  
+
       if (response.ok) {
         const message = await response.text();
         this.setState({
@@ -76,7 +77,7 @@ class DailyReport extends Component {
           showAddRow: false,      // Hide the add form
           newRow: [],
         });
-        alert(message); // Show success message
+        alert(message);
       } else {
         throw new Error(`Failed to add row: ${response.statusText}`);
       }
@@ -85,6 +86,36 @@ class DailyReport extends Component {
       alert("Error adding row: " + error.message);
     }
   };
+  handleDelete = async (sno) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this row?");
+    if (!isConfirmed) {
+      return;
+    }
+    const { data } = this.state;
+    console.log("sno: ",sno);
+    try {
+      const response = await fetch(`http://localhost:8080/daily-report/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sno),
+      });
+      if (response.ok) {
+        const message = await response.text();
+        console.log(message);
+        const updatedData = data.filter((row) => row[0] !== sno);
+        this.setState({ data: updatedData });
+        alert(message);
+      } else {
+        throw new Error(`Failed to delete: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error deleting row:", error);
+      alert("Error deleting row: " + error.message);
+    }
+  };
+  
 
   renderAddForm() {
     const { newRow } = this.state;
@@ -213,6 +244,9 @@ class DailyReport extends Component {
                     Update
                   </button>
                 )}
+                <button type="button" className="btn btn-danger" onClick={() => this.handleDelete(row[0])}>
+                Delete
+                </button>
               </td>
             </tr>
           ))}

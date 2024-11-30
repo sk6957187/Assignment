@@ -12,8 +12,8 @@ logging:
       timeZone: UTC
       archive: true
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      archivedLogFilenamePattern: C:/log/java/application-%d{yyyy-MM-dd}.log
-      currentLogFilename: C:/log/java/application.log
+      archivedLogFilenamePattern: C:/log/java/application/DailyReport-%d{yyyy-MM-dd}.log
+      currentLogFilename: C:/log/java/application/DailyReport.log
       #      archivedLogFilenamePattern: C:/log/java/application-%d{yyyy-MM-dd}-%i.log
       #      maxFileSize: 1MB
       archivedFileCount: 5 #Number of day archived file to be present
