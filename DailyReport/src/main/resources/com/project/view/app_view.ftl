@@ -8,7 +8,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <h1>Ftl Page</h1>
 <script type="text/javascript">
 </script>
 <script type="text/javascript" src="/assets/libs/react-build-1.0.0/script1.js"></script>

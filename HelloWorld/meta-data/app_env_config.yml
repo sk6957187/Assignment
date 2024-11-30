@@ -27,4 +27,4 @@ server:
     type: http
   rootPath: /*
 
-userMessage: "Hello World2!"
+userMessage: "Hello World22!"

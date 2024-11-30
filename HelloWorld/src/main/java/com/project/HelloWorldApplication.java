@@ -51,6 +51,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
     @Override
     public void run(HelloWorldConfiguration configuration, Environment environment) {
         logger.info("Application run success.");
+        logger.info("Registering REST resources: {}", configuration);
         environment.jersey().register(new HelloWorldResource(configuration));
     }
     public static void main(String[] args) throws Exception {
