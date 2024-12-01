@@ -32,9 +32,17 @@ public class DailyReportController {
     @Produces(MediaType.TEXT_HTML)
     @Path("/app-view")
     public Response appView(@Context HttpServletRequest request) {
+        lOGGER.info("Loading: /app-view");
         return Response.ok( new AppView("app_view.ftl")).build();
     }
-
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/app-view/edit/sno/{sno}")
+    public Response appViewEdit(@Context HttpServletRequest request,
+                                @PathParam("sno") String serialNumber) {
+        lOGGER.info("Loading: /app-view/edit/sno/{}", serialNumber);
+        return Response.ok(new AppView("app_view.ftl")).build();
+    }
     @GET
     @Path("/daily-report/view")
     public Response viewDailyReport(@Context HttpServletRequest request) {
@@ -57,7 +65,6 @@ public class DailyReportController {
     public Response updateRecord(ArrayList<String> rowData) {
         lOGGER.info("Data fro update: {}", rowData);
         String status ="ok";
-//        System.out.println(rowData.get("sno"));
         status = dailyReportService.update(rowData);
         return Response.ok(status).build();
     }
