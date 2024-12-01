@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 
 class DailyReport extends Component {
   constructor(props) {
@@ -7,11 +8,12 @@ class DailyReport extends Component {
       data: [],
       isLoading: true,
       error: null,
-      editingRowIndex: null,
-      editedRow: null,
       showAddRow: false,
       newRow: [],
+      editedRow: null
     };
+    this.editingRowIndex=null;
+    // this.editedRow=null;
   }
 
   async componentDidMount() {
@@ -29,15 +31,17 @@ class DailyReport extends Component {
   }
 
   handleEditClick = (index, row) => {
-    const editableRow = row.map((cell, cellIndex) => {
+    // const editableRow = row.map((cell, cellIndex) => {
       // Convert dates to ISO format for editing
-      if (cellIndex === 7 || cellIndex === 8) {
-        return cell ? new Date(cell).toISOString().slice(0, 10) : "";
-      }
-      return cell;
-    });
-
-    this.setState({ editingRowIndex: index, editedRow: editableRow });
+    //   if (cellIndex === 7 || cellIndex === 8) {
+    //     return cell ? new Date(cell).toISOString().slice(0, 10) : "";
+    //   }
+    //   return cell;
+    // });
+      this.editingRowIndex=index;
+      // this.editedRow=row;
+      this.setState({});
+    // this.setState({ editingRowIndex: index, editedRow: editableRow });
   };
 
   handleInputChange = (index, value) => {
@@ -137,21 +141,11 @@ class DailyReport extends Component {
           <tr>
             {newRow.map((cell, index) => (
               <td key={index}>
-                <input
-                  type="text"
-                  value={cell}
-                  onChange={(e) =>
-                    this.handleNewRowChange(index, e.target.value)
-                  }
-                />
+                <input type="text" value={cell} onChange={(e) => this.handleNewRowChange(index, e.target.value)}/>
               </td>
             ))}
             <td>
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={this.handleAddRowSubmit}
-              >
+              <button type="button" className="btn btn-success" onClick={this.handleAddRowSubmit}>
                 Save
               </button>
             </td>
@@ -161,10 +155,21 @@ class DailyReport extends Component {
     );
   }
   
+  getEditedRow = (editingRowIndex) => {
+    var row = [];
+    const { data } = this.state;
+    for(var i = 0; i<data.length; i++){
+      if(i === editingRowIndex) {
+        return data[i];
+      }
+    }
+    return row;
+  };
 
   handleUpdateSubmit = async () => {
-    const { data, editingRowIndex, editedRow } = this.state;
-
+    const { data, editedRow } = this.state;
+    var editingRowIndex = this.editingRowIndex;
+    // var editedRow = this.getEditedRow(editingRowIndex);
     try {
        console.log(editedRow);
       const response = await fetch("http://localhost:8080/daily-report/update", {
@@ -182,9 +187,10 @@ class DailyReport extends Component {
         updatedData[editingRowIndex] = editedRow; // Update row in the state
         this.setState({
           data: updatedData,
-          editingRowIndex: null,
           editedRow: null,
         });
+        this.editingRowIndex = null;
+        // this.editedRow = null;
         alert(message); // Show success message
       } else {
         throw new Error(`Failed to update: ${response.statusText}`);
@@ -196,7 +202,10 @@ class DailyReport extends Component {
   };
 
   renderTable() {
-    const { data, editingRowIndex, editedRow } = this.state;
+
+    const { data } = this.state;
+    var editingRowIndex = this.editingRowIndex;
+    var editedRow = this.getEditedRow(editingRowIndex);
 
     return (
       <table className="table">
@@ -223,13 +232,7 @@ class DailyReport extends Component {
                       // no update here
                       <span>{editedRow[cellIndex]}</span>
                     ) : (
-                      <input
-                        type="text"
-                        value={editedRow[cellIndex]}
-                        onChange={(e) =>
-                          this.handleInputChange(cellIndex, e.target.value)
-                        }
-                      />
+                      <input type="text" value={editedRow[cellIndex]} onChange={(e) => this.handleInputChange(cellIndex, e.target.value)}/>
                     )
                   ) : (
                     cell
@@ -241,11 +244,12 @@ class DailyReport extends Component {
                   <button type="button" className="btn btn-primary" onClick={this.handleUpdateSubmit}>Save</button>
                 ) : (
                   <button type="button" className="btn btn-primary" onClick={() => this.handleEditClick(index, row)}>
-                    Update
+                    update
                   </button>
+                  // <a type="button" href={"/app-view/edit/sno/" + row[0]} className="btn btn-primary me-md-2">Update</a>
                 )}
                 <button type="button" className="btn btn-danger" onClick={() => this.handleDelete(row[0])}>
-                Delete
+                  Delete
                 </button>
               </td>
             </tr>
@@ -259,15 +263,17 @@ class DailyReport extends Component {
     const { isLoading, error, showAddRow  } = this.state;
 
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <div className="text-center">
+        <h2>Loading...</h2>
+      </div>;
     }
     if (error) {
-      return <div>Error: {error.message}</div>;
+      return <h2>Error: {error.message}</h2>;
     }
     return (
       <div>
-        <h1>Daily Report</h1>
-        <button type="button" class="btn btn-outline-secondary"  onClick={() => this.handleAddClick()}>Add Information</button>
+        <h1 className="text-center">Daily Report</h1>
+        <button type="button" className="btn btn-outline-secondary float-end"  onClick={() => this.handleAddClick()}>Add Information</button>
         {showAddRow && this.renderAddForm()}
         {this.renderTable()}
       </div>

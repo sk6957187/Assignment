@@ -1,4 +1,3 @@
-import './App.css';
 import DailyReport from './document/DailyReport'; // Correct import with PascalCase
 
 function App() {
