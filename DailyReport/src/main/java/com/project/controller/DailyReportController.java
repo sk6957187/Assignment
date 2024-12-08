@@ -29,8 +29,15 @@ public class DailyReportController {
         this.dailyReportService = new DailyReportService(configuration);
     }
     @GET
+    @Produces
+    public Response appView1(@Context HttpServletRequest request) {
+        lOGGER.info("Loading: /Home-page");
+        return Response.ok( new AppView("app_view.ftl")).build();
+    }
+
+    @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/app-view")
+    @Path("/view")
     public Response appView(@Context HttpServletRequest request) {
         lOGGER.info("Loading: /app-view");
         return Response.ok( new AppView("app_view.ftl")).build();

@@ -4,7 +4,9 @@ class HomePage extends Component {
   render() {
     return (
       <div>
-        This is Home page.
+        <div>Current page name: {this.props.pageName}</div>
+        <div>This is Home page.</div>
+        <div><a href="/edit-page">Go to Edit page</a></div>
       </div>
     )
   };

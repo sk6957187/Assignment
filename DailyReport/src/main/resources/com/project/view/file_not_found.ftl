@@ -9,9 +9,9 @@
 <body>
     <div class="container">
         <center style="background-color: aqua;">
-            <div>Requested page does not exist</div>
             <div><b><a href="/">Go to Home page</a></b></div>
-            <div><b><a href="/app-view">Go to App View</a></b></div>
+            <div><b><a href="/view">Go to App View</a></b></div>
+            <div>Requested page does not exist</div>
         </center>
     </div>
 </body>
