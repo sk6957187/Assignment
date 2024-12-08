@@ -29,20 +29,16 @@ public class TableDataRepository {
 
     public Connection sqlConn() {
         Connection con = null;
-        System.out.println(this.driver);
-        System.out.println(this.url);
-        System.out.println(this.username);
-        System.out.println(this.pass);
         try {
             Class.forName(this.driver);
             con = DriverManager.getConnection(this.url, this.username, this.pass);
             if (con != null) {
-                System.out.println("Connection established..");
+                lOGGER.info("Connection established..");
             } else {
-                System.out.println("Connection error..");
+                lOGGER.info("Connection error..");
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error during sql: " + e.getMessage());
+            lOGGER.info("Error during sql: " + e.getMessage());
         }
         return con;
     }
@@ -69,7 +65,6 @@ public class TableDataRepository {
                     row.add(String.valueOf(rs.getDate("ADDED_DATE")));
                     row.add(String.valueOf(rs.getTimestamp("UPDATE_TIME")));
                     data.add(row);
-//                    System.out.println(row);
                 }
             } else {
                 lOGGER.info("Connection error..");

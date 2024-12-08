@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import {BrowserRouter, Link} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import Error from './Error';
+import AddForm from './component/AddForm';
+import Home from './component/Home';
 
 class DailyReport extends Component {
   constructor(props) {
@@ -8,11 +12,11 @@ class DailyReport extends Component {
       data: [],
       isLoading: true,
       error: null,
-      showAddRow: false,
       newRow: [],
-      editedRow: null
+      editedRow: []
     };
     this.editingRowIndex=null;
+    this.showAddRow = false;
     // this.editedRow=null;
   }
 
@@ -38,9 +42,9 @@ class DailyReport extends Component {
     //   }
     //   return cell;
     // });
-      this.editingRowIndex=index;
-      // this.editedRow=row;
-      this.setState({});
+      this.editingRowIndex = index;
+    //   this.editedRow=row;
+      this.setState({editedRow: row});
     // this.setState({ editingRowIndex: index, editedRow: editableRow });
   };
 
@@ -51,45 +55,14 @@ class DailyReport extends Component {
   };
 
   handleAddClick=() =>{
-    this.setState({ showAddRow: true, newRow: Array(6).fill("") });
+    this.setState({  newRow: Array(6).fill("") });
+    this.showAddRow = true;
   };
 
-  handleNewRowChange = (index, value) => {
-    const updatedRow = [...this.state.newRow];
-    updatedRow[index] = value;
-    this.setState({ newRow: updatedRow });
-  };
+  
 
 
-  handleAddRowSubmit = async () => {
-    const { data, newRow } = this.state;
-
-    try {
-      console.log("Added data: ",newRow);
-      const response = await fetch("http://localhost:8080/daily-report/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newRow),
-      });
-
-      if (response.ok) {
-        const message = await response.text();
-        this.setState({
-          data: [...data, newRow], // Append the new row
-          showAddRow: false,      // Hide the add form
-          newRow: [],
-        });
-        alert(message);
-      } else {
-        throw new Error(`Failed to add row: ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error("Error adding row:", error);
-      alert("Error adding row: " + error.message);
-    }
-  };
+  
   handleDelete = async (sno) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this row?");
     if (!isConfirmed) {
@@ -120,50 +93,16 @@ class DailyReport extends Component {
     }
   };
   
-
-  renderAddForm() {
-    const { newRow } = this.state;
-  
-    return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>START_DATE</th>
-            <th>USERID</th>
-            <th>SUB</th>
-            <th>TOPIC</th>
-            <th>TOPIC_DETAILS</th>
-            <th>COMPLETED</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {newRow.map((cell, index) => (
-              <td key={index}>
-                <input type="text" value={cell} onChange={(e) => this.handleNewRowChange(index, e.target.value)}/>
-              </td>
-            ))}
-            <td>
-              <button type="button" className="btn btn-success" onClick={this.handleAddRowSubmit}>
-                Save
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  }
   
   getEditedRow = (editingRowIndex) => {
-    var row = [];
-    const { data } = this.state;
-    for(var i = 0; i<data.length; i++){
-      if(i === editingRowIndex) {
-        return data[i];
-      }
-    }
-    return row;
+    // var row = [];
+    // const { data } = this.state;
+    // for(var i = 0; i<data.length; i++){
+    //   if(i === editingRowIndex) {
+    //     return data[i];
+    //   }
+    // }
+    return this.state.editedRow;
   };
 
   handleUpdateSubmit = async () => {
@@ -171,30 +110,30 @@ class DailyReport extends Component {
     var editingRowIndex = this.editingRowIndex;
     // var editedRow = this.getEditedRow(editingRowIndex);
     try {
-       console.log(editedRow);
-      const response = await fetch("http://localhost:8080/daily-report/update", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editedRow),
-      });
-
-      if (response.ok) {
-        const message = await response.text();
-        console.log(message);
-        const updatedData = [...data];
-        updatedData[editingRowIndex] = editedRow; // Update row in the state
-        this.setState({
-          data: updatedData,
-          editedRow: null,
+        console.log(editedRow);
+        const response = await fetch("http://localhost:8080/daily-report/update", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editedRow),
         });
-        this.editingRowIndex = null;
-        // this.editedRow = null;
-        alert(message); // Show success message
-      } else {
-        throw new Error(`Failed to update: ${response.statusText}`);
-      }
+
+        if (response.ok) {
+            const message = await response.text();
+            console.log(message);
+            const updatedData = [...data];
+            updatedData[editingRowIndex] = editedRow; // Update row in the state
+            this.setState({
+            data: updatedData,
+            editedRow: null,
+            });
+            this.editingRowIndex = null;
+            // this.editedRow = null;
+            alert(message); // Show success message
+        } else {
+            throw new Error(`Failed to update: ${response.statusText}`);
+        }
     } catch (error) {
       console.error("Error updating row:", error);
       alert("Error updating row: " + error.message);
@@ -232,7 +171,7 @@ class DailyReport extends Component {
                       // no update here
                       <span>{editedRow[cellIndex]}</span>
                     ) : (
-                      <input type="text" value={editedRow[cellIndex]} onChange={(e) => this.handleInputChange(cellIndex, e.target.value)}/>
+                      <input type="text" className="form-control bg-info focus" value={editedRow[cellIndex]} onChange={(e) => this.handleInputChange(cellIndex, e.target.value)}/>
                     )
                   ) : (
                     cell
@@ -241,9 +180,9 @@ class DailyReport extends Component {
               ))}
               <td>
                 {editingRowIndex === index ? (
-                  <button type="button" className="btn btn-primary" onClick={this.handleUpdateSubmit}>Save</button>
+                  <button type="button" className="btn btn-primary me-2" onClick={this.handleUpdateSubmit}>Save</button>
                 ) : (
-                  <button type="button" className="btn btn-primary" onClick={() => this.handleEditClick(index, row)}>
+                  <button type="button" className="btn btn-primary me-2" onClick={() => this.handleEditClick(index, row)}>
                     update
                   </button>
                   // <a type="button" href={"/app-view/edit/sno/" + row[0]} className="btn btn-primary me-md-2">Update</a>
@@ -257,11 +196,14 @@ class DailyReport extends Component {
         </tbody>
       </table>
     );
-  }
+  };
+  //const View = () => <div>{this.renderTable()}</div>;
+
+
 
   render() {
-    const { isLoading, error, showAddRow  } = this.state;
-
+    const { isLoading, error  } = this.state;
+    var showAddRow = this.showAddRow;
     if (isLoading) {
       return <div className="text-center">
         <h2>Loading...</h2>
@@ -271,12 +213,27 @@ class DailyReport extends Component {
       return <h2>Error: {error.message}</h2>;
     }
     return (
+      <BrowserRouter>
       <div>
-        <h1 className="text-center">Daily Report</h1>
-        <button type="button" className="btn btn-outline-secondary float-end"  onClick={() => this.handleAddClick()}>Add Information</button>
-        {showAddRow && this.renderAddForm()}
-        {this.renderTable()}
+        <h1 className="text-center"><u>Daily Report</u></h1>
+        <button type="button" className="btn btn-outline-secondary float-none ms-3 mb-2" onClick={() => this.handleAddClick()}>
+            <Link to="/add-data"> Add Information</Link>
+        </button>
+        <button type="button" className="btn btn-outline-secondary float-none ms-3 mb-2" onClick={() => this.renderTable()}>
+            <Link to="/view">Show Data</Link>
+        </button>
+        {/* {this.renderTable()} */}
+        <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/view" render={() => this.renderTable()} />
+            <Route exact path="/add-data" 
+                render={props => (
+                    <AddForm pageName="add-data" showAddRow=""/>
+                )} />
+          <Route path="*" component={Error} />
+        </Switch>
       </div>
+      </BrowserRouter>
     );
   }
 }
