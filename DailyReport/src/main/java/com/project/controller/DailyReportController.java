@@ -54,7 +54,7 @@ public class DailyReportController {
     @Path("/daily-report/view")
     public Response viewDailyReport(@Context HttpServletRequest request) {
         ArrayList<ArrayList<String>> data = dailyReportService.getRecord();
-        lOGGER.info("SQL data return : {}",data);
+        //lOGGER.info("SQL data return : {}",data);
         return Response.ok(data).build();
     }
     @POST

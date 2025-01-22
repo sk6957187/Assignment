@@ -3,17 +3,21 @@ package com.project.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.project.view.TableDataRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class OracleSqlConfig {
+    private static final Logger lOGGER = LoggerFactory.getLogger(OracleSqlConfig.class);
     private String driver;
     private String url;
     private String username;
     private String password;
 
     public String getDriver() {
-        System.out.println("get driver"+driver);
+        lOGGER.info("get driver:{}", driver);
         return driver;
     }
 
@@ -22,7 +26,7 @@ public class OracleSqlConfig {
     }
 
     public String getUrl() {
-        System.out.println("get url "+url);
+        lOGGER.info("get url: {}", url);
         return url;
     }
 
@@ -31,7 +35,7 @@ public class OracleSqlConfig {
     }
 
     public String getUsername() {
-        System.out.println("get name "+username);
+        lOGGER.info("get name: {}",username);
         return username;
     }
 
@@ -40,7 +44,7 @@ public class OracleSqlConfig {
     }
 
     public String getPassword() {
-        System.out.println("get pass: "+ password);
+        lOGGER.info("get pass: {}",password);
         return password;
     }
 

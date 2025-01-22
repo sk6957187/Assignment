@@ -45,26 +45,35 @@ class WeatherMonitor extends Component {
             const { city, baseApi } = this.state;
             if (baseApi) {
                 const response = await axios.get(`${baseApi}/api/weather/current/${city}`);
-                this.setState({ weather: response.data });
-                console.log("Current weather:", response.data);
+                console.log("Response data:", response.data);
+                if (typeof response.data === "object") {
+                    this.setState({ weather: response.data });
+                } else {
+                    console.error("Expected JSON, but got:", response.data);
+                }
             }
         } catch (error) {
-            console.log('Error fetching current weather:', error);
+            console.error('Error fetching current weather:', error.response ? error.response.data : error.message);
         }
     };
+
 
     fetchDailySummary = async () => {
         try {
             const { city, baseApi } = this.state;
             if (baseApi) {
                 const response = await axios.get(`${baseApi}/api/weather/daily-summary/${city}`);
-                this.setState({ summary: response.data });
-                console.log("Daily summary:", response.data);
+                if (Array.isArray(response.data)) {
+                    this.setState({ summary: response.data });
+                } else {
+                    console.warn("Invalid daily summary response:", response.data);
+                }
             }
         } catch (error) {
-            console.log('Error fetching daily summary:', error);
+            console.error('Error fetching daily summary:', error.response ? error.response.data : error.message);
         }
     };
+
 
     setTemperatureAlert = async () => {
         try {

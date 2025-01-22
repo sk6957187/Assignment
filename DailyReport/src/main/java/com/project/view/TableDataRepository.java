@@ -10,10 +10,6 @@ import java.util.ArrayList;
 
 public class TableDataRepository {
     private static final Logger lOGGER = LoggerFactory.getLogger(TableDataRepository.class);
-//    Class.forName();
-//    String url = "jdbc:oracle:thin:@Sumit11:1521:xe";
-//    String username = "System";
-//    String password = "tiger";
     private final String driver;// = "oracle.jdbc.driver.OracleDriver";
     private final String username; //"System";
     private final String pass; //"oracle.jdbc.driver.OracleDriver";
@@ -52,7 +48,8 @@ public class TableDataRepository {
             con = sqlConn();
             if (con != null) {
                 stmt = con.createStatement();
-                rs = stmt.executeQuery("select * from daily_report");
+                //select * from daily_report where delete='NO' order by sno desc
+                rs = stmt.executeQuery("select * from daily_report where deleted = 'NO' order by sno desc");
                 while (rs.next()) {
                     ArrayList<String> row = new ArrayList<>();
                     row.add(String.valueOf(rs.getInt("SNO")));
@@ -86,7 +83,6 @@ public class TableDataRepository {
     public String addRecordSql(ArrayList<String> addData){
         Connection conn = null;
         PreparedStatement pstmt = null;
-
         try {
             conn = sqlConn();
             String sql = "INSERT INTO daily_report (START_DATE, USERID, SUB, TOPIC, TOPIC_DETAILS, COMPLETED) VALUES (?, ?, ?, ?, ?, ?)";
@@ -122,6 +118,12 @@ public class TableDataRepository {
     public String updateSql(ArrayList<String> rowData) {
         Connection conn = null;
         PreparedStatement pstmt = null;
+        if (rowData.size() <= 6 || rowData.get(6) == null) {
+            while (rowData.size() <= 6) {
+                rowData.add(null);
+            }
+            rowData.set(6, "NO");
+        }
         try{
             conn = sqlConn();
             if (conn != null){
@@ -160,7 +162,8 @@ public class TableDataRepository {
         try{
             conn = sqlConn();
             if(conn != null){
-                String stmt= "delete daily_report where sno= ?";
+                //update daily_report set delete='YES' where sno = ?
+                String stmt= "update daily_report set deleted ='YES' where sno = ?";
                 pstmt = conn.prepareStatement(stmt);
                 pstmt.setInt(1,n);
                 int rowsUpdated = pstmt.executeUpdate();
