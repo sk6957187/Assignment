@@ -7,12 +7,12 @@
     <link rel="stylesheet" type="text/css" href="/assets/libs/bootstrap-5.0.2-dist/css/bootstrap.css"/>
 </head>
 <body>
-    <div class="container">
-        <center style="background-color: aqua;">
+    <div class="container" style="background-color: aqua;">
+        <center>
             <div><b><a href="/">Go to Home page</a></b></div>
             <div><b><a href="/view">Go to App View</a></b></div>
-            <div>Requested page does not exist</div>
         </center>
+        <div>404 Requested page does not exist!</div>
     </div>
 </body>
 </html>
