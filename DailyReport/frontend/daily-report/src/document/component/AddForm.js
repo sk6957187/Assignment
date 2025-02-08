@@ -73,18 +73,15 @@ class AddForm extends Component {
           <tr>
             {newRow.map((cell, index) => (
               <td key={index}>
-              
               {index === 5 ? (
-                // <select className="form-control bg-info focus" value={cell || "NO"} onChange={(e) => this.handleNewRowChange(index, e.target.value)}>
-                <select
-  className="form-control bg-info focus"
-  value={cell || "NO"} // Ensure a valid default value
-  onChange={(e) => this.handleNewRowChange(index, e.target.value)}
->
-  <option value="NO">Noo</option>
-  <option value="YES">Yes</option>
-</select>
-
+              <select
+                className="form-control bg-info focus"
+                value={cell || "NO"} // Ensures a default value
+                onChange={(e) => this.handleNewRowChange(index, e.target.value)}>
+                  <option value="NO">No</option>
+                  <option value="YES">Yes</option>
+              </select>
+              // <input type="text" className="form-control bg-info focus" value={cell} onChange={(e) => this.handleNewRowChange(index, e.target.value)}/>
               ) : index === 0 ? (
                 <input type="date" className="form-control bg-info focus" value={cell} onChange={(e) => this.handleNewRowChange(index, e.target.value)}/>
                 ):(  
