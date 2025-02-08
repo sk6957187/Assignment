@@ -300,7 +300,7 @@ class View extends Component {
                 totalPost={record.length}
                 currentPage={currentPage}
                 postsPerPage={rowsPerPage}
-                setCurrentPage={this.setCurrentPage}
+                // setCurrentPage={this.setCurrentPage}
                 filterPerPage={this.filterPerPage} // Pass filterPerPage to update postsPerPage
               />
           </div>

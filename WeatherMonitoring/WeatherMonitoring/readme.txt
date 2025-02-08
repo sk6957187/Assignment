@@ -17,7 +17,11 @@ after creating jar file in react copy js file in build/static/js and store creat
 
 In react add configuration -->
 index.html,
-
+ 
 react jar file add in assets
+
+
+Summery:-
+Developed a robust weather monitoring system using OpenWeatherMap API for real-time weather analysis. The backend is powered by Java and Oracle SQL, focusing on efficient data storage and processing. The frontend, built with React, provides an intuitive user interface to visualize weather trends, summaries, and alerts. Integrated business logic, data aggregation, and alerting mechanisms for comprehensive reporting and enhanced user experience.
 
 

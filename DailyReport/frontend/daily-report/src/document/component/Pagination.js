@@ -4,46 +4,40 @@ class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pageNumbers: [],
-      postsPerPage: this.props.postsPerPage,
+      postsPerPage: props.postsPerPage,
+      pageNumber: ""
     };
   }
 
-  static getDerivedStateFromProps(nextProps, nextState) {
-    const pageNumbers = [];
-    const { totalPost, postsPerPage } = nextProps;
-    const totalPages = Math.ceil(totalPost / postsPerPage);
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(i);
+  componentDidUpdate(prevProps) {
+    if (prevProps.totalPost !== this.props.totalPost || prevProps.postsPerPage !== this.props.postsPerPage) {
+      this.forceUpdate(); // Forces re-render when totalPost or postsPerPage changes
     }
-    return { pageNumbers };
   }
 
   handlePageChange = (pageNumber) => {
     console.log("Page clicked:", pageNumber);
+    this.setState({pageNumber:pageNumber}); 
     this.props.setCurrentPage(pageNumber);
   };
 
   filterPerPage = (e) => {
     const value = Number(e.target.value);
     this.setState({ postsPerPage: value });
-    this.props.filterPerPage(e); // Notify the parent component about the change
+    this.props.filterPerPage(e);
   };
-  
 
   render() {
-    const { pageNumbers } = this.state;
-    const { currentPage} = this.props;
+    const { totalPost, currentPage, postsPerPage } = this.props;
+    const totalPages = Math.ceil(totalPost / postsPerPage);
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         {pageNumbers.map((number) => (
           <button
             key={number}
-            onClick={() => {
-              console.log("Button clicked for page:", number); // Debugging
-              this.handlePageChange(number);
-            }}
+            onClick={() => this.handlePageChange(number)}
             style={{
               margin: "5px",
               backgroundColor: number === currentPage ? "blue" : "white",
@@ -53,8 +47,14 @@ class Pagination extends Component {
             {number}
           </button>
         ))}
-        <span style={{ marginLeft: "10px" }}>posts per page</span>
-        <input type="number" className="form-control" style={{ marginLeft: "10px", width: "60px", height: "30px" }} value={this.state.postsPerPage} onChange={this.filterPerPage}/>
+        <span style={{ marginLeft: "10px" }}>Posts per page</span>
+        <input
+          type="number"
+          className="form-control"
+          style={{ marginLeft: "10px", width: "60px", height: "30px" }}
+          value={this.state.postsPerPage}
+          onChange={this.filterPerPage}
+        />
       </div>
     );
   }
