@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import {Link} from 'react-router-dom';
+
 
 class Pagination extends Component {
   constructor(props) {
@@ -35,7 +37,7 @@ class Pagination extends Component {
     return (
       <div style={{ display: "flex", alignItems: "center" }}>
         {pageNumbers.map((number) => (
-          <button
+          <Link to="/view"><button
             key={number}
             onClick={() => this.handlePageChange(number)}
             style={{
@@ -45,16 +47,15 @@ class Pagination extends Component {
             }}
           >
             {number}
-          </button>
+          </button></Link>
         ))}
         <span style={{ marginLeft: "10px" }}>Posts per page</span>
-        <input
-          type="number"
-          className="form-control"
-          style={{ marginLeft: "10px", width: "60px", height: "30px" }}
-          value={this.state.postsPerPage}
-          onChange={this.filterPerPage}
-        />
+        <span style={{ marginLeft: "5px" }}> <select className="form-control bg-info" onChange={this.filterPerPage}>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select> </span>
       </div>
     );
   }
