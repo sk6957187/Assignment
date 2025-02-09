@@ -47,7 +47,10 @@ class View extends Component {
     
     
     filterPerPage = (e) => {
-      const value = Number(e.target.value);
+      let value = Number(e.target.value);
+      if(value <= 1){
+        value = 1;
+      }
       this.setState({ rowsPerPage: value}); // Reset currentPage when rowsPerPage changes
     };
     
@@ -300,11 +303,10 @@ class View extends Component {
                 totalPost={record.length}
                 currentPage={currentPage}
                 postsPerPage={rowsPerPage}
-                // setCurrentPage={this.setCurrentPage}
+                setCurrentPage={this.setCurrentPage}
                 filterPerPage={this.filterPerPage} // Pass filterPerPage to update postsPerPage
               />
           </div>
-            current page = {this.state.currentPage}
           </div>
         );
     }
