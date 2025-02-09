@@ -4,8 +4,10 @@ class AddForm extends Component {
 
     constructor(props) {
         super(props);
+        var newRow = Array(6).fill("");
+        newRow[5] = "NO";
         this.state = {
-          newRow: Array(6).fill(""),
+          newRow: newRow
         };
         this.editingRowIndex=null;
         this.showAddRow = this.props.showAddRow;
@@ -76,10 +78,9 @@ class AddForm extends Component {
               {index === 5 ? (
               <select
                 className="form-control bg-info focus"
-                value={cell || "NO"} // Ensures a default value
                 onChange={(e) => this.handleNewRowChange(index, e.target.value)}>
-                  <option value="NO">No</option>
-                  <option value="YES">Yes</option>
+                  <option value="NO">NO</option>
+                  <option value="YES">YES</option>
               </select>
               // <input type="text" className="form-control bg-info focus" value={cell} onChange={(e) => this.handleNewRowChange(index, e.target.value)}/>
               ) : index === 0 ? (
