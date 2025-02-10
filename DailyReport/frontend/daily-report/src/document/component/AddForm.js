@@ -24,7 +24,13 @@ class AddForm extends Component {
       };
 
       handleAddRowSubmit = async () => {
-        const { data, newRow } = this.state;
+        const { newRow } = this.state;
+        // Check for empty values
+        let emptyIndex = newRow.findIndex((cell, index) => index !== 5 && cell.trim() === "");
+        if (emptyIndex !== -1) {
+          alert(`Field at index ${emptyIndex+1} is required!`);
+          return;
+        }
     
         try {
           console.log("Added data: ",newRow);
@@ -91,7 +97,7 @@ class AddForm extends Component {
             </td>
             ))}
             <td>
-              <button type="button" className="btn btn-success" onClick={this.handleAddRowSubmit}>
+              <button type="button"  className="btn btn-success" onClick={this.handleAddRowSubmit}>
                 Save
               </button>
             </td>
