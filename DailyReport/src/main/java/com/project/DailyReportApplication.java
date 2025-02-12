@@ -30,5 +30,6 @@ public class DailyReportApplication extends Application<DailyReportConfiguration
 
     public static void main(String[] args) throws Exception {
         new DailyReportApplication().run(args);
+        //ghj
     }
 }
