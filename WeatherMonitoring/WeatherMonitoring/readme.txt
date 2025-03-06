@@ -24,4 +24,18 @@ react jar file add in assets
 Summery:-
 Developed a robust weather monitoring system using OpenWeatherMap API for real-time weather analysis. The backend is powered by Java and Oracle SQL, focusing on efficient data storage and processing. The frontend, built with React, provides an intuitive user interface to visualize weather trends, summaries, and alerts. Integrated business logic, data aggregation, and alerting mechanisms for comprehensive reporting and enhanced user experience.
 
+create table WeatherData(
+    id number ,
+    city VARCHAR2(50) NOT NULL,
+    temp_celsius NUMBER(5, 2),
+    feels_like_celsius NUMBER(5, 2),
+    condition VARCHAR2(50),
+    Added_time TIMESTAMP,
+    pressure NUMBER,
+    humidity NUMBER,
+    sea_level NUMBER,
+    visibility NUMBER,
+    wind_speed NUMBER
+);
+
 
