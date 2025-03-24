@@ -5,45 +5,45 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.3</version>
+		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.nayak</groupId>
-	<artifactId>Hellow-World-Spring</artifactId>
+	<artifactId>Hello-World-Spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Hellow-World-Spring</name>
-	<description>HelloWorld project for Spring Boot</description>
-
+	<name>Hello-World-Spring</name>
+	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>21</java.version>
 	</properties>
-
 	<dependencies>
-		<!-- Spring Boot Starter -->
+		<!-- Spring Boot Starter for Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Spring Boot Starter Thymeleaf -->
+		<!-- Spring Boot Starter for Thymeleaf -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-		<!-- Lombok (Optional) -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 
-		<!-- Logging -->
+
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.9.3</version>
+			<scope>test</scope>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -53,6 +53,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		
 	</build>
 
 </project>
