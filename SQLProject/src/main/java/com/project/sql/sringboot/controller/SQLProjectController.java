@@ -1,48 +1,42 @@
 package com.project.sql.sringboot.controller;
 
+import com.project.sql.sringboot.model.Student;
 import com.project.sql.sringboot.service.SqlService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 @RequestMapping("/")
 public class SQLProjectController {
-
-    // In-memory list to store student data
+    private static final Logger logger = LoggerFactory.getLogger(SQLProjectController.class);
     private final List<Student> students = new ArrayList<>();
-    public static SqlService sqlService;
+    SqlService sqlService = new SqlService();
 
-    // GET method to return stored data
-    @GetMapping("/")
-    public List<Student> showData() {
+    @GetMapping("/sql")
+    public List<Map<String, Object>> showData() {
         System.out.println("Fetching student data...");
-        if (students.isEmpty()) {
-            return sqlService.getData();
-//            return List.of(new Student("No data available", 0, "N/A", null));
-        }
-//        System.out.println(students);
-        return students;
+        return sqlService.getData();
     }
 
-    // POST method to receive and store data
-    @PostMapping(value = "/sql", consumes = {"multipart/form-data"})
-    public String addStudent(@RequestPart("student") Student student, @RequestPart("photo") MultipartFile photo) {
-        try {
-            // Save the photo as a byte array
-            student.setPhoto(photo.getBytes());
-
-            // Add the student to the in-memory list
-            students.add(student);
-
-            return "Student data added successfully!";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Failed to add student data: " + e.getMessage();
+    @PostMapping("/sql/add-data")
+    public ResponseEntity<String> updateRecord(@RequestBody List<Map<String, Object>> rowDataList) {
+        String str = "OK";
+        int i = 0;
+        if (!rowDataList.isEmpty()) {
+            for (Map<String, Object> row : rowDataList) {
+                logger.info("{} Received row: {}", i++, row);
+            }
+            str = sqlService.UpdateData(rowDataList);
         }
+        return ResponseEntity.ok(str);
     }
+
 }
