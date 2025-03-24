@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>App View</title>
-    <link rel="stylesheet" type="text/css" href="/assets/libs/bootstrap-5.0.2-dist/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/libs/bootstrap-5.0.2-dist/css/bootstrap.css}"/>
 </head>
 <body>
-<div class="container">
+<div class="container text-center">
     <h1>Application View</h1>
     <p><strong>App Version: </strong> <span th:text="${appVersion}"></span></p>
     <p><strong>User Message: </strong> <span th:text="${userMessage}"></span></p>
