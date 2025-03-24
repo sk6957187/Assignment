@@ -11,8 +11,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class sqlProjectRepository {
-    private final Logger logger = LoggerFactory.getLogger(sqlProjectRepository.class);
+public class SQLProjectRepository {
+    private final Logger logger = LoggerFactory.getLogger(SQLProjectRepository.class);
     private final String driver= "oracle.jdbc.driver.OracleDriver";
     private final String url= "jdbc:oracle:thin:@Sumit11:1521:xe";
     private final String username = "System";
@@ -21,6 +21,10 @@ public class sqlProjectRepository {
     public String setStuData(){
         return null;
     }
+
+    /*
+    NAME, PHOTO, AGE, DOB, PHOTOS, VIDEOS, AUDIO, TEXTFILE, ADDEDTIME, ADDRESS
+     */
 
     public List<Student> getStuData(){
         List<Student> students = new ArrayList<>();
@@ -37,11 +41,11 @@ public class sqlProjectRepository {
             } else {
                 while(rs.next()){
                     int sid = rs.getInt("sid");
-                    String sroll = rs.getString("sroll");
+                    int sroll = rs.getInt("sroll");
                     String sname = rs.getString("sname");
                     String email = rs.getString("email");
                     String photo = rs.getString("photo");
-                    students.add(new Student(sid, sroll,sname,email,photo));
+                    students.add(new Student(sid, sname, sroll,  email, photo));
                 }
             }
         } catch (Exception e){
