@@ -3,6 +3,7 @@ package com.nayak.Hello_World_Spring.controller;
 
 import com.nayak.Hello_World_Spring.common.AppConstant;
 import com.nayak.Hello_World_Spring.config.DataBaseConfiguration;
+import com.nayak.Hello_World_Spring.config.EmailConfig;
 import com.nayak.Hello_World_Spring.config.HelloWorldConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,12 @@ public class HelloWorldResource {
     private static final Logger logger = LoggerFactory.getLogger(HelloWorldResource.class);
     private final HelloWorldConfiguration configuration;
     private final DataBaseConfiguration dbConfig;
+    private final EmailConfig emailConfig;
 
-    public HelloWorldResource(HelloWorldConfiguration configuration, DataBaseConfiguration dbConfig){
+    HelloWorldResource(HelloWorldConfiguration configuration, DataBaseConfiguration dbConfig, EmailConfig emailConfig){
         this.dbConfig = dbConfig;
         this.configuration = configuration;
+        this.emailConfig = emailConfig;
     }
 
     @GetMapping
@@ -50,6 +53,11 @@ public class HelloWorldResource {
         String sql = dbConfig.getDriver();
         logger.info("Sql Driver: {}",sql);
         model.addAttribute("sqlDriver",sql);
+        String emailId = emailConfig.getEmailId();
+        String pass = emailConfig.getPassword();
+        logger.info("email: {}",emailId);
+        model.addAttribute("email", emailId);
+        model.addAttribute("pass",pass);
         return "app_view";
     }
 }

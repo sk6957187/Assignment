@@ -1,6 +1,10 @@
 spring:
   application:
-  name : "hello-world-spring"
+    name: "hello-world-spring"
+
+
+#  config:
+#    import: "classpath:emailConfig.yml"
 
 logging:
   level:
@@ -18,4 +22,4 @@ logging:
 
 
 dataBase:
-  driver: "com.mysql.cj.jdbc.Driver   (read through .yml file)"
+  driver: "com.mysql.cj.jdbc.Driver123456   (read through .yml file)"

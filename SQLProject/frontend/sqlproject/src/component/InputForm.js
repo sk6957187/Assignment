@@ -1,4 +1,5 @@
-import React, { Component, createRef  } from "react";
+import React, { Component, createRef } from "react";
+import "./InputForm.css";
 
 export class InputForm extends Component {
   constructor(props) {
@@ -14,11 +15,10 @@ export class InputForm extends Component {
       address: "",
       submittedData: [],
     };
-     // Refs for file inputs
-     this.imageRef = createRef();
-     this.videoRef = createRef();
-     this.audioRef = createRef();
-     this.textFileRef = createRef();
+    this.imageRef = createRef();
+    this.videoRef = createRef();
+    this.audioRef = createRef();
+    this.textFileRef = createRef();
   }
 
   handleChange = (e) => {
@@ -33,8 +33,6 @@ export class InputForm extends Component {
       this.setState({ [name]: value });
     }
   };
-  
-
 
   uploadData = async (newData) => {
     try {
@@ -44,11 +42,11 @@ export class InputForm extends Component {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify([newData]), // Sending an array
+        body: JSON.stringify([newData]),
       });
-  
+
       if (response.ok) {
-        var message = await response.text();
+        const message = await response.text();
         alert(message);
       }
     } catch (error) {
@@ -56,11 +54,10 @@ export class InputForm extends Component {
       alert("Error adding row: " + error.message);
     }
   };
-  
 
   handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const newData = {
       name: this.state.name,
       age: this.state.age,
@@ -71,7 +68,6 @@ export class InputForm extends Component {
       textFile: this.state.textFile ? this.state.textFile.name : "No file",
       address: this.state.address,
     };
-       
 
     this.setState((prevState) => ({
       submittedData: [...prevState.submittedData, newData],
@@ -80,21 +76,17 @@ export class InputForm extends Component {
       dob: "",
       image: null,
       video: null,
-      audio: null,  
+      audio: null,
       textFile: null,
       address: "",
     }));
 
     this.uploadData(newData);
 
-    if (this.imageRef.current)
-       this.imageRef.current.value = "";
-    if (this.videoRef.current)
-       this.videoRef.current.value = "";
-    if (this.audioRef.current)
-       this.audioRef.current.value = "";
-    if (this.textFileRef.current)
-       this.textFileRef.current.value = "";
+    if (this.imageRef.current) this.imageRef.current.value = "";
+    if (this.videoRef.current) this.videoRef.current.value = "";
+    if (this.audioRef.current) this.audioRef.current.value = "";
+    if (this.textFileRef.current) this.textFileRef.current.value = "";
   };
 
   render() {
@@ -112,16 +104,16 @@ export class InputForm extends Component {
           <input type="date" name="dob" value={this.state.dob} onChange={this.handleChange} />
 
           <label>Image:</label>
-          <input type="file" name="image" accept="image/*" onChange={this.handleChange} />
+          <input type="file" name="image" accept="image/*" onChange={this.handleChange} ref={this.imageRef} />
 
           <label>Video:</label>
-          <input type="file" name="video" accept="video/*" onChange={this.handleChange} />
+          <input type="file" name="video" accept="video/*" onChange={this.handleChange} ref={this.videoRef} />
 
           <label>Audio:</label>
-          <input type="file" name="audio" accept="audio/*" onChange={this.handleChange} />
+          <input type="file" name="audio" accept="audio/*" onChange={this.handleChange} ref={this.audioRef} />
 
           <label>Text File:</label>
-          <input type="file" name="textFile" accept=".txt" onChange={this.handleChange} />
+          <input type="file" name="textFile" accept=".txt" onChange={this.handleChange} ref={this.textFileRef} />
 
           <label>Address:</label>
           <textarea name="address" value={this.state.address} onChange={this.handleChange}></textarea>
@@ -129,7 +121,6 @@ export class InputForm extends Component {
           <button type="submit" className="submit-btn">Submit</button>
         </form>
 
-        {/* Display Submitted Data in a Table */}
         {this.state.submittedData.length > 0 && (
           <div className="table-container">
             <h3>Submitted Data</h3>
@@ -163,66 +154,6 @@ export class InputForm extends Component {
             </table>
           </div>
         )}
-
-        {/* CSS Styling */}
-        <style jsx>{`
-          .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-          }
-          .title {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-          }
-          .form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-          }
-          label {
-            font-weight: bold;
-          }
-          input, textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-          }
-          .submit-btn {
-            padding: 10px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-          }
-          .submit-btn:hover {
-            background: #218838;
-          }
-          .table-container {
-            margin-top: 20px;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-          }
-          th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-          }
-          th {
-            background-color: #f4f4f4;
-          }
-        `}</style>
       </div>
     );
   }
