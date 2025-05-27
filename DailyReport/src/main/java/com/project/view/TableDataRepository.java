@@ -61,6 +61,7 @@ public class TableDataRepository {
                     row.add(rs.getString("COMPLETED"));
                     row.add(String.valueOf(rs.getDate("ADDED_DATE")));
                     row.add(String.valueOf(rs.getTimestamp("UPDATE_TIME")));
+                    row.add(rs.getString("FILE_LINK"));
                     data.add(row);
                 }
             } else {
@@ -85,7 +86,8 @@ public class TableDataRepository {
         PreparedStatement pstmt = null;
         try {
             conn = sqlConn();
-            String sql = "INSERT INTO daily_report (START_DATE, USERID, SUB, TOPIC, TOPIC_DETAILS, COMPLETED) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO daily_report (START_DATE, USERID, SUB, TOPIC, TOPIC_DETAILS, COMPLETED, FILE_LINK) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, addData.get(0));               // START_DATE
             pstmt.setString(2, addData.get(1));               // USERID
@@ -93,6 +95,7 @@ public class TableDataRepository {
             pstmt.setString(4, addData.get(3));               // TOPIC
             pstmt.setString(5, addData.get(4));               // TOPIC_DETAILS
             pstmt.setString(6, addData.get(5));               // COMPLETED (assuming YES/NO, adjust as needed)
+            pstmt.setString(7,addData.get(6));
             int rowsInserted = pstmt.executeUpdate();
             pstmt = conn.prepareStatement("commit");
             pstmt.executeUpdate();

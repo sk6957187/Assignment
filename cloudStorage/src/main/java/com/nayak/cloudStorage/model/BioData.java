@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Getter
-@Setter
 public class BioData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +30,6 @@ public class BioData {
 
     private LocalDateTime createdTime;
     private LocalDateTime updateTime;
+
+
 }

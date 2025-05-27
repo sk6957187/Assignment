@@ -3,9 +3,11 @@ package com.nayak.cloudStorage.controller;
 import com.nayak.cloudStorage.model.BioData;
 import com.nayak.cloudStorage.service.GoogleCloudService;
 import com.nayak.cloudStorage.model.Res;
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,8 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/")
 public class GoogleCloudController {
@@ -30,8 +33,9 @@ public class GoogleCloudController {
         File temFile = File.createTempFile("temp", null);
         try {
             file.transferTo(temFile);
-            Res res = service.uploadImageToDrive(temFile);
-            return res;
+//            Res res = service.uploadImageToDrive(temFile);
+            String imageLink = service.uploadFile(temFile);
+            return imageLink;
         } finally {
             temFile.delete();
         }
@@ -48,35 +52,66 @@ public class GoogleCloudController {
             @RequestParam(value = "audio", required = false) MultipartFile audio,
             @RequestParam(value = "textFile", required = false) MultipartFile textFile
     ) throws IOException {
-        Res res = null;
         BioData bd = new BioData();
         bd.setName(name);
         bd.setAge(Integer.parseInt(age));
         bd.setDob(LocalDate.parse(dob));
         bd.setAddress(address);
 
-        if (image != null && !image.isEmpty()){
+        if (image != null && !image.isEmpty()) {
             logger.info("Received Image: {}", image.getOriginalFilename());
-            File tempFile = File.createTempFile("temp-image", null);
+            String extension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf('.'));
+            File tempFile = File.createTempFile("temp-image", extension);
             image.transferTo(tempFile);
-            res = service.uploadImageToDrive(tempFile);
-            logger.info("Uploaded image to Google Drive: {}", res.getUrl());
-            bd.setImage(res.getUrl());
+            String imageLink = service.uploadFile(tempFile);
+            logger.info("Uploaded image to Google Drive: {}", imageLink);
+            bd.setImage(imageLink);
             tempFile.delete();
         }
-        if (video != null){
+
+        if (video != null && !video.isEmpty()) {
             logger.info("Received Video: {}", video.getOriginalFilename());
-        }
-        if (audio != null){
-            logger.info("Received Audio: {}", audio.getOriginalFilename());
-        }
-        if (textFile != null){
-            logger.info("Received Text File: {}", textFile.getOriginalFilename());
+            String extension = video.getOriginalFilename().substring(video.getOriginalFilename().lastIndexOf('.'));
+            File tempFile = File.createTempFile("temp-video", extension);
+            video.transferTo(tempFile);
+            String videoLink = service.uploadFile(tempFile);
+            logger.info("Uploaded video to Google Drive: {}", videoLink);
+            bd.setVideo(videoLink);
+            tempFile.delete();
         }
 
-        return ResponseEntity.ok("Form data uploaded successfully!\n "+res.getUrl());
+        if (audio != null && !audio.isEmpty()) {
+            logger.info("Received Audio: {}", audio.getOriginalFilename());
+            String extension = audio.getOriginalFilename().substring(audio.getOriginalFilename().lastIndexOf('.'));
+            File tempFile = File.createTempFile("temp-audio", extension);
+            audio.transferTo(tempFile);
+            String audioLink = service.uploadFile(tempFile);
+            logger.info("Uploaded audio to Google Drive: {}", audioLink);
+            bd.setAudio(audioLink);
+            tempFile.delete();
+        }
+
+        if (textFile != null && !textFile.isEmpty()) {
+            logger.info("Received Text File: {}", textFile.getOriginalFilename());
+            String extension = textFile.getOriginalFilename().substring(textFile.getOriginalFilename().lastIndexOf('.'));
+            File tempFile = File.createTempFile("temp-text", extension);
+            textFile.transferTo(tempFile);
+            String textLink = service.uploadFile(tempFile);
+            logger.info("Uploaded text file to Google Drive: {}", textLink);
+            bd.setTextFile(textLink);
+            tempFile.delete();
+        }
+
+        BioData newBd = service.setBioData(bd);
+
+        return ResponseEntity.ok("Form data uploaded successfully!\n "+newBd);
     }
 
-
+    
+    @GetMapping("/view")
+    public ResponseEntity<List<BioData>> getBiodata(){
+        List<BioData> bd = service.getBioData();
+        return new ResponseEntity<>(bd, HttpStatusCode.valueOf(HttpStatus.SC_OK));
+    }
 
 }

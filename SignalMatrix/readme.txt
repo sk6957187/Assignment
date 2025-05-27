@@ -1,0 +1,4 @@
+S1-LHS-GREEN = S1 OK, O1 OK, LHS OK, RHS not OK
+S1-RHS-GREEN = S1 OK, O1 OK, RHS OK, LHS not OK
+
+S1-LHS = (!S1-LOCK, S1-input-LHS) || (S1-LOCK && S1-LHS)

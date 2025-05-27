@@ -37,18 +37,20 @@ class Pagination extends Component {
     return (
       <div style={{ display: "flex", alignItems: "center" }}>
         {pageNumbers.map((number) => (
-          <Link to="/view"><button
-            key={number}
-            onClick={() => this.handlePageChange(number)}
-            style={{
-              margin: "5px",
-              backgroundColor: number === currentPage ? "blue" : "white",
-              color: number === currentPage ? "white" : "black",
-            }}
-          >
-            {number}
-          </button></Link>
+          <Link to="/view" key={number}>
+            <button
+              onClick={() => this.handlePageChange(number)}
+              style={{
+                margin: "5px",
+                backgroundColor: number === currentPage ? "blue" : "white",
+                color: number === currentPage ? "white" : "black",
+              }}
+            >
+              {number}
+            </button>
+          </Link>
         ))}
+
         <span style={{ marginLeft: "10px" }}>Posts per page</span>
         <span style={{ marginLeft: "5px" }}> <select className="form-control bg-info" onChange={this.filterPerPage}>
           <option value="10">10</option>

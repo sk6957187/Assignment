@@ -8,6 +8,7 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +27,11 @@ public class DailyReportApplication extends Application<DailyReportConfiguration
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new DailyReportController(configuration));
+        environment.jersey().register(MultiPartFeature.class);
     }
 
     public static void main(String[] args) throws Exception {
         new DailyReportApplication().run(args);
-        //ghj
+
     }
 }

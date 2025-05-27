@@ -4,6 +4,10 @@ import com.project.DailyReportConfiguration;
 import com.project.service.DailyReportService;
 import com.project.view.AppView;
 import com.project.view.TableDataRepository;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +16,18 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -23,6 +36,7 @@ public class DailyReportController {
     private static final Logger lOGGER = LoggerFactory.getLogger(TableDataRepository.class);
     private final DailyReportConfiguration configuration;
     private final DailyReportService dailyReportService;
+
 
     public DailyReportController(DailyReportConfiguration configuration) {
         this.configuration = configuration;
@@ -57,15 +71,46 @@ public class DailyReportController {
         //lOGGER.info("SQL data return : {}",data);
         return Response.ok(data).build();
     }
+
     @POST
     @Path("/daily-report/add")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addRecord(ArrayList<String> addData){
-        lOGGER.info("Data for add: {}",addData);
-        String status = "Ok";
-        status = dailyReportService.addRecord(addData);
-        return Response.ok(status).build();
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response addRecord(FormDataMultiPart multiPart) {
+        try {
+            List<String> addData = multiPart.getFields("addData").stream()
+                    .map(FormDataBodyPart::getValue)
+                    .toList();
+            lOGGER.info("Data received: {}", addData);
+            List<File> files = new ArrayList<>();
+//            Map<String, List<FormDataBodyPart>> allFields = multiPart.getFields();
+            List<FormDataBodyPart> parts = multiPart.getFields().get("mediaData");
+            if (parts != null && !parts.isEmpty()) {
+                for (FormDataBodyPart part : parts) {
+                    String fileName = part.getFormDataContentDisposition().getFileName();
+                    InputStream inputStream = part.getValueAs(InputStream.class);
+                    File tempFile = File.createTempFile("upload_", "_" + fileName);
+                    Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    files.add(tempFile);
+                    lOGGER.info("Received file: {}", fileName);
+                }
+            } else {
+                lOGGER.info("No mediaData files received.");
+            }
+            ArrayList<String> addData1 = new ArrayList<>(addData);
+            String status = dailyReportService.addRecord(addData1, files);
+            return Response.ok(status).build();
+
+        } catch (IOException e) {
+            lOGGER.error("Error while saving uploaded files", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("File upload failed: " + e.getMessage()).build();
+        }
     }
+
+
+
+
+
     @POST
     @Path("/daily-report/update")
     @Consumes(MediaType.APPLICATION_JSON)
