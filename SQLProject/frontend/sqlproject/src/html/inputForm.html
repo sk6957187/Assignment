@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Form Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="title">Input Form Page</h2>
+        <form id="inputForm" class="form">
+            <label>Name:</label>
+            <input type="text" required name="name">
+            
+            <label>Age:</label>
+            <input type="number" name="age">
+            
+            <label>DOB:</label>
+            <input type="date" name="dob">
+            
+            <label>Image:</label>
+            <input type="file" name="image" accept="image/*">
+            
+            <label>Video:</label>
+            <input type="file" name="video" accept="video/*">
+            
+            <label>Audio:</label>
+            <input type="file" name="audio" accept="audio/*">
+            
+            <label>Text File:</label>
+            <input type="file" name="textFile" accept=".txt">
+            
+            <label>Address:</label>
+            <textarea name="address"></textarea>
+            
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+
+        <div class="table-container" id="tableContainer" style="display:none;">
+            <h3>Submitted Data</h3>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>DOB</th>
+                        <th>Image</th>
+                        <th>Video</th>
+                        <th>Audio</th>
+                        <th>Text File</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="javascript.js"></script>
+</body>
+</html>

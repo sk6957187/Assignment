@@ -1,0 +1,5 @@
+oracleSqlConfig:
+  driver: "oracle.jdbc.driver.OracleDriver"
+  url: "jdbc:oracle:thin:@Sumit11:1521:xe"
+  username: "System"
+  password: "tiger"

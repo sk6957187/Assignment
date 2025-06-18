@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/libs/bootstrap-5.0.2-dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="3x1_inputSignal.css">
+</head>
+<body>
+    <h2><u>3x1 Signal Matrix</u></h2>
+    <div>
+        <table>
+            <tr>
+                <td><button class="button" id="i_1">I_1</button></td>
+                <td><button class="button" id="i_2">I_2</button></td>
+                <td><button class="button" id="i_3">I_3</button></td>
+            </tr>
+            <tr>
+                <td><button class="button" id="sw_1">SW_1</button></td>
+                <td><button class="button" id="sw_2">SW_2</button></td>
+                <td><button class="button" id="sw_3">SW_3</button></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button class="lock" id="lock">Unlock</button></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button class="button" id="o_1">O</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="3x1_inputSignal.js"></script>
+</body>
+</html>

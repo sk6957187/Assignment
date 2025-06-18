@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>1x1 Signal System</title>
+  <link rel="stylesheet" href="1.css" />
+  <link rel="stylesheet" href="/SignalMatrix/static/libs/bootstrap-5.0.2-dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="A:/workspace/Assignment/SignalMatrix/static/libs/bootstrap-5.0.2-dist/css/bootstrap.css" />
+</head>
+<body>
+
+  <h2><u>1x1 Signal System</u></h2>
+  <div>
+    <table>
+      <tr>
+        <td></td>
+        <td>
+          <button id="inputSwitch" class= "badge text-danger">Input Switch</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button id="leftSwitch" class= "badge text-danger">Left Switch</button>
+        </td>
+        <td class="text-center"><span id="sw1" class="sw1">Unlocked</span></td>
+        <td></td>
+        <td>
+          <button id="rightSwitch" class= "badge text-danger">Right Switch</button>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="3">
+          <div class="status-container">
+            <div id="signalStatus1" class="status red">RED</div>
+            <div id="signalStatus2" class="status red">RED</div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <hr>
+
+  <script src="1.js"></script>
+</body>
+</html>

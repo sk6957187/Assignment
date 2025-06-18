@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: "hello-world-spring"
+
+
+#  config:
+#    import: "classpath:emailConfig.yml"
+
+logging:
+  level:
+    root: INFO
+    com.project: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %logger{15} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %logger{15} - %msg%n"
+  file:
+    name: C:/log/java-HelloSpring/application.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: C:/log/java-HelloSpring/application-%d{yyyy-MM-dd}.log
+      max-history: 5
+
+
+dataBase:
+  driver: "com.mysql.cj.jdbc.Driver123456   (read through .yml file)"

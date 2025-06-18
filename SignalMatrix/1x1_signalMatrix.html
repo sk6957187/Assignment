@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>1x1 Signal</title>
+  <link rel="stylesheet" href="/SignalMatrix/style.css" />
+  <link rel="stylesheet" href="/SignalMatrix/static/libs/bootstrap-5.0.2-dist/css/bootstrap.css" />
+</head>
+<body>
+
+  <h2><u>1x1 Signal System</u></h2>
+  <div>
+    <table>
+      <tr>
+        <td></td>
+        <td><label></label><input type="checkbox" id="inputSwitch" /> Input Switch</label></td>
+      </tr>
+      
+      <tr>
+        <td><label>
+          <input type="checkbox" id="leftSwitch" /> Left Switch
+        </label></td>
+        <td class="text-center"><span id="sw1" class="badge alert-warning">Locked</span></td>
+        <td><label>
+          <input type="checkbox" id="rightSwitch" /> Right Switch
+        </label></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <div class="status-container">
+            <div id="signalStatus1" class="status red">RED</div>
+            <div id="signalStatus2" class="status red">RED</div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><label>
+          <input type="checkbox" id="outputSwitch" /> Output Switch
+        </label></td>
+      </tr>
+    </table>
+    
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+oracleSqlConfig:
+  driver: "oracle.jdbc.driver.OracleDriver"
+  url: "jdbc:oracle:thin:@Sumit11:1521:xe"
+  username: "System"
+  password: "tiger"
+
+#  1. set sql to excel. \n2. Excel to sql. \n3. Set sql to csv. "
+#  + "\n4. csv to sql.
+# ready only 1 and 3
+converter:
+  value: 4
+
+excelConfig:
+  headers:
+    - "SNO"
+    - "START_DATE"
+    - "USERID"
+    - "SUB"
+    - "TOPIC"
+    - "TOPIC_DETAILS"
+    - "COMPLETED"
+    - "ADDED_DATE"
+    - "UPDATE_TIME"
+  fileName: "Daily_Report.xlsx"
+  sheetName: "Daily Report"
+
+csvConfig:
+  headers:
+    - "SNO"
+    - "START_DATE"
+    - "USERID"
+    - "SUB"
+    - "TOPIC"
+    - "TOPIC_DETAILS"
+    - "COMPLETED"
+    - "ADDED_DATE"
+    - "UPDATE_TIME"
+#  fileName: "Daily_Report.csv"
+  fileName: "TestData.csv"
+  writeFileName: "FilterData.csv"
+
+

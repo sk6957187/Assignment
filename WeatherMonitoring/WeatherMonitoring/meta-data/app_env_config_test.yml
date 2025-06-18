@@ -1,0 +1,12 @@
+weatherApiConfig:
+  apiKey: "3d66b4662f9e189700ece9721f3d1d85"
+  baseUrl: "http://api.openweathermap.org/data/2.5/weather?q="
+
+oracleSqlConfig:
+  driver: "oracle.jdbc.driver.OracleDriver"
+  url: "jdbc:oracle:thin:@Sumit11:1521:xe"
+  username: "System"
+  password: "tiger"
+
+uiConfig:
+  uiBaseApi: "http://localhost:8080"

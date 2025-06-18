@@ -1,0 +1,39 @@
+logging:
+  level: INFO
+  loggers:
+    com.project: INFO
+  appenders:
+    - type: console
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      threshold: ALL
+      timeZone: UTC
+    - type: file
+      threshold: ALL
+      timeZone: UTC
+      archive: true
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      archivedLogFilenamePattern: C:/log/java-weather/application-%d{yyyy-MM-dd}.log
+      currentLogFilename: C:/log/java-weather/application.log
+      archivedFileCount: 5 #Number of day archived file to be present
+
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    port: 8080
+    type: http
+  rootPath: /*
+
+weatherApiConfig:
+  apiKey: "3d66b4662f9e189700ece9721f3d1d85"
+  baseUrl: "http://api.openweathermap.org/data/2.5/weather?q="
+
+oracleSqlConfig:
+  driver: "oracle.jdbc.driver.OracleDriver"
+  url: "jdbc:oracle:thin:@Sumit11:1521:xe"
+  username: "System"
+  password: "tiger"
+
+uiConfig:
+  uiBaseApi: "http://localhost:8080"
