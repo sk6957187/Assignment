@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 *.csv
 *.xlsx
+data.csv
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
