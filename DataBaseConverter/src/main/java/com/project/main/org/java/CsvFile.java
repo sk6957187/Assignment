@@ -102,7 +102,7 @@ public class CsvFile {
 
 
 	public List<String> filterData(List<String> str) {
-		String mob_no = "9771484801";
+		String mob_no = csvConfig.getMobNum();
 		List<String> filteredData = new ArrayList<>();
 		int totalRec = 0;
 
@@ -113,7 +113,7 @@ public class CsvFile {
 				totalRec++;
 			}
 		}
-
+		System.err.println("Total Records: " + totalRec);
 		filteredData.add("Total Records: " + totalRec);
 		return filteredData;
 	}

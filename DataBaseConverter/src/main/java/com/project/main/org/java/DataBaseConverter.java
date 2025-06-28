@@ -17,7 +17,8 @@ public class DataBaseConverter {
         String configPath = args[0];
         System.out.println("Reading config from: " + configPath);
 
-        try (InputStream input = new FileInputStream(configPath)) {
+        try {
+            InputStream input = new FileInputStream(configPath);
             Yaml yaml = new Yaml();
             config = yaml.loadAs(input, AppConfig.class);
             System.out.println("YAML parsed successfully.");

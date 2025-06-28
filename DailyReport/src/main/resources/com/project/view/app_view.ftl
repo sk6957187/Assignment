@@ -6,7 +6,7 @@
     <title>Daily_Report</title>
     <link rel="stylesheet" type="text/css" href="/assets/libs/bootstrap-5.0.2-dist/css/bootstrap.css"/>
 </head>
-<body style="background: linear-gradient(115deg, red, rgb(177, 68, 68), blue, black);">
+<body">
 
     <div id="root" ></div>
 

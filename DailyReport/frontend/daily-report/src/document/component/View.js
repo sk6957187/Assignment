@@ -21,18 +21,23 @@ class View extends Component {
     this.editingRowIndex = null;
   }
 
-  async componentDidMount() {
+  fetchData = async () => {
     try {
       const response = await fetch("http://localhost:8080/daily-report/view");
       if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
       const data = await response.json();
-      console.log(data);
       this.setState({ data, record: data, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       this.setState({ error, isLoading: false });
     }
+  };
+
+  componentDidMount() {
+    this.fetchData();
   }
+
+
 
   setCurrentPage = (pageNumber) => {
     this.setState({ currentPage: pageNumber });
@@ -94,6 +99,7 @@ class View extends Component {
         const updatedData = data.filter((row) => row[0] !== sno);
         this.setState({ data: updatedData, record: updatedData });
         alert(message);
+        await this.fetchData();
       } else throw new Error(`Failed to delete: ${response.statusText}`);
     } catch (error) {
       console.error("Error deleting row:", error);
@@ -117,6 +123,7 @@ class View extends Component {
         this.setState({ data: updatedData, editedRow: null });
         this.editingRowIndex = null;
         alert(message);
+        await this.fetchData();
       } else throw new Error(`Failed to update: ${response.statusText}`);
     } catch (error) {
       console.error("Error updating row:", error);

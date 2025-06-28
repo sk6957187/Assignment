@@ -7,6 +7,15 @@ public class CsvConfig {
     private String fileName;
     private String sheetName;
     private String writeFileName;
+    private String mobNum;
+
+    public String getMobNum() {
+        return mobNum;
+    }
+
+    public void setMobNum(String mobNum) {
+        this.mobNum = mobNum;
+    }
 
     public String getWriteFileName() {
         return writeFileName;
