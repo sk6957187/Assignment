@@ -58,10 +58,9 @@ public class DataAccess {
             fileMetaData.setName(file.getName());
             fileMetaData.setParents(Collections.singletonList(folderId));
 
-            // Dynamically detect MIME type
             String mimeType = Files.probeContentType(file.toPath());
             if (mimeType == null) {
-                mimeType = "application/octet-stream"; // Fallback for unknown types
+                mimeType = "application/octet-stream";
             }
 
             FileContent mediaContent = new FileContent(mimeType, file);
@@ -80,7 +79,7 @@ public class DataAccess {
         } catch (Exception e) {
             return e.getMessage();
         } finally {
-            file.delete(); // Caution: this deletes the uploaded file from your local system
+            file.delete();
         }
         return fileUrl;
     }

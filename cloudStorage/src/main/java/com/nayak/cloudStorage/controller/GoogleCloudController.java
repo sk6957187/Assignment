@@ -51,7 +51,8 @@ public class GoogleCloudController {
             @RequestParam(value = "video", required = false) MultipartFile video,
             @RequestParam(value = "audio", required = false) MultipartFile audio,
             @RequestParam(value = "textFile", required = false) MultipartFile textFile
-    ) throws IOException {
+            ) throws IOException {
+
         BioData bd = new BioData();
         bd.setName(name);
         bd.setAge(Integer.parseInt(age));
