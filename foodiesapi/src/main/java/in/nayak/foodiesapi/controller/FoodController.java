@@ -2,6 +2,7 @@ package in.nayak.foodiesapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import in.nayak.foodiesapi.entity.FoodEntity;
 import in.nayak.foodiesapi.io.FoodRequest;
 import in.nayak.foodiesapi.io.FoodResponse;
 import in.nayak.foodiesapi.service.FoodService;
@@ -25,7 +26,7 @@ public class FoodController {
 
     @PostMapping
     public FoodResponse addFood(@RequestPart("food") String foodString,
-                               @RequestPart("file")MultipartFile file){
+                                @RequestPart("file")MultipartFile file){
         ObjectMapper objectMapper = new ObjectMapper();
         FoodRequest request = null;
         try{
@@ -35,6 +36,21 @@ public class FoodController {
         }
         FoodResponse response = foodService.addFood(request, file);
         return response;
+    }
+
+    @PutMapping("/{id}")
+    public FoodResponse updateFood(@RequestPart("food") String foodSting,
+                                    @RequestPart("file") MultipartFile file){
+        ObjectMapper objectMapper = new ObjectMapper();
+        FoodEntity request = null;
+        try {
+            request = objectMapper.readValue(foodSting, FoodEntity.class);
+        } catch (JsonProcessingException ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid JSON format");
+        }
+        FoodResponse response = foodService.updateFood(request, file);
+        return response;
+
     }
 
     @GetMapping
@@ -52,4 +68,6 @@ public class FoodController {
     public void deleteFood(@PathVariable String id){
         foodService.deleteFood(id);
     }
+
+
 }

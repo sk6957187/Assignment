@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    <p>1</p>
+    <img
+      src="https://t3.ftcdn.net/jpg/05/37/20/16/360_F_537201659_fdMtc4hpI2Acv8VS5wwfh6xqbHFaG7EE.jpg" 
+      alt="test"
+      style="height: 100px; object-fit: contain;"
+    />
+
+    <p>2</p>
+    <img
+      src="https://drive.google.com/thumbnail?id=1KmV57hMoquuLyR9E95F2M1qUab_gYQsz"
+      alt="Google Drive Image"
+      style="height: 150px; object-fit: contain;"
+    />
+
+    <p>3</p>
+    <iframe
+      src="https://drive.google.com/file/d/1-7UzvWlcaqRVvb-gKicNR7ga8bkM2zYv/preview"
+      width="320"
+      height="240"
+      allow="autoplay"
+    ></iframe>
+
+    
+
+    <p>5. Working MP3 from SoundHelix</p>
+    <audio
+      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"controls>
+    </audio>
+
+    <p>6. Google Drive Audio (loaded via Blob)</p>
+    <audio src="https://docs.google.com/uc?export=download&id=1sjBn-euhJm0pN7rjukhjhK7EFSSMFNPf" controls>
+      Your browser does not support the audio element.
+    </audio>
+
+    <p>
+      <a
+        href="https://docs.google.com/uc?export=download&id=1sjBn-euhJm0pN7rjukhjhK7EFSSMFNPf"
+        download="my-audio.mp3"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Download MP3
+      </a>
+    </p>
+  </div>
+
+  <!-- Blob loading script -->
+  <script>
+    const driveId = "1sjBn-euhJm0pN7rjukhjhK7EFSSMFNPf";
+    const audioElement = document.getElementById("gdrive-audio");
+
+    fetch(`https://docs.google.com/uc?export=download&id=${driveId}`)
+      .then(res => res.blob())
+      .then(blob => {
+        const blobUrl = URL.createObjectURL(blob);
+        audioElement.src = blobUrl;
+      })
+      .catch(err => {
+        console.error("Failed to load Google Drive audio:", err);
+        audioElement.innerHTML = "Failed to load audio.";
+      });
+  </script>
+</body>
+</html>

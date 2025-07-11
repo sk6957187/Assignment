@@ -17,7 +17,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +40,6 @@ public class FoodServicesImpl implements FoodService {
                     .key(key)
                     .contentType(file.getContentType())
                     .build();
-
 
             PutObjectResponse response = s3Client.putObject(
                     putObjectRequest,
@@ -104,6 +102,31 @@ public class FoodServicesImpl implements FoodService {
             foodRepository.deleteById(response.getId());
         }
     }
+
+    @Override
+    public FoodResponse updateFood(FoodEntity request, MultipartFile file) {
+        FoodEntity existingFood = foodRepository.findById(request.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found with ID: " + request.getId()));
+        if (file != null && !file.isEmpty()) {
+            String oldImageUrl = existingFood.getImageUrl();
+            if (oldImageUrl != null && oldImageUrl.contains("/")) {
+                String oldFileName = oldImageUrl.substring(oldImageUrl.lastIndexOf("/") + 1);
+                deleteFile(oldFileName);  // Safely ignore failure if file doesn't exist
+            }
+
+            String newImageUrl = uploadFile(file);
+            existingFood.setImageUrl(newImageUrl);
+        }
+
+        existingFood.setName(request.getName());
+        existingFood.setDescription(request.getDescription());
+        existingFood.setPrice(request.getPrice());
+        existingFood.setCategory(request.getCategory());
+
+        FoodEntity updatedFood = foodRepository.save(existingFood);
+        return convertToResponse(updatedFood);
+    }
+
 
     private FoodEntity convertToEntity(FoodRequest request) {
         return FoodEntity.builder()

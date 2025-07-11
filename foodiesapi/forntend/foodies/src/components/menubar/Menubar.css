@@ -1,0 +1,25 @@
+.logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 25px;
+}
+
+.navbar {
+  background-color: #a8acb1 !important;
+  padding: 10px 20px;
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand,
+.navbar .dropdown-toggle {
+  color: #fff !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .dropdown-menu a:hover {
+  color: #ddd !important;
+}
+
+.dropdown-menu {
+  background-color: #f8f9fa;
+}

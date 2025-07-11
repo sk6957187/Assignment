@@ -65,10 +65,17 @@ class ViewPage extends Component {
                       width="200"
                       height="150"
                       allow="autoplay"
+                      controls
                     />
                   </td>
                   <td>
-                    <audio controls src={bd.audio}></audio>
+                    <audio controls src={bd.audio} />
+                    {/* <audio
+                      controls
+                      src={`https://docs.google.com/uc?export=download&id=${this.extractDriveId(bd.audio)}`}
+                      title={`audio-${bd.id}`}
+                    /> */}
+
                   </td>
                   <td>
                     <a href={bd.textFile} target="_blank" rel="noreferrer">

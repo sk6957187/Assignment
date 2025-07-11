@@ -25,11 +25,9 @@ function AppWrapper() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Home />} />
-
-        {/* ✅ Nest MySQL under Converter */}
         <Route path="/converter" element={<Converter />}>
-          <Route path="excel" element={<ReadExcel />} />;
-          <Route path="sql" element={<ReadSQL />} />;
+          <Route path="excel" element={<ReadExcel />} />
+          <Route path="sql" element={<ReadSQL />} />
         </Route>
       </Routes>
     </>

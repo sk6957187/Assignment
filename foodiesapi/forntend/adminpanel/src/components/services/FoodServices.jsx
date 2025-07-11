@@ -20,3 +20,37 @@ export const addFood = async (foodData, image) => {
     throw error;
   }
 };
+
+export const updateFood = async (foodId, formData) => {
+  try {
+    const response = await axios.put(API_URL + "/" + foodId, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error.response || error.message);
+    throw error;
+  }
+};
+
+export const getFoodList = async () => {
+  try {
+    const response = await axios.get(API_URL);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching food list:", error);
+    throw error;
+  }
+};
+
+export const removeFood = async (foodId) => {
+  try {
+    const response = await axios.delete(API_URL + "/" + foodId);
+    return response.status === 204 ? true : false;
+  } catch (error) {
+    console.error("Error removing food item:", error);
+    throw error;
+  }
+};

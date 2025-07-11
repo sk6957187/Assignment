@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const Result = ({ data }) => {
+const Result = ({ data, tableName }) => {
     const [sqldata, setSqlData] = useState(data);
     const [filterText, setFilterText] = useState("");
 
@@ -110,7 +110,7 @@ const Result = ({ data }) => {
                 fontSize: 8,
                 cellWidth: "wrap",
             },
-            
+
         });
         // trigger download
         doc.save(fileName);
@@ -122,7 +122,46 @@ const Result = ({ data }) => {
 
     };
 
+    const uploadSql = () => {
+        let name = tableName || prompt("Enter SQL table name");
+        if (!name || name.trim() === "") {
+            alert("Table name is required.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("data", JSON.stringify(sqldata));
+        formData.append("tableName", name);
+
+        fetch("http://localhost:8080/databaseconvert/uploadSql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                data: sqldata,
+                tableName: name
+            })
+        })
+            .then(res => {
+                if (res.ok) {
+                    alert("Data uploaded successfully");
+                } else {
+                    alert("Failed to upload data");
+                }
+            })
+            .catch(err => {
+                console.error("Error uploading data:", err);
+                alert("Error uploading data");
+            });
+
+    };
+
+
+
+
     if (!sqldata) return <div>No data available</div>;
+    console.log("table name: ", tableName);
     const headers = Object.keys(sqldata[0]);
     return (
         <>
@@ -141,6 +180,7 @@ const Result = ({ data }) => {
                     </div>
 
                     <div>
+                        <button className="btn btn-outline-primary me-2" onClick={uploadSql}>Upload in SQL</button>
                         <button className="btn btn-outline-primary me-2" onClick={downloadCSV}>Download CSV</button>
                         <button className="btn btn-outline-success me-2" onClick={downloadExcel}>Download Excel</button>
                         <button className="btn btn-outline-danger" onClick={downloadPDF}>Download PDF</button>

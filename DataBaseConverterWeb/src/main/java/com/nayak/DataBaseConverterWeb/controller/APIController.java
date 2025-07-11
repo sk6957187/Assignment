@@ -1,6 +1,8 @@
 package com.nayak.DataBaseConverterWeb.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nayak.DataBaseConverterWeb.entity.ResponseStructure;
 import com.nayak.DataBaseConverterWeb.entity.SQLConn;
 import com.nayak.DataBaseConverterWeb.entity.SQLData;
@@ -43,6 +45,16 @@ public class APIController {
         }
         return null;
     }
+
+    @PostMapping("/uploadSql")
+    public ResponseEntity<ResponseStructure<String>> updateSQL(@RequestBody Map<String, Object> payload) throws JsonProcessingException {
+        String tableName = (String) payload.get("tableName");
+        ObjectMapper mapper = new ObjectMapper();
+        String dataJson = mapper.writeValueAsString(payload.get("data"));
+        System.err.println(dataJson);
+        return serviceClass.UpdateSQL(dataJson, tableName);
+    }
+
 
 
 }

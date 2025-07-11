@@ -15,7 +15,7 @@ function Converter() {
     <>
       <h3><u>Database Converter Page</u></h3>
       <button className="btn btn-success ms-3 me-3" onClick={() => navigate("excel")}>Read from Excel</button>
-      <button className="btn btn-success" onClick={() => navigate("sql")}>Convert into SQL to Excel</button>
+      <button className="btn btn-success" onClick={() => navigate("sql")}>Read from SQL</button>
     </>
   );
 }

@@ -1,5 +1,6 @@
 package in.nayak.foodiesapi.service;
 
+import in.nayak.foodiesapi.entity.FoodEntity;
 import in.nayak.foodiesapi.io.FoodRequest;
 import in.nayak.foodiesapi.io.FoodResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,4 +15,5 @@ public interface FoodService {
     FoodResponse readFood(String id);
     boolean deleteFile(String filename);
     void deleteFood(String id);
+    FoodResponse updateFood(FoodEntity request, MultipartFile file);
 }
