@@ -10,16 +10,39 @@ const ReadExcel = () => {
 
     const parseExcelFile = (file) => {
         const reader = new FileReader();
+        // reader.onload = (evt) => {
+        //     const bstr = evt.target.result;
+        //     const wb = XLSX.read(bstr, { type: 'binary' });
+        //     const wsname = wb.SheetNames[0];
+        //     const ws = wb.Sheets[wsname];
+        //     const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+        //     setExcelData(data);
+        //     setShowDetails(true);
+        // };
+        // reader.readAsBinaryString(file);
         reader.onload = (evt) => {
-            const bstr = evt.target.result;
-            const wb = XLSX.read(bstr, { type: 'binary' });
-            const wsname = wb.SheetNames[0];
-            const ws = wb.Sheets[wsname];
-            const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
-            setExcelData(data);
-            setShowDetails(true);
+            try {
+                const arrayBuffer = evt.target.result;
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+
+                const MAX_ROWS = 20000; // Limit to avoid memory crash
+                const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+
+                const limitedData = rawData.slice(0, MAX_ROWS); // Read only first 10,000 rows
+
+                setExcelData(limitedData);
+                setShowDetails(true);
+            } catch (error) {
+                console.error("Error reading Excel file:", error);
+                alert("Failed to load Excel file. Try a smaller file or reduce rows.");
+            }
         };
-        reader.readAsBinaryString(file);
+
+        reader.readAsArrayBuffer(file);
+
     };
 
     const handleFileUpload = async (e) => {
@@ -92,6 +115,7 @@ const ReadExcel = () => {
             <table className="table table-bordered mt-3">
                 <thead className="table-dark">
                     <tr>
+                        <th>SNO</th>
                         {excelData[0]?.map((header, index) => (
                             <th key={index}>{header}</th>
                         ))}
@@ -100,6 +124,7 @@ const ReadExcel = () => {
                 <tbody>
                     {excelData.slice(1).map((row, rowIndex) => (
                         <tr key={rowIndex}>
+                            <td>{rowIndex+1}</td>
                             {row.map((cell, colIndex) => (
                                 <td key={colIndex}>{cell}</td>
                             ))}
@@ -109,7 +134,7 @@ const ReadExcel = () => {
             </table>
         </>
     );
-    
+    console.log("Excel data: "+ excelData);
     return (
         
         <>
@@ -140,8 +165,8 @@ const ReadExcel = () => {
                 <button type="submit" className="btn btn-primary ms-3 mb-3 mt-3">Upload</button>
             </form>
 
-            {/* {showDetails && selectedFile && showExcelFileContent()} */}
-            {showDetails && selectedFile && <Result data={excelData} tableName={selectedFile.name.split('.')[0]} />}
+            {showDetails && selectedFile && showExcelFileContent()}
+            {/* {showDetails && selectedFile && <Result data={excelData} tableName={selectedFile.name.split('.')[0]} />} */}
         </>
     );
 };
