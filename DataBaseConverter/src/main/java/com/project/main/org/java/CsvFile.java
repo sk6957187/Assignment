@@ -102,21 +102,28 @@ public class CsvFile {
 
 
 	public List<String> filterData(List<String> str) {
-		String mob_no = csvConfig.getMobNum();
+		ArrayList<String> searchData = csvConfig.getSearchData();
+		int col = csvConfig.getColumn();
 		List<String> filteredData = new ArrayList<>();
 		int totalRec = 0;
 
 		for (String line : str) {
 			String[] column = line.split(",", -1);
-			if (column.length > 1 && column[1].length() == 12 && column[1].trim().substring(1, 11).equals(mob_no)) {
-				filteredData.add(line);
-				totalRec++;
+
+			if (column.length >= col ) {
+				String mobile = column[col].trim();
+				if (searchData.contains(mobile)) {
+					filteredData.add(line);
+					totalRec++;
+				}
 			}
 		}
-		System.err.println("Total Records: " + totalRec);
+
+		System.err.println("Total filtered Records: " + totalRec);
 		filteredData.add("Total Records: " + totalRec);
 		return filteredData;
 	}
+
 
 
 	public String writeFile(List<String> str) {
