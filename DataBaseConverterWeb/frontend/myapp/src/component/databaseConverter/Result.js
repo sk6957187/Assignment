@@ -190,6 +190,7 @@ const Result = ({ data, tableName }) => {
                 <table className="table table-bordered">
                     <thead className="table-dark">
                         <tr>
+                            <th>SNO.</th>
                             {headers.map(header => (
                                 <th key={header}>{header.toUpperCase()}</th>
                             ))}
@@ -198,6 +199,7 @@ const Result = ({ data, tableName }) => {
                     <tbody>
                         {sqldata.map((row, rowIndex) => (
                             <tr key={rowIndex}>
+                                <td>{rowIndex + 1}</td>
                                 {headers.map(header => (
                                     <td key={header}>{highlightMatch(String(row[header]))}</td>
                                 ))}
