@@ -1,5 +1,6 @@
 package com.project.main.org.java;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CsvConfig {
@@ -7,14 +8,23 @@ public class CsvConfig {
     private String fileName;
     private String sheetName;
     private String writeFileName;
-    private String mobNum;
+    private ArrayList<String> searchData;
+    private int column;
 
-    public String getMobNum() {
-        return mobNum;
+    public ArrayList<String> getSearchData() {
+        return searchData;
     }
 
-    public void setMobNum(String mobNum) {
-        this.mobNum = mobNum;
+    public void setSearchData(ArrayList<String> searchData) {
+        this.searchData = searchData;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column-1;
     }
 
     public String getWriteFileName() {
