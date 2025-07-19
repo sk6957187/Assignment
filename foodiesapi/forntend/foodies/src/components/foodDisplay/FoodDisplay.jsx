@@ -4,6 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 const FoodList = ({ category, searchText }) => {
   const { foodList } = useContext(StoreContext);
   const [selectedFood, setSelectedFood] = useState(null);
+  const { increaseQty, decreaseQty, quantities } = useContext(StoreContext);
 
 
   const filteredFood = foodList.filter(food => (
@@ -18,6 +19,38 @@ const FoodList = ({ category, searchText }) => {
   const handleClose = () => {
     setSelectedFood(null);
   };
+
+  const addButton = (food) => {
+  if (quantities[food.id] > 0) {
+    return (
+      <>
+        <button
+          className="btn btn-outline-secondary btn-sm"
+          onClick={() => decreaseQty(food.id)}
+        >
+          <i className="bi bi-dash-circle"></i>
+        </button>
+        <span className="fw-bold mx-2">{quantities[food.id]}</span>
+        <button
+          className="btn btn-outline-secondary btn-sm"
+          onClick={() => increaseQty(food.id)}
+        >
+          <i className="bi bi-plus-circle"></i>
+        </button>
+      </>
+    );
+  } else {
+    return (
+      <button
+        className="btn btn-outline-secondary btn-sm"
+        onClick={() => increaseQty(food.id)}
+      >
+        <i className="bi bi-plus-circle"></i>
+      </button>
+    );
+  }
+};
+
 
   return (
     <div className="container mt-4">
@@ -58,9 +91,7 @@ const FoodList = ({ category, searchText }) => {
                 </div>
                 <div className="card-footer d-flex justify-content-between bg-light">
                   <button className="btn btn-primary btn-sm">Add to Cart</button>
-                  <button className="btn btn-outline-secondary btn-sm">
-                    <i className="bi bi-heart"></i>
-                  </button>
+                  {addButton(food)}
                 </div>
               </div>
             </div>
@@ -104,7 +135,8 @@ const FoodList = ({ category, searchText }) => {
                 <button className="btn btn-secondary" onClick={handleClose}>
                   Close
                 </button>
-                <button className="btn btn-primary">Add to Cart</button>
+                <p style={{ background: "blue", textAlign: "center", color: "white", padding: "7px", borderRadius: "5px" }}>Add to Cart</p>
+                {addButton(selectedFood)}
               </div>
             </div>
           </div>

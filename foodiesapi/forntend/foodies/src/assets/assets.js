@@ -1,5 +1,5 @@
 import logo from './logo.webp';
-import cart from './cart.jpg';
+import cart from './cart.png';
 import biryani from './biryani.jpg';
 import pizza from './pizza.jpg';
 import burger from './burger.jpg';
