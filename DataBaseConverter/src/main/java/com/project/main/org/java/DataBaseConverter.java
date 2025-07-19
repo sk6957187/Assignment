@@ -48,7 +48,7 @@ public class DataBaseConverter {
             CsvFile cssFile = new CsvFile(oracleSqlConfig, csvConfig);
             List<String> str = cssFile.readCSVFile();
             List<String> res = cssFile.filterData(str);
-//            System.err.println("total number of records is: "+ res);
+            System.err.println("total number of records is: "+ str.size());
             String msg = cssFile.writeFile(res);
 
         } else {

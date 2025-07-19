@@ -38,6 +38,10 @@ csvConfig:
 #  fileName: "Daily_Report.csv"
   fileName: "TestData.csv"
   writeFileName: "FilterData.csv"
-  mobNum: "9771484801"
+  column: "2"
+  searchData:
+    - '"KDLTD0590"'
+    - '"KDLTD0589"'
+
 
 
