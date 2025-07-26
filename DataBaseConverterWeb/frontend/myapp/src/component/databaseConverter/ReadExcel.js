@@ -10,30 +10,16 @@ const ReadExcel = () => {
 
     const parseExcelFile = (file) => {
         const reader = new FileReader();
-        // reader.onload = (evt) => {
-        //     const bstr = evt.target.result;
-        //     const wb = XLSX.read(bstr, { type: 'binary' });
-        //     const wsname = wb.SheetNames[0];
-        //     const ws = wb.Sheets[wsname];
-        //     const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
-        //     setExcelData(data);
-        //     setShowDetails(true);
-        // };
-        // reader.readAsBinaryString(file);
         reader.onload = (evt) => {
             try {
                 const arrayBuffer = evt.target.result;
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
-
-                const MAX_ROWS = 20000; // Limit to avoid memory crash
-                const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
-
-                const limitedData = rawData.slice(0, MAX_ROWS); // Read only first 10,000 rows
-
-                setExcelData(limitedData);
+                // const MAX_ROWS = 20000; // Limit to avoid memory crash
+                const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });  //read all data
+                // const limitedData = rawData.slice(0, MAX_ROWS); // Read only first 10,000 rows because os not support in loaded all data
+                setExcelData(rawData);
                 setShowDetails(true);
             } catch (error) {
                 console.error("Error reading Excel file:", error);
@@ -53,7 +39,7 @@ const ReadExcel = () => {
             return;
         }
 
-        if (!selectedFile && link.trim()) {
+        if (selectedFile || link.trim()) {
             try {
                 let finalLink = link.trim();
 
@@ -66,12 +52,31 @@ const ReadExcel = () => {
                     finalLink = `https://drive.google.com/uc?id=${fileId}&export=download`;
                 }
 
-                const response = await fetch(finalLink);
-                const blob = await response.blob();
+                // const response = await fetch(finalLink);
+                // const blob = await response.blob();
+                // const file = new File([blob], 'uploaded_file.xlsx', { type: blob.type });
+                // setSelectedFile(file);
+                // parseExcelFile(file);
 
-                const file = new File([blob], 'uploaded_file.xlsx', { type: blob.type });
-                setSelectedFile(file);
-                parseExcelFile(file);
+                const formData = new FormData();
+                formData.append("file", selectedFile);
+                formData.append("link", finalLink);
+                try {
+                    const response = await fetch("http://localhost:8080/databaseconvert/uploadfile", {
+                        method: "POST",
+                        body: formData,
+                    });
+                    if (!response.ok) throw new Error("Failed to upload file");
+                    const responseData = await response.json();
+                    console.log("Response data: "+responseData);
+                    
+                    setExcelData(responseData.data); // Adjust based on your backend JSON structure
+                    setShowDetails(true);
+                } catch (error) {
+                    console.error('Error uploading Excel file:', error);
+                    alert('Failed to upload Excel file');   
+                }
+
 
                 return;
             } catch (error) {
@@ -82,11 +87,12 @@ const ReadExcel = () => {
         }
 
         // File was selected from disk
-        parseExcelFile(selectedFile);
+        // parseExcelFile(selectedFile);
     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+
         setSelectedFile(file);
         setLink("");
         document.getElementById("link").value = "";
@@ -165,8 +171,8 @@ const ReadExcel = () => {
                 <button type="submit" className="btn btn-primary ms-3 mb-3 mt-3">Upload</button>
             </form>
 
-            {showDetails && selectedFile && showExcelFileContent()}
-            {/* {showDetails && selectedFile && <Result data={excelData} tableName={selectedFile.name.split('.')[0]} />} */}
+            {/* {showDetails && selectedFile && showExcelFileContent()} */}
+            {showDetails && selectedFile && <Result data={excelData} tableName={selectedFile.name.split('.')[0]} />}
         </>
     );
 };
