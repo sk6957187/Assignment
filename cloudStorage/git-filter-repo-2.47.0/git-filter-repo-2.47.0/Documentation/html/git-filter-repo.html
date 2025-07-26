@@ -1,0 +1,3348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 10.2.0" />
+<title>git-filter-repo(1)</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+pre {
+  white-space: pre-wrap;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; vertical-align: text-bottom; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overridden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install();
+/*]]>*/
+</script>
+</head>
+<body class="manpage">
+<div id="header">
+<h1>
+git-filter-repo(1) Manual Page
+</h1>
+<h2>NAME</h2>
+<div class="sectionbody">
+<p>git-filter-repo -
+   Rewrite repository history
+</p>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_synopsis">SYNOPSIS</h2>
+<div class="sectionbody">
+<div class="verseblock">
+<pre class="content"><em>git filter-repo</em> --analyze
+<em>git filter-repo</em> [&lt;path_filtering_options&gt;] [&lt;content_filtering_options&gt;]
+        [&lt;ref_renaming_options&gt;] [&lt;commit_message_filtering_options&gt;]
+        [&lt;name_or_email_filtering_options&gt;] [&lt;parent_rewriting_options&gt;]
+        [&lt;generic_callback_options&gt;] [&lt;miscellaneous_options&gt;]</pre>
+<div class="attribution">
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_description">DESCRIPTION</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Rapidly rewrite entire repository history using user-specified filters.
+This is a destructive operation which should not be used lightly; it
+writes new commits, trees, tags, and blobs corresponding to (but
+filtered from) the original objects in the repository, then deletes the
+original history and leaves only the new.  See <a href="#DISCUSSION">[DISCUSSION]</a> for more
+details on the ramifications of using this tool.  Several different
+types of history rewrites are possible; examples include (but are not
+limited to):</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+stripping large files (or large directories or large extensions)
+</p>
+</li>
+<li>
+<p>
+stripping unwanted files by path
+</p>
+</li>
+<li>
+<p>
+extracting wanted paths and their history (stripping everything else)
+</p>
+</li>
+<li>
+<p>
+restructuring the file layout (such as moving all files into a
+    subdirectory in preparation for merging with another repo, making a
+    subdirectory become the new toplevel directory, or merging two
+    directories with independent filenames into one directory)
+</p>
+</li>
+<li>
+<p>
+renaming tags (also often in preparation for merging with another repo)
+</p>
+</li>
+<li>
+<p>
+replacing or removing sensitive text such as passwords
+</p>
+</li>
+<li>
+<p>
+making mailmap rewriting of user names or emails permanent
+</p>
+</li>
+<li>
+<p>
+making grafts or replacement refs permanent
+</p>
+</li>
+<li>
+<p>
+rewriting commit messages
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Additionally, several concerns are handled automatically (many of these
+can be overridden, but they are all on by default):</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+rewriting (possibly abbreviated) hashes in commit messages to
+    refer to the new post-rewrite commit hashes
+</p>
+</li>
+<li>
+<p>
+pruning commits which become empty due to the above filters (also
+    handles edge cases like pruning of merge commits which become
+    degenerate and empty)
+</p>
+</li>
+<li>
+<p>
+rewriting stashes
+</p>
+</li>
+<li>
+<p>
+baking the changes made by refs/replace/ refs into the permanent
+    history and removing the replace refs
+</p>
+</li>
+<li>
+<p>
+stripping of original history to avoid mixing old and new history
+</p>
+</li>
+<li>
+<p>
+repacking the repository post-rewrite to shrink the repo for the
+    user
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>And additional facilities are available via a config option</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+creating replace-refs (see <a href="git-replace.html">git-replace(1)</a>) for old commit
+    hashes, which if manually pushed and fetched will allow users to
+    continue to refer to new commits using (unabbreviated) old commit
+    IDs
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Also, it&#8217;s worth noting that there is an important safety mechanism:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+abort if run from a repo that is not a fresh clone (to prevent
+    accidental data loss from rewriting local history that doesn&#8217;t
+    exist anywhere else).  See <a href="#FRESHCLONE">[FRESHCLONE]</a>.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>For those who know that there is large unwanted stuff in their history
+and want help finding it, this command also</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+provides an option to analyze a repository and generate reports that
+    can be useful in determining what to filter (or in determining
+    whether a separate filtering command was successful).
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>See also <a href="#VERSATILITY">[VERSATILITY]</a>, <a href="#DISCUSSION">[DISCUSSION]</a>, <a href="#EXAMPLES">[EXAMPLES]</a>, and
+<a href="#INTERNALS">[INTERNALS]</a>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_options">OPTIONS</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_analysis_options">Analysis Options</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--analyze
+</dt>
+<dd>
+<p>
+        Analyze repository history and create a report that may be
+        useful in determining what to filter in a subsequent run (or
+        in determining if a previous filtering command did what you
+        wanted).  Will not modify your repo.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_filtering_based_on_paths_see_also_filename_callback">Filtering based on paths (see also --filename-callback)</h3>
+<div class="paragraph"><p>These options specify the paths to select.  Note that much like git
+itself, renames are NOT followed so you may need to specify multiple
+paths, e.g. <code>--path olddir/ --path newdir/</code></p></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--invert-paths
+</dt>
+<dd>
+<p>
+        Invert the selection of files from the specified
+        --path-{match,glob,regex} options below, i.e. only select
+        files matching none of those options.
+</p>
+</dd>
+<dt class="hdlist1">
+--path-match &lt;dir_or_file&gt;
+</dt>
+<dt class="hdlist1">
+--path &lt;dir_or_file&gt;
+</dt>
+<dd>
+<p>
+        Exact paths (files or directories) to include in filtered
+        history.  Multiple --path options can be specified to get a
+        union of paths.
+</p>
+</dd>
+<dt class="hdlist1">
+--path-glob &lt;glob&gt;
+</dt>
+<dd>
+<p>
+        Glob of paths to include in filtered history.  Multiple
+        --path-glob options can be specified to get a union of paths.
+</p>
+</dd>
+<dt class="hdlist1">
+--path-regex &lt;regex&gt;
+</dt>
+<dd>
+<p>
+        Regex of paths to include in filtered history.  Multiple
+        --path-regex options can be specified to get a union of paths.
+</p>
+</dd>
+<dt class="hdlist1">
+--use-base-name
+</dt>
+<dd>
+<p>
+        Match on file base name instead of full path from the top of
+        the repo.  Incompatible with --path-rename, and incompatible
+        with matching against directory names.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_renaming_based_on_paths_see_also_filename_callback">Renaming based on paths (see also --filename-callback)</h3>
+<div class="paragraph"><p>Note: if you combine path filtering with path renaming, be aware that
+      a rename directive does not select paths, it only says how to
+      rename paths that are selected with the filters.</p></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--path-rename &lt;old_name:new_name&gt;
+</dt>
+<dt class="hdlist1">
+--path-rename-match &lt;old_name:new_name&gt;
+</dt>
+<dd>
+<p>
+        Path to rename; if filename or directory matches &lt;old_name&gt;
+        rename to &lt;new_name&gt;.  Multiple --path-rename options can be
+        specified.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_path_shortcuts">Path shortcuts</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--paths-from-file &lt;filename&gt;
+</dt>
+<dd>
+<p>
+        Specify several path filtering and renaming directives, one
+        per line. Lines with <code>==&gt;</code> in them specify path renames, and
+        lines can begin with <code>literal:</code> (the default), <code>glob:</code>, or
+        <code>regex:</code> to specify different matching styles.  Blank lines
+        and lines starting with a <code>#</code> are ignored (if you have a
+        filename that you want to filter on that starts with
+        <code>literal:</code>, <code>#</code>, <code>glob:</code>, or <code>regex:</code>, then prefix the line
+        with <em>literal:</em>).
+</p>
+</dd>
+<dt class="hdlist1">
+--subdirectory-filter &lt;directory&gt;
+</dt>
+<dd>
+<p>
+        Only look at history that touches the given subdirectory and
+        treat that directory as the project root. Equivalent to using
+        <code>--path &lt;directory&gt;/ --path-rename &lt;directory&gt;/:</code>
+</p>
+</dd>
+<dt class="hdlist1">
+--to-subdirectory-filter &lt;directory&gt;
+</dt>
+<dd>
+<p>
+        Treat the project root as if it were under
+        &lt;directory&gt;.  Equivalent to using <code>--path-rename :&lt;directory&gt;/</code>
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_content_editing_filters_see_also_blob_callback">Content editing filters (see also --blob-callback)</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--replace-text &lt;expressions_file&gt;
+</dt>
+<dd>
+<p>
+        A file with expressions that, if found, will be replaced. By
+        default, each expression is treated as literal text, but
+        <code>regex:</code> and <code>glob:</code> prefixes are supported. You can end the
+        line with <code>==&gt;</code> and some replacement text to choose a
+        replacement choice other than the default of <code>***REMOVED***</code>.
+</p>
+</dd>
+<dt class="hdlist1">
+--strip-blobs-bigger-than &lt;size&gt;
+</dt>
+<dd>
+<p>
+        Strip blobs (files) bigger than specified size (e.g. <code>5M</code>,
+        <code>2G</code>, etc)
+</p>
+</dd>
+<dt class="hdlist1">
+--strip-blobs-with-ids &lt;blob_id_filename&gt;
+</dt>
+<dd>
+<p>
+        Read git object ids from each line of the given file, and
+        strip all of them from history
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_renaming_of_refs_see_also_refname_callback">Renaming of refs (see also --refname-callback)</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--tag-rename &lt;old:new&gt;
+</dt>
+<dd>
+<p>
+        Rename tags starting with &lt;old&gt; to start with &lt;new&gt;. For example,
+        --tag-rename foo:bar will rename tag foo-1.2.3 to bar-1.2.3;
+        either &lt;old&gt; or &lt;new&gt; can be empty.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_filtering_of_commit_messages_see_also_message_callback">Filtering of commit messages (see also --message-callback)</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--replace-message &lt;expressions_file&gt;
+</dt>
+<dd>
+<p>
+        A file with expressions that, if found in commit or tag
+        messages, will be replaced. This file uses the same syntax as
+        --replace-text.
+</p>
+</dd>
+<dt class="hdlist1">
+--preserve-commit-hashes
+</dt>
+<dd>
+<p>
+        By default, since commits are rewritten and thus gain new
+        hashes, references to old commit hashes in commit messages are
+        replaced with new commit hashes (abbreviated to the same
+        length as the old reference).  Use this flag to turn off
+        updating commit hashes in commit messages.
+</p>
+</dd>
+<dt class="hdlist1">
+--preserve-commit-encoding
+</dt>
+<dd>
+<p>
+        Do not reencode commit messages into UTF-8. By default, if the
+        commit object specifies an encoding for the commit message,
+        the message is re-encoded into UTF-8.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_filtering_of_names_amp_emails_see_also_name_callback_and_email_callback">Filtering of names &amp; emails (see also --name-callback and --email-callback)</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--mailmap &lt;filename&gt;
+</dt>
+<dd>
+<p>
+        Use specified mailmap file (see <a href="git-shortlog.html">git-shortlog(1)</a> for details
+        on the format) when rewriting author, committer, and tagger names
+        and emails. If the specified file is part of git history,
+        historical versions of the file will be ignored; only the current
+        contents are consulted.
+</p>
+</dd>
+<dt class="hdlist1">
+--use-mailmap
+</dt>
+<dd>
+<p>
+        Same as: <em>--mailmap .mailmap</em>
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_parent_rewriting">Parent rewriting</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--replace-refs {delete-no-add, delete-and-add, update-no-add, update-or-add, update-and-add, old-default}
+</dt>
+<dd>
+<p>
+        How to handle replace refs (see git-replace(1)).  Replace refs
+        can be added during the history rewrite as a way to allow
+        users to pass old commit IDs (from before git-filter-repo was
+        run) to git commands and have git know how to translate those
+        old commit IDs to the new (post-rewrite) commit IDs.  Also,
+        replace refs that existed before the rewrite can either be
+        deleted or updated.  The choices to pass to --replace-refs
+        thus need to specify both what to do with existing refs and
+        what to do with commit rewrites.  Thus <em>update-and-add</em> means
+        to update existing replace refs, and for any commit rewrite
+        (even if already pointed at by a replace ref) add a new
+        refs/replace/ reference to map from the old commit ID to the
+        new commit ID.  The default is update-no-add, meaning update
+        existing replace refs but do not add any new ones.  There is
+        also a special <em>old-default</em> option for picking the default
+        used in versions prior to git-filter-repo-2.45, namely
+        <em>update-and-add</em> upon the first run of git-filter-repo in a
+        repository and <em>update-or-add</em> if running git-filter-repo
+        again on a repository.
+</p>
+</dd>
+<dt class="hdlist1">
+--prune-empty {always, auto, never}
+</dt>
+<dd>
+<p>
+        Whether to prune empty commits. <em>auto</em> (the default) means
+        only prune commits which become empty (not commits which were
+        empty in the original repo, unless their parent was
+        pruned). When the parent of a commit is pruned, the first
+        non-pruned ancestor becomes the new parent.
+</p>
+</dd>
+<dt class="hdlist1">
+--prune-degenerate {always, auto, never}
+</dt>
+<dd>
+<p>
+        Since merge commits are needed for history topology, they are
+        typically exempt from pruning. However, they can become
+        degenerate with the pruning of other commits (having fewer
+        than two parents, having one commit serve as both parents, or
+        having one parent as the ancestor of the other.) If such merge
+        commits have no file changes, they can be pruned. The default
+        (<em>auto</em>) is to only prune empty merge commits which become
+        degenerate (not which started as such).
+</p>
+</dd>
+<dt class="hdlist1">
+--no-ff
+</dt>
+<dd>
+<p>
+        Even if the first parent is or becomes an ancestor of another
+        parent, do not prune it.  This modifies how --prune-degenerate
+        behaves, and may be useful in projects who always use merge
+        --no-ff.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_generic_callback_code_snippets">Generic callback code snippets</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--filename-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing filenames; see <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+<dt class="hdlist1">
+--message-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing messages (both commit messages and
+        tag messages); see <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+<dt class="hdlist1">
+--name-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing names of people; see <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+<dt class="hdlist1">
+--email-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing emails addresses; see
+        <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+<dt class="hdlist1">
+--refname-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing refnames; see <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+<dt class="hdlist1">
+--file-info-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing the combination of filename, mode,
+        and associated file contents; see &lt;&lt;CALLBACKS&gt;.  Note that when
+        --file-info-callback is specified, any replacements specified by
+        --replace-text will not be automatically applied; instead, you
+        have control within the --file-info-callback to choose which files
+        to apply those transformations to.
+</p>
+</dd>
+<dt class="hdlist1">
+--blob-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing blob objects; see <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+<dt class="hdlist1">
+--commit-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing commit objects; see <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+<dt class="hdlist1">
+--tag-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing tag objects; see <a href="#CALLBACKS">[CALLBACKS]</a>.
+        Note that lightweight tags have no tag object and thus are not
+        handled by this callback.  The only thing you really could do with a
+        lightweight tag is rename it, but for that you should see
+        --refname-callback instead.
+</p>
+</dd>
+<dt class="hdlist1">
+--reset-callback &lt;function_body&gt;
+</dt>
+<dd>
+<p>
+        Python code body for processing reset objects; see <a href="#CALLBACKS">[CALLBACKS]</a>.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_sensitive_data_removal">Sensitive Data Removal</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--sensitive-data-removal
+</dt>
+<dt class="hdlist1">
+--sdr
+</dt>
+<dd>
+<p>
+        This rewrite is intended to remove sensitive data from a repository.
+        Gather extra information from the rewrite needed to provide
+        additional instructions on how to clean up other copies.  This
+        includes:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Fetching all refs, so that if refs outside of branches and tags
+            also reference the sensitive data, they can be cleaned up too
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>Note that if you have any local-only changes (i.e. un-pushed
+changes) in your repository, on any branch or ref, this fetch step
+may discard them.  Working in a fresh clone avoids this problem;
+see also the --no-fetch option if you don't want to work with a
+fresh clone and you have important local-only changes.</code></pre>
+</div></div>
+</li>
+<li>
+<p>
+Tracking and reporting on the first changed commit(s)
+</p>
+</li>
+<li>
+<p>
+Tracking and reporting whether any LFS objects become orphaned by
+            the rewrite, so they can be removed
+</p>
+</li>
+<li>
+<p>
+Providing additional instructions at the end on how to clean up
+            the repository you cloned from, and other clones of the repo
+</p>
+</li>
+</ul></div>
+</dd>
+<dt class="hdlist1">
+--no-fetch
+</dt>
+<dd>
+<p>
+        Avoid the "fetch all refs" step with --sensitive-data-removal, and
+        thus avoid overwriting local-only changes in the repository, but at
+        the risk of leaving the sensitive data in other refs in the source
+        repository.  This option is implied by --partial or any flag that
+        implies --partial.
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_location_to_filter_from_to">Location to filter from/to</h3>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">Specifying alternate source or target locations implies
+--partial.  However, unlike normal uses of --partial, this doesn&#8217;t
+risk mixing old and new history since the old and new histories are in
+different repositories.</td>
+</tr></table>
+</div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--source &lt;source&gt;
+</dt>
+<dd>
+<p>
+        Git repository to read from
+</p>
+</dd>
+<dt class="hdlist1">
+--target &lt;target&gt;
+</dt>
+<dd>
+<p>
+        Git repository to overwrite with filtered history
+</p>
+</dd>
+</dl></div>
+</div>
+<div class="sect2">
+<h3 id="_miscellaneous_options">Miscellaneous options</h3>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+--help
+</dt>
+<dt class="hdlist1">
+-h
+</dt>
+<dd>
+<p>
+        Show a help message and exit.
+</p>
+</dd>
+<dt class="hdlist1">
+--force
+</dt>
+<dt class="hdlist1">
+-f
+</dt>
+<dd>
+<p>
+        Ignore fresh clone checks and rewrite history (an irreversible
+        operation, especially since it by default ends with an
+        immediate pruning of reflogs and old objects).  See
+        <a href="#FRESHCLONE">[FRESHCLONE]</a>.  Note that when cloning repos on a local
+        filesystem, it is better to pass <code>--no-local</code> to git clone
+        than passing <code>--force</code> to git-filter-repo.
+</p>
+</dd>
+<dt class="hdlist1">
+--partial
+</dt>
+<dd>
+<p>
+        Do a partial history rewrite, resulting in the mixture of old and
+        new history.  This disables rewriting refs/remotes/origin/* to
+        refs/heads/*, disables removing of the <em>origin</em> remote, disables
+        removing unexported refs, disables expiring the reflog, and
+        disables the automatic post-filter gc.  Also, this modifies
+        --tag-rename and --refname-callback options such that instead of
+        replacing old refs with new refnames, it will instead create new
+        refs and keep the old ones around.  Use with caution.
+</p>
+</dd>
+<dt class="hdlist1">
+--refs &lt;refs+&gt;
+</dt>
+<dd>
+<p>
+        Limit history rewriting to the specified refs.  Implies --partial.
+        In addition to the normal caveats of --partial (mixing old and new
+        history, no automatic remapping of refs/remotes/origin/* to
+        refs/heads/*, etc.), this also may cause problems for pruning of
+        degenerate empty merge commits when negative revisions are
+        specified.
+</p>
+</dd>
+<dt class="hdlist1">
+--dry-run
+</dt>
+<dd>
+<p>
+        Do not change the repository. Run <code>git fast-export</code> and filter its
+        output, and save both the original and the filtered version for
+        comparison.  This also disables rewriting commit messages due to
+        not knowing new commit IDs and disables filtering of some empty
+        commits due to inability to query the fast-import backend.
+</p>
+</dd>
+<dt class="hdlist1">
+--debug
+</dt>
+<dd>
+<p>
+        Print additional information about operations being performed and
+        commands being run.  (If used together with --dry-run, shows
+        extra information about what would be run).
+</p>
+</dd>
+<dt class="hdlist1">
+--stdin
+</dt>
+<dd>
+<p>
+        Instead of running <code>git fast-export</code> and filtering its output,
+        filter the fast-export stream from stdin.  The stdin must be in
+        the expected input format (e.g. it needs to include original-oid
+        directives).
+</p>
+</dd>
+<dt class="hdlist1">
+--quiet
+</dt>
+<dd>
+<p>
+        Pass --quiet to other git commands called.
+</p>
+</dd>
+</dl></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_output">OUTPUT</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Every time filter-repo is run, files are created in the <code>.git/filter-repo/</code>
+directory. These files are updated or overwritten on every run.</p></div>
+<div class="sect2">
+<h3 id="_commit_map">Commit map</h3>
+<div class="paragraph"><p>The <code>$GIT_DIR/filter-repo/commit-map</code> file contains a mapping of how all
+commits were (or were not) changed.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+A header is the first line with the text "old" and "new"
+</p>
+</li>
+<li>
+<p>
+Commit mappings are in no particular order
+</p>
+</li>
+<li>
+<p>
+All commits in range of the rewrite will be listed, even commits
+    that are unchanged (e.g. because the commit pre-dated when files
+    the filtering operation are removing were introduced to the repo).
+</p>
+</li>
+<li>
+<p>
+An all-zeros hash, or null SHA, represents a non-existent object.
+    When in the "new" column, this means the commit was removed
+    entirely.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_reference_map">Reference map</h3>
+<div class="paragraph"><p>The <code>$GIT_DIR/filter-repo/ref-map</code> file contains a mapping of which local
+references were (or were not) changed.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+A header is the first line with the text "old", "new" and "ref"
+</p>
+</li>
+<li>
+<p>
+Reference mappings are sorted by ref
+</p>
+</li>
+<li>
+<p>
+An all-zeros hash, or null SHA, represents a non-existent object.
+    When in the "new" column, this means the ref was removed entirely.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_changed_references">Changed References</h3>
+<div class="paragraph"><p>The <code>$GIT_DIR/filter-repo/changed-refs</code> file contains a list of refs that
+were changed.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+No header is provided
+</p>
+</li>
+<li>
+<p>
+Lists the subsets of refs from ref-map for which old != new
+</p>
+</li>
+<li>
+<p>
+While unnecessary since this provides no new information over ref-map,
+    it does make it easier to quickly determine which refs were changed by
+    the rewrite.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_first_changed_commits">First Changed Commits</h3>
+<div class="paragraph"><p>The <code>$GIT_DIR/filter-repo/first-changed-commits</code> contains a list of the
+first commit(s) changed by the filtering operation.  These are the commits
+that got rewritten and which had no parents that were also rewritten.</p></div>
+<div class="paragraph"><p>So, for example if you had commits
+  A1-B1-C1-D1-E1
+before running git-filter-repo, and afterward you had commits
+  A1-B2-C2-D2-E2
+then the First Changed Commits file would contain just one line, which
+would be the hash of B2.</p></div>
+<div class="paragraph"><p>In most cases, there will only be one commit listed, but if you had
+multiple root commits or a non-linear history where the commits on
+those diverging histories were the first ones modified, then there
+could be multiple first changed commits and they will each be listed
+on separate lines.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_already_ran">Already Ran</h3>
+<div class="paragraph"><p>The <code>$GIT_DIR/filter-repo/already_ran</code> file contains a file recording that
+git-filter-repo has been run.  When this file is present, future runs will
+be treated as an extension of the previous filtering operation.</p></div>
+<div class="paragraph"><p>Concretely, this means:
+  * The "Fresh Clone" check is bypassed</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>This is done because past runs would cause the repository to no longer
+look like a fresh clone, and thus fail the fresh clone check, but doing
+filtering via multiple invocations of git-filter-repo is an intended
+and support usecase.  You already passed or bypassed the "Fresh Clone"
+check on your initial run.</code></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The commit-map and ref-map files above will be updated rather than
+    simply rewritten.
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>In other words, if the first filter-repo invocation rewrote commit
+A to commit B, and the second filter-repo invocation rewrite
+commit B to commit C, then the second run would have an "A C"
+entry rather than a "B C" entry for the changed commit.</code></pre>
+</div></div>
+</li>
+<li>
+<p>
+The first changed commit(s) (reported When using the
+    --sensitive-data-removal option) will be the first original commit
+    modified, not the first intermediate commit modified.
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>In more detail, if the repository original had the following commits:
+   A1-B1-C1-D1-E1
+and the first invocation of filter-repo changed this to
+   A1-B1-C2-D2-E2
+then the first run would report "C1" as the first changed commit.  If
+a second filter-repo run further changed this to
+   A1-B1-C2-D3-E3
+then it would report "C1" as the first changed commit, not "D2",
+because it is comparing to the original commits rather than the
+intermediate ones.</code></pre>
+</div></div>
+</li>
+</ul></div>
+<div class="paragraph"><p>However, if the already_ran file exists but is older than 1 day when they
+invoke git-filter-repo, the user will be prompted for whether the new run
+should be considered a continuation of the previous run.  If they do not
+answer in the affirmative, then the above three bullets will not apply.
+This prompt exists because users might do a history rewrite in a repository,
+forget about it and leave the $GIT_DIR/filter-repo directory around, and
+then some months or years later need to do another rewrite.  If commits
+have been made public and shared from the previous rewrite, then the next
+filter-repo run should not be considered a continuation of the previous
+filtering run.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_original_lfs_objects">Original LFS Objects</h3>
+<div class="paragraph"><p>When running with the --sensitive-data-removal flag, and LFS is in use by the
+repository, the <code>$GIT_DIR/filter-repo/original_lfs_objects</code> contains a list of
+LFS objects referenced by the repository before the rewrite, in sorted order.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_orphaned_lfs_objects">Orphaned LFS Objects</h3>
+<div class="paragraph"><p>When running with the --sensitive-data-removal flag, and LFS is in use by the
+repository, the <code>$GIT_DIR/filter-repo/orphaned_lfs_objects</code> contains a list of
+LFS objects that used to be referenced by the repository but no longer are after
+git-filter-repo has run.  Objects appear in sorted order.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="FRESHCLONE">FRESH CLONE SAFETY CHECK AND --FORCE</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Since filter-repo does irreversible rewriting of history, it is
+important to avoid making changes to a repo for which the user doesn&#8217;t
+have a good backup.  The primary defense mechanism is to simply
+educate users and rely on them to be good stewards of their data; thus
+there are several warnings in the documentation about how filter repo
+rewrites history.</p></div>
+<div class="paragraph"><p>However, as a service to users, we would like to provide an additional
+safety check beyond the documentation.  There isn&#8217;t a good way to
+check if the user has a good backup, but we can ask a related question
+that is an imperfect but quite reasonable proxy: "Is this repository a
+fresh clone?"  Unfortunately, that is also a question we can&#8217;t get a
+perfect answer to; git provides no way to answer that question.
+However, there are approximately a dozen things that I found that seem
+to always be true of brand new clones (assuming they are either clones
+of remote repositories or are made with the <code>--no-local</code> flag), and I
+check for all of those.</p></div>
+<div class="paragraph"><p>These checks can have both false positives and false negatives.
+Someone might have a perfectly good backup of their repo without it
+actually being a fresh clone&#8201;&#8212;&#8201;but there&#8217;s no way for filter-repo to
+know that.  Conversely, someone could look at all things that
+filter-repo checks for in its safety checks and then just tweak their
+non-backed-up repository to satisfy those conditions (though it would
+take a fair amount of effort, and it&#8217;s astronomically unlikely that a
+repo that isn&#8217;t a fresh clone randomly happens to match all the
+criteria).  In practice, the safety checks filter-repo uses seem to be
+really good at avoiding people accidentally running filter-repo on a
+repository that they shouldn&#8217;t be running it on. It even caught me
+once when I did mean to run filter-repo but was in a different
+directory than I thought I was.</p></div>
+<div class="paragraph"><p>In short, it&#8217;s perfectly fine to use &#8216;--force` to override the safety
+checks as long as you&#8217;re okay with filter-repo irreversibly rewriting
+the contents of the current repository.  It is a really bad idea to
+get in the habit of always specifying <code>--force</code>; if you do, one day
+you will run one of your commands in the wrong directory like I did,
+and you won&#8217;t have the safety check anymore to bail you out.  Also, it
+is definitely NOT okay to recommend <code>--force</code> on forums, Q&amp;A sites, or
+in emails to other users without first carefully explaining that
+<code>--force</code> means putting your repositories&#8217; data at risk.  I am
+especially bothered by people who suggest the flag when it clearly is
+NOT needed; they are needlessly putting other peoples' data at risk.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="VERSATILITY">VERSATILITY</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>filter-repo has a hierarchy of capabilities on the spectrum from easy to
+use convenience flags that perform pre-defined types of filtering, to
+choices that provide lots of flexibility in controlling how filtering
+occurs.  This spectrum includes the following:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Convenience flags making common types of history rewriting simple (e.g.
+    --path, --strip-blobs-bigger-than, --replace-text, --mailmap)
+</p>
+</li>
+<li>
+<p>
+Options which are shorthand for others or which provide greater control
+    than others (e.g. --subdirectory-filter could just be written using
+    both a path selection (--path) and a path rename (--path-rename)
+    filter; --paths-from-file can handle all other --path* options and more
+    such as regex renaming of paths)
+</p>
+</li>
+<li>
+<p>
+Generic python callbacks for handling a certain type of data (the
+    filename, message, name, email, and refname callbacks)
+</p>
+</li>
+<li>
+<p>
+Generic python callbacks for handling fundamental git objects, allowing
+    greater control over the combination of data types the object holds
+    (the commit, tag, blob, and reset callbacks)
+</p>
+</li>
+<li>
+<p>
+The ability to import filter-repo as a module in a python program and
+    use its classes and functions for even greater control and flexibility
+    while still leveraging lots of basic capabilities.  One can even use
+    this to write new tools with a completely different interface.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>For more information about callbacks, see <a href="#CALLBACKS">[CALLBACKS]</a>.  For examples on
+writing python programs that import filter-repo as a module to create new
+history rewriting tools, look at the contrib/filter-repo-demos/ directory.
+That directory includes, among other examples, a reimplementation of
+git-filter-branch which is faster than git-filter-branch, and a
+reimplementation of BFG Repo Cleaner with several bug fixes and new
+features.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="DISCUSSION">DISCUSSION</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Using filter-repo is relatively simple, but rewriting history is part of
+a larger discussion in terms of collaboration.  When you rewrite
+history, the old and new histories are no longer compatible; if you push
+this history somewhere for others to view, it will look as though you&#8217;ve
+done a rebase of all branches and tags.  Make sure you are familiar with
+the "RECOVERING FROM UPSTREAM REBASE" section of <a href="git-rebase.html">git-rebase(1)</a>
+(and in particular, "The hard case") before proceeding, in addition to
+this section.</p></div>
+<div class="paragraph"><p>Steps to use git-filter-repo as part of the bigger picture of doing a
+history rewrite are roughly as follows:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Create a clone of your repository.  You may pass <code>--bare</code> or
+   <code>--mirror</code> to <code>git clone</code>, if you prefer.  You should pass
+   <code>--no-local</code> if the repository you are cloning from is on the local
+   filesystem.  Avoid other flags; some might confuse the fresh clone
+   check, and others could cause parts of the data to be missing that
+   are needed for the rewrite.
+</p>
+</li>
+<li>
+<p>
+(Optional) Run <code>git filter-repo --analyze</code>.  This will create a
+   directory of reports mentioning multiple things: (a) paths that have
+   existed over time in your repo, (b) renames that have occurred in
+   your repo and (c) sizes of objects aggregated by
+   path/directory/extension/blob-id.  This information may be useful in
+   choosing how to filter your repo.  It can also be useful to re-run
+   --analyze after filtering to verify the changes look correct.
+</p>
+</li>
+<li>
+<p>
+Before rewriting the history of your local copy with git-filter-repo,
+   determine where you will push the rewritten history to when you are
+   done.  In the special case that you are trying to remove sensitive
+   data from an existing repository, you will want to push it back where
+   you cloned from, as well as clean up all other clones/copies of the
+   repo.  If you will be pushing back to the repository you cloned from,
+   you will want to use the --sensitive-data-removal option and see the
+   Sensitive Data Removal section below.  In most cases not dealing with
+   sensitive data removal, you will want to push to a new repo, because:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+Even after you rewrite history and push it back, other people who
+     previously cloned from the original repo will have the old history.
+     If they simply run <code>git pull &amp;&amp; git push</code>, it will merge the
+     unrewritten history with the new, resulting in what looks like two
+     copies of each commit involved in your rewrite&#8201;&#8212;&#8201;a new copy of
+     each commit which has the cleanups you made, and an old copy of
+     each commit that has not been cleaned up&#8201;&#8212;&#8201;being merged together.
+     That means everything you carefully worked to remove from the
+     repository has been pushed back.  You&#8217;re more likely to succeed in
+     making sure they don&#8217;t re-push the unclean data if you just give
+     them a new repository URL and tell them to reclone.
+</p>
+</li>
+<li>
+<p>
+Rewriting history will rewrite tags; those who have already
+     downloaded tags will not get the updated tags even if they specify
+     <code>--tags</code> to <code>git fetch</code> or <code>git pull</code> (see the "On Re-tagging"
+     section of <a href="git-tag.html">git-tag(1)</a>).  Every user trying to use an
+     existing clone will have to forcibly delete all tags they already
+     downloaded <em>before</em> re-fetching them; it may be easier for them to
+     just re-clone, which they are more likely to do with a new clone
+     URL.
+</p>
+</li>
+<li>
+<p>
+Rewriting history may delete some refs (e.g. branches that only
+     had files that you wanted excised from history); unless you run
+     git push with the <code>--mirror</code> or <code>--prune</code> options, those refs
+     will continue to exist on the server.  If folks then merge these
+     branches into others, then people have started mixing old and new
+     history.  If users had already cloned these branches, removing
+     them from the server isn&#8217;t enough; you need all users to delete
+     any local branches based on these refs and run fetch with the
+     <code>--prune</code> option as well.  Simply re-cloning from a new URL is
+     easier.
+</p>
+</li>
+<li>
+<p>
+The server may not allow you to force push over some refs.  For
+     example, code review systems may have special ref namespaces
+     (e.g. refs/changes/, refs/pull/, refs/merge-requests/) that they
+     have locked down, and you&#8217;ll need to somehow prevent users from
+     merging those locked-down (and thus not cleaned up) histories
+     with your cleaned-up history.  Every software code review system
+     handles this differently (see the sensitive data removal section
+     for some links).
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Run filter-repo with your desired filtering options.  Many examples
+   are given in the <a href="#EXAMPLES">[EXAMPLES]</a> section.  For more complex cases, note
+   that doing the filtering in multiple steps (by running multiple
+   filter-repo invocations in a sequence) is supported.  If anything
+   goes wrong here, simply delete your clone and restart.
+</p>
+</li>
+<li>
+<p>
+Push your new repository to its new home (note that
+   refs/remotes/origin/* will have been moved to refs/heads/* as the
+   first part of filter-repo, so you can just deal with normal branches
+   instead of remote tracking branches).
+</p>
+</li>
+<li>
+<p>
+(Optional) Some additional considerations
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+filter-repo has a --replace-refs option to allow creating replace
+     refs (see <a href="git-replace.html">git-replace(1)</a>) for each rewritten commit ID,
+     allowing you to use old (unabbreviated) commit hashes in the git
+     command line to refer to the newly rewritten commits.  If you
+     want to use these replace refs, manually push them to the
+     relevant clone URL and tell users to manually fetch them (e.g. by
+     adjusting their fetch refspec, <code>git config --add
+     remote.origin.fetch +refs/replace/*:refs/replace/*</code>).  Sadly,
+     replace refs are not yet widely understood; projects like jgit
+     and libgit2 do not support them and existing repository managers
+     (e.g. Gerrit, GitHub, GitLab) do not yet understand replace refs.
+     Thus one can&#8217;t use old commit hashes within the UI of these other
+     systems.  This may change in the future, but replace refs at
+     least help users locally within the git command line interface.
+     Also, be aware that commit-graphs are excessively cautious around
+     replace refs and just turn off entirely if any are present, so
+     after enough time has passed that old commit IDs become less
+     relevant, users may want to locally delete the replace refs to
+     regain the speedups from commit-graphs.
+</p>
+</li>
+</ul></div>
+</li>
+</ol></div>
+<div class="sect2">
+<h3 id="_why_is_my_origin_removed">Why is my origin removed?</h3>
+<div class="paragraph"><p>When you rewrite history, all commit IDs (starting with the first one
+where changes are made) are modified.  Even if you think you didn&#8217;t
+change an intermediate commit, the fact that you changed any of its
+ancestors is also a change that counts and will cause a commit&#8217;s ID to
+change as well.  It is unfortunately all-too-easy for yourself or
+someone else to accidentally merge the old ugly history you were
+trying to rewrite with the new history, resulting in not only the old
+ugly history returning but getting you "two copies" of each commit
+(both an original commit and a cleaned-up alternative), and thus
+doubling the number of commits in your repository.  In short, you end
+up with an even bigger mess to clean up than you started with.</p></div>
+<div class="paragraph"><p>This happens frequently to people using <code>git filter-branch</code> or <code>BFG
+repo cleaner</code>, and can happen to folks using <code>git filter-repo</code> if they
+insist on pushing back to the original repo.  Example ways you can get
+such an even uglier history include:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+at the command line (of another clone of the same repo from before the
+    cleanup): <code>git pull &amp;&amp; git push</code>
+</p>
+</li>
+<li>
+<p>
+in a software forge: "reopen old Pull-Request/Merge-Request/Code-Review
+    and hit the merge/submit button"
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Removing the <code>origin</code> remote and suggesting people push to a new repo
+(and ensuring they tell others to clone the new repo) is usually a
+good forcing function to avoid these problems.  But, if people really
+want to push to the original repository despite these warnings, it is
+trivial to do so; simply run:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<code>git remote add origin $ORIGINAL_CLONE_URL</code>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>and then you can push (e.g. <code>git push --force --branches --tags
+--prune</code>).  Since removing the origin url is such a cheap way to
+potentially prevent big messes, and it&#8217;s so easy to work around for
+those that really do want to push back over the original history,
+removing the origin url is a great safety measure that I employ.</p></div>
+<div class="paragraph"><p>One final warning if you really want to push back to the original repo:
+see the next section on sensitive data removals.  Those are the steps
+needed when pushing back to the original repo; they are so involved that
+I assume they are only worth it when sensitive data is involved, but you
+can choose to follow them for other kinds of rewrites too.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_sensitive_data_removals">Sensitive Data Removals</h3>
+<div class="paragraph"><p>Sensitive data removals are a specialized type of history rewrite.
+While it is always very problematic to mix the cleaned-up history with
+the non-cleaned-up history, for sensitive data removals it is also bad
+to allow others to continue to view/clone/fetch the non-cleaned-up
+history at all; users often need to try to expunge the old history as
+well.</p></div>
+<div class="paragraph"><p>Note that if the sensitive data under consideration is a
+token/password/credential/secret (as is often the case), then it is
+important that you revoke and rotate that credential first.  Once the
+credential is revoked or rotated, it can no longer be used for access.
+Revoking/rotating may resolve your problem without resorting to the
+heavy-handed action of rewriting and purging history.</p></div>
+<div class="paragraph"><p>For sensitive data removal history rewrites, there are three high-level
+steps:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Rewrite the repository locally, using git-filter-repo
+</p>
+</li>
+<li>
+<p>
+Make sure other copies are cleaned up, including:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+the server you cloned from
+</p>
+</li>
+<li>
+<p>
+other clones that exist, such as ones your colleagues made
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Prevent repeats and avoid future sensitive data spills
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Each will be discussed in greater detail below.</p></div>
+<div class="paragraph"><p>One important thing to note, though, is that others working on the same
+repository should be instructed to stop while you do the cleanup; if
+they continue development during your cleanup, you&#8217;ll likely be forced to
+either discard their changes or start over on your cleanup.</p></div>
+<div class="sect3">
+<h4 id="_rewrite_the_repository_locally_using_git_filter_repo">Rewrite the repository locally, using git-filter-repo</h4>
+<div class="paragraph"><p>The first step is to rewrite a copy of your repository locally using
+git-filter-repo.  The exact commands to run will differ based on where
+in your repository the sensitive data is found, but some general tips:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Use the --sensitive-data-removal flag.  It will provide additional
+    information useful for the other steps.
+</p>
+</li>
+<li>
+<p>
+If the sensitive data is the entirety of one or more files, and no
+    version of those files from history needs to be kept in your
+    repository, the --invert-paths flag together with one or more --path
+    arguments may come in handy.
+</p>
+</li>
+<li>
+<p>
+If the sensitive data is just a string found within one or more
+    files and you want to replace that sensitive string with something
+    else while leaving the rest of the file(s) intact, the --replace-text
+    option may come in handy.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>After rewriting the history locally, make sure to inspect it to ensure the
+sensitive data has been removed.  Some commands that might be handy for
+checking are:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git log --all --name-status -- ${PROBLEMATIC_FILE1} ${PROBLEMATIC_FILE2}</code></pre>
+</div></div>
+<div class="paragraph"><p>or</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git log -S"${PROBLEMATIC_STRING}" --all -p --</code></pre>
+</div></div>
+<div class="paragraph"><p>If either of these commands turn up more sensitive data, then run additional
+git-filter-repo commands to clean up the necessary data before proceeding.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_make_sure_other_copies_are_cleaned_up_primary_server">Make sure other copies are cleaned up: primary server</h4>
+<div class="paragraph"><p>Cleaning up the repository you cloned from requires force pushing your
+rewritten history over the original.  You need to force push all refs,
+not just your current branch.  You can use the following command to do so
+(read the bulleted list right after this command before running it):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git push --force --mirror origin</code></pre>
+</div></div>
+<div class="paragraph"><p>Several comments on this command:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+If any of your colleagues have pushed any changes since you
+    started, this force push command will discard their changes.
+</p>
+</li>
+<li>
+<p>
+This force push is likely to fail to push some refs, since most
+    forges (Gerrit, GitHub, GitLab, etc.) prevent you from updating
+    some refs (e.g. <code>refs/changes/*</code>, <code>refs/pull/*</code>,
+    <code>refs/merge-requests/*</code>).  You will need to follow the directions
+    from those forges to get the remaining refs updated or deleted,
+    and a garbage collection to be triggered on their end.  Some
+    examples:
+    (<a href="https://docs.gitlab.com/ee/user/project/repository/reducing_the_repo_size_using_git.html">GitLab&#8217;s
+    docs on reducing repository size</a>, or
+    <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository#fully-removing-the-data-from-github">the
+    "Fully removing the data from GitHub" section of GitHub&#8217;s docs</a>).
+</p>
+</li>
+<li>
+<p>
+If you passed the <code>--no-fetch</code> option to git-filter-repo (or
+    implied it with another option), you will either need to (1) drop
+    the <code>--mirror</code> option and figure out which refs or refspecs to
+    push on your own, or (2) use the <code>--mirror</code> option and risk
+    deleting any refs you didn&#8217;t fetch.  Further, if you lacked some
+    refs the server had which included the sensitive data in their
+    history, then your only options at this point to actually clean up
+    the sensitive data from the server are to either redo your rewrite
+    from scratch (and make sure to get the relevant refs included this
+    time) or delete those refs on the server.
+</p>
+</li>
+<li>
+<p>
+Yes, I know that --mirror implies --force and is unnecessary.  I
+    included --force anyway as a visual reminder to readers that this
+    is going to overwrite changes on the server.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Also, if any LFS objects were orphaned by your rewrite, those objects
+likely contain sensitive data and need to be deleted/purged from the LFS
+server.  You&#8217;ll have to ask the maintainer of the LFS server you are
+using for how to delete/purge those on the server.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_make_sure_other_copies_are_cleaned_up_clones_of_colleagues">Make sure other copies are cleaned up: clones of colleagues</h4>
+<div class="paragraph"><p>After you have cleaned up the server, the easiest way to clean up other
+clones is to make everyone delete their existing clones and reclone.</p></div>
+<div class="paragraph"><p>If that isn&#8217;t an option, then you will need to proceed carefully because
+a simple <code>git pull &amp;&amp; git push</code> from any other clone will recontaminate
+the main repository and make the mess even harder to clean up.  To avoid
+this, before pushing from any other clone, you&#8217;ll need to have them clean
+up their copy, as detailed below.</p></div>
+<div class="paragraph"><p>First, though, let me note that you should <strong>not</strong> have other developers
+try to cleanup their clone by running the same <code>git-filter-repo</code>
+commands that you ran.  While that sometimes may happen to work, it is
+not reliable in general.  Running the same <code>git-filter-repo</code> commands,
+even if identical, can result in them getting new hashes for commits
+that are different than your new hashes, and you&#8217;ll end up with a mess
+involving two or more copies of every commit.</p></div>
+<div class="paragraph"><p>Instead developers with other clones of the repository should run
+through the following steps to clean up their copy if they are unwilling
+to discard their copy and reclone:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+delete all tags and run <code>git fetch --prune --tags</code>.  Running the
+    fetch command without deleting tags first will result in the old
+    tags being kept, which will keep the sensitive data.
+</p>
+</li>
+<li>
+<p>
+rebase any changes they have on any branch (or other ref) on top of
+    the new history.  See the "RECOVERING FROM UPSTREAM REBASE" section
+    of <a href="git-rebase.html">git-rebase(1)</a> (and in particular, "The hard case") for
+    instructions.
+</p>
+</li>
+<li>
+<p>
+run a few steps to clean out the pre-rebase history (note that the first
+    step drops all reflogs including all stash entries.  That&#8217;s a high cost,
+    but needed to clean up the sensitive data):
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+git reflog expire --expire=now --all
+</p>
+</li>
+<li>
+<p>
+git gc --prune=now
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="paragraph"><p>Once these steps are complete, you also need to verify that the clone no
+longer contains any sensitive data (it is really easy to miss something,
+which puts you at risk of recontaminating other repositories with the
+sensitive data).  You can do so by running:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git cat-file -t ${HASH_OF_FIRST_CHANGED_COMMIT}</code></pre>
+</div></div>
+<div class="paragraph"><p>Where <code>${HASH_OF_FIRST_CHANGED_COMMIT}</code> was printed by git-filter-repo at
+the end of its run (if there was more than one "first changed commit",
+run this command multiple times, with each commit hash).  If this
+command returns a fatal error, then the commit has correctly been
+removed from this repository.  If it responds with "commit", then the
+object still exists and you need to re-delete tags, re-rebase all
+necessary branches/refs, and re-expire reflogs and redo the gc.  If you
+are curious about which branches or refs were the problematic ones
+holding on to <code>${HASH_OF_FIRST_CHANGED_COMMIT}</code>, then presuming you did
+the reflog expire and gc jobs above, the following command should help
+you find the problematic branches/refs:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git for-each-ref --contains ${HASH_OF_FIRST_CHANGED_COMMIT}</code></pre>
+</div></div>
+<div class="paragraph"><p>Also, remember, the cat-file command needs to come back with a fatal
+error for every <code>${HASH_OF_FIRST_CHANGED_COMMIT}</code> involved if you have
+more than one.</p></div>
+<div class="paragraph"><p>After this is all done, then if any LFS objects were orphaned by the
+rewrite (which again, you will be told if you use the
+--sensitive-data-removal option when you run git-filter-repo), then you
+also need to remove those LFS objects.  Look for them a couple
+directories under .git/lfs/objects/, and delete them.</p></div>
+</div>
+<div class="sect3">
+<h4 id="_prevent_repeats_and_avoid_future_sensitive_data_spills">Prevent repeats and avoid future sensitive data spills</h4>
+<div class="paragraph"><p>There are several measures you can take to help avoid repeat problems.
+Not all may be applicable for your case, but the more that are, the more
+likely you can avoid problems.</p></div>
+<div class="paragraph"><p>For dealing with the existing sensitive data spill:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Since it is so easy to re-contaminate the repository you cloned from
+  (it merely takes a colleague to run <code>git pull &amp;&amp; git push</code> from their
+  clone that was created before your cleanup), take extra vigilance in
+  performing the clean ups steps above for other clones to ensure they
+  have all been cleaned up.
+</p>
+</li>
+<li>
+<p>
+If you have a central repository everyone pushes to, look into methods
+  to ban the First Changed Commit(s) from being (re-)pushed to your
+  repository.  Sadly, few repository managers currently have such a
+  built-in capability (see Gerrit&#8217;s ban-commit ability for one such
+  example at
+  <a href="https://gerrit-review.googlesource.com/Documentation/cmd-ban-commit.html">https://gerrit-review.googlesource.com/Documentation/cmd-ban-commit.html</a>),
+  but a few may allow you to write your own pre-receive hooks that
+  reject pushes containing these bad commits.  (Pro-tip for writing such
+  a pre-receive hook: use <code>git cat-file -t ${BAD_COMMIT}</code> as a cheap
+  check before checking if any revision range between <code>&lt;old-oid&gt;</code> and
+  <code>&lt;new-oid&gt;</code> contains <code>${BAD_COMMIT}</code>)
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Steps to help avoid other future sensitive data spills:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+If sensitive data is likely to appear within certain filenames that
+  should not be tracked in git at all, then add those filenames to
+  .gitignore to reduce the risk that others accidentally add them.
+</p>
+</li>
+<li>
+<p>
+Avoid hardcoding secrets in code.  Use environment variables,
+  configuration management tools, or secrets management services like
+  Azure Key Vault, AWS Secrets Manager, or HashiCorp Vault to manage and
+  inject secrets at runtime.
+</p>
+</li>
+<li>
+<p>
+Create a pre-commit hook to check for sensitive data before it is
+  committed or pushed anywhere, or use a well-known tool in a pre-commit
+  hook like git-secrets or gitleaks.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="EXAMPLES">EXAMPLES</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_path_based_filtering">Path based filtering</h3>
+<div class="paragraph"><p>To only keep the <em>README.md</em> file plus the directories <em>guides</em> and
+<em>tools/releases/</em>:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path README.md --path guides/ --path tools/releases</code></pre>
+</div></div>
+<div class="paragraph"><p>Directory names can be given with or without a trailing slash, and all
+filenames are relative to the toplevel of the repo.  To keep all files
+except these paths, just add <code>--invert-paths</code>:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path README.md --path guides/ --path tools/releases --invert-paths</code></pre>
+</div></div>
+<div class="paragraph"><p>If you want to have both an inclusion filter and an exclusion filter, just
+run filter-repo multiple times.  For example, to keep the src/main
+subdirectory but exclude files under src/main named <em>data</em>, run:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path src/main/
+git filter-repo --path-glob 'src/*/data' --invert-paths</code></pre>
+</div></div>
+<div class="paragraph"><p>Note that the asterisk (<code>*</code>) will match across multiple directories, so the
+second command would remove e.g. src/main/org/whatever/data.  Also, the
+second command by itself would also remove e.g. src/not-main/foo/data, but
+since src/not-main/ was removed by the first command, that&#8217;s not an issue.
+Also, the use of quotes around the asterisk is sometimes important to avoid
+glob expansion by the shell.</p></div>
+<div class="paragraph"><p>You can also select paths by regular expression (see
+<a href="https://docs.python.org/3/library/re.html#regular-expression-syntax">https://docs.python.org/3/library/re.html#regular-expression-syntax</a>).
+For example, to only include files from the repo whose name is in the
+format YYYY-MM-DD.txt and is found at least two subdirectories deep:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path-regex '^.*/.*/[0-9]{4}-[0-9]{2}-[0-9]{2}.txt$'</code></pre>
+</div></div>
+<div class="paragraph"><p>If you want two directories to be renamed (and maybe merged if both are
+renamed to the same location), use --path-rename; for example, to rename
+both <em>cmds/</em> and <em>src/scripts/</em> to <em>tools/</em>:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path-rename cmds:tools --path-rename src/scripts/:tools/</code></pre>
+</div></div>
+<div class="paragraph"><p>As with <code>--path</code>, directories can be specified with or without a
+trailing slash for <code>--path-rename</code>.</p></div>
+<div class="paragraph"><p>If you do a <code>--path-rename</code> to something that was already in use, it will
+be silently overwritten.  However, if you try to rename multiple files to
+the same location (e.g. src/scripts/run_release.sh and cmds/run_release.sh
+both existed and had different content with the renames above), then you
+will be given an error.  If you have such a case, you may want to add
+another rename command to move one of the paths somewhere else where it
+won&#8217;t collide:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path-rename cmds/run_release.sh:tools/do_release.sh \
+                --path-rename cmds/:tools/ \
+                --path-rename src/scripts/:tools/</code></pre>
+</div></div>
+<div class="paragraph"><p>Also, <code>--path-rename</code> brings up ordering issues; all path arguments are
+applied in order.  Thus, a command like</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path-rename sources/:src/main/ --path src/main/</code></pre>
+</div></div>
+<div class="paragraph"><p>would make sense but reversing the two arguments would not (src/main/ is
+created by the rename so reversing the two would give you an empty repo).
+Also, note that the rename of cmds/run_release.sh a couple examples ago was
+done before the other renames.</p></div>
+<div class="paragraph"><p>Note that path renaming does not do path filtering, thus the following
+command</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path src/main/ --path-rename tools/:scripts/</code></pre>
+</div></div>
+<div class="paragraph"><p>would not result in the tools or scripts directories being present, because
+the single filter selected only src/main/.  It&#8217;s likely that you would
+instead want to run:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --path src/main/ --path tools/ --path-rename tools/:scripts/</code></pre>
+</div></div>
+<div class="paragraph"><p>If you prefer to filter based solely on basename, use the <code>--use-base-name</code>
+flag (though this is incompatible with <code>--path-rename</code>).  For example, to
+only include README.md and Makefile files from any directory:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --use-base-name --path README.md --path Makefile</code></pre>
+</div></div>
+<div class="paragraph"><p>If you wanted to delete all .DS_Store files in any directory, you could
+either use:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --invert-paths --path '.DS_Store' --use-base-name</code></pre>
+</div></div>
+<div class="paragraph"><p>or</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --invert-paths --path-glob '*/.DS_Store' --path '.DS_Store'</code></pre>
+</div></div>
+<div class="paragraph"><p>(the <code>--path-glob</code> isn&#8217;t sufficient by itself as it might miss a toplevel
+.DS_Store file; further while something like <code>--path-glob '*.DS_Store'</code>
+would workaround that problem it would also grab files named <code>foo.DS_Store</code>
+or <code>bar/baz.DS_Store</code>)</p></div>
+<div class="paragraph"><p>Finally, see also the <code>--filename-callback</code> from <a href="#CALLBACKS">[CALLBACKS]</a>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_filtering_based_on_many_paths">Filtering based on many paths</h3>
+<div class="paragraph"><p>If you have a long list of files, directories, globs, or regular
+expressions to filter on, you can stick them in a file and use
+<code>--paths-from-file</code>; for example, with a file named stuff-i-want.txt with
+contents of</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code># Blank lines and comment lines are ignored.
+# Examples similar to --path:
+README.md
+guides/
+tools/releases
+
+# An example that is like --path-glob:
+glob:*.py
+
+# An example that is like --path-regex:
+regex:^.*/.*/[0-9]{4}-[0-9]{2}-[0-9]{2}.txt$
+
+# An example of renaming a path
+tools/==&gt;scripts/
+
+# An example of using a regex to rename a path
+regex:(.*)/([^/]*)/([^/]*)\.text$==&gt;\2/\1/\3.txt</code></pre>
+</div></div>
+<div class="paragraph"><p>then you could run</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --paths-from-file stuff-i-want.txt</code></pre>
+</div></div>
+<div class="paragraph"><p>to get a repo containing only the toplevel README.md file, the guides/
+and tools/releases/ directories, all python files, files whose name
+was of the form YYYY-MM-DD.txt at least two subdirectories deep, and
+would rename tools/ to scripts/ and rename files like foo/bar/baz.text
+to bar/foo/baz.txt.  Note the special line prefixes of <code>glob:</code> and
+<code>regex:</code> and the special string <code>==&gt;</code> denoting renames.</p></div>
+<div class="paragraph"><p>Sometimes you have a way of easily generating all the files you want.
+For example, if you know that none of the currently tracked files have
+any newlines or special characters in them (see core.quotePath from
+<code>git config --help</code>) so that <code>git ls-files</code> would print all files
+literally one per line, and you knew that you wanted to keep only the
+files that are currently tracked (thus deleting from all commits in
+history any files that only appear on other branches or that only
+appear in older commits), then you could use a pair of commands such
+as</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git ls-files &gt;../paths-i-want.txt
+git filter-repo --paths-from-file ../paths-i-want.txt</code></pre>
+</div></div>
+<div class="paragraph"><p>Similarly, you could use --paths-from-file to delete many files.  For
+example, you could run <code>git filter-repo --analyze</code> to get reports,
+look in one such as .git/filter-repo/analysis/path-deleted-sizes.txt
+and copy all the filenames into a file such as
+/tmp/files-i-dont-want-anymore.txt and then run</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --invert-paths --paths-from-file /tmp/files-i-dont-want-anymore.txt</code></pre>
+</div></div>
+<div class="paragraph"><p>to delete them all.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_directory_based_shortcuts">Directory based shortcuts</h3>
+<div class="paragraph"><p>Let&#8217;s say you had a directory structure like the following:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>module/
+   foo.c
+   bar.c
+otherDir/
+   blah.config
+   stuff.txt
+zebra.jpg</code></pre>
+</div></div>
+<div class="paragraph"><p>If you wanted just the module/ directory and you wanted it to become the
+new root so that your new directory structure looked like</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>foo.c
+bar.c</code></pre>
+</div></div>
+<div class="paragraph"><p>then you could run:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --subdirectory-filter module/</code></pre>
+</div></div>
+<div class="paragraph"><p>If you wanted all the files from the original repo, but wanted to move
+everything under a subdirectory named my-module/, so that your new
+directory structure looked like</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>my-module/
+   module/
+      foo.c
+      bar.c
+   otherDir/
+      blah.config
+      stuff.txt
+   zebra.jpg</code></pre>
+</div></div>
+<div class="paragraph"><p>then you would instead run run</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --to-subdirectory-filter my-module/</code></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_content_based_filtering">Content based filtering</h3>
+<div class="paragraph"><p>If you want to filter out all files bigger than a certain size, you can use
+<code>--strip-blobs-bigger-than</code> with some size (K, M, and G suffixes are
+recognized), e.g.:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --strip-blobs-bigger-than 10M</code></pre>
+</div></div>
+<div class="paragraph"><p>If you want to strip out all files with specified git object ids (hashes),
+list the hashes in a file and run</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --strip-blobs-with-ids FILE_WITH_GIT_BLOB_IDS</code></pre>
+</div></div>
+<div class="paragraph"><p>If you want to modify file contents, you can do so based on a list of
+expressions in a file, one per line.  For example, with a file named
+expressions.txt containing</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>p455w0rd
+foo==&gt;bar
+glob:*666*==&gt;
+regex:\bdriver\b==&gt;pilot
+literal:MM/DD/YYYY==&gt;YYYY-MM-DD
+regex:([0-9]{2})/([0-9]{2})/([0-9]{4})==&gt;\3-\1-\2</code></pre>
+</div></div>
+<div class="paragraph"><p>then running</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --replace-text expressions.txt</code></pre>
+</div></div>
+<div class="paragraph"><p>will go through and replace <code>p455w0rd</code> with <code>***REMOVED***</code>, <code>foo</code> with
+<code>bar</code>, any line containing <code>666</code> with a blank line, the word <code>driver</code> with
+<code>pilot</code> (but not if it has letters before or after; e.g. <code>drivers</code> will be
+unmodified), replace the exact text <code>MM/DD/YYYY</code> with <code>YYYY-MM-DD</code> and
+replace date strings of the form MM/DD/YYYY with ones of the form
+YYYY-MM-DD.  In the expressions file, there are a few things to note:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Every line has a replacement, given by whatever is on the right of
+    <code>==&gt;</code>.  If <code>==&gt;</code> does not appear on the line, the default replacement
+    is <code>***REMOVED***</code>.
+</p>
+</li>
+<li>
+<p>
+Lines can start with <code>literal:</code>, <code>glob:</code>, or <code>regex:</code> to specify
+    whether to do literal string matches,
+    globs (see <a href="https://docs.python.org/3/library/fnmatch.html">https://docs.python.org/3/library/fnmatch.html</a>), or regular
+    expressions (see <a href="https://docs.python.org/3/library/re.html#regular-expression-syntax">https://docs.python.org/3/library/re.html#regular-expression-syntax</a>).
+    If none of these are specified, <code>literal:</code> is assumed.
+</p>
+</li>
+<li>
+<p>
+If multiple matches are found, all are replaced.
+</p>
+</li>
+<li>
+<p>
+globs and regexes are applied to the entire file, but without any
+    special flags turned on.  Some folks may be interested in adding <code>(?m)</code>
+    to the regex to turn on MULTILINE mode, so that <code>^</code> and <code>$</code> match the
+    beginning and ends of lines rather than the beginning and end of file.
+    See <a href="https://docs.python.org/3/library/re.html">https://docs.python.org/3/library/re.html</a> for details.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>See also the <code>--blob-callback</code> from <a href="#CALLBACKS">[CALLBACKS]</a>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_updating_commit_tag_messages">Updating commit/tag messages</h3>
+<div class="paragraph"><p>If you want to modify commit or tag messages, you can do so with the
+same syntax as <code>--replace-text</code>, explained above.  For example, with a
+file named expressions.txt containing</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>foo==&gt;bar</code></pre>
+</div></div>
+<div class="paragraph"><p>then running</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --replace-message expressions.txt</code></pre>
+</div></div>
+<div class="paragraph"><p>will replace <code>foo</code> in commit or tag messages with <code>bar</code>.</p></div>
+<div class="paragraph"><p>See also the <code>--message-callback</code> from <a href="#CALLBACKS">[CALLBACKS]</a>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_refname_based_filtering">Refname based filtering</h3>
+<div class="paragraph"><p>To rename tags, use <code>--tag-rename</code>, e.g.:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --tag-rename foo:bar</code></pre>
+</div></div>
+<div class="paragraph"><p>This will rename any tags starting with <code>foo</code> to now start with <code>bar</code>.
+Either side of the colon could be blank, e.g.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --tag-rename '':'my-module-'</code></pre>
+</div></div>
+<div class="paragraph"><p>For more general refname modification, see <code>--refname-callback</code> from
+<a href="#CALLBACKS">[CALLBACKS]</a>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_user_and_email_based_filtering">User and email based filtering</h3>
+<div class="paragraph"><p>To modify username and emails of commits, you can create a mailmap
+file in the format accepted by <a href="git-shortlog.html">git-shortlog(1)</a>.  For example,
+if you have a file named my-mailmap you can run</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --mailmap my-mailmap</code></pre>
+</div></div>
+<div class="paragraph"><p>and if the current contents of that file are as follows (if the
+specified mailmap file is version controlled, historical versions of
+the file are ignored):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>Name For User &lt;email@addre.ss&gt;
+&lt;new@ema.il&gt; &lt;old1@ema.il&gt;
+New Name And &lt;new@ema.il&gt; &lt;old2@ema.il&gt;
+New Name And &lt;new@ema.il&gt; Old Name And &lt;old3@ema.il&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>then we can update username and/or emails based on the specified
+mapping.</p></div>
+<div class="paragraph"><p>See also the <code>--name-callback</code> and <code>--email-callback</code> from
+<a href="#CALLBACKS">[CALLBACKS]</a>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_parent_rewriting_2">Parent rewriting</h3>
+<div class="paragraph"><p>To replace $commit_A with $commit_B (e.g. make all commits which had
+$commit_A as a parent instead have $commit_B for that parent), and
+rewrite history to make it permanent:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git replace $commit_A $commit_B
+git filter-repo --proceed</code></pre>
+</div></div>
+<div class="paragraph"><p>To create a new commit with the same contents as $commit_A except with
+different parent(s) and then replace $commit_A with the new commit,
+and rewrite history to make it permanent:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git replace --graft $commit_A $new_parent_or_parents
+git filter-repo --proceed</code></pre>
+</div></div>
+<div class="paragraph"><p>The <code>--proceed</code> option is needed to avoid failing the "no arguments
+specified" check.  Note that older versions of git-filter-repo
+required <code>--force</code> to be passed after creating a graft to avoid
+triggering the not-a-fresh-clone check; that check has been modified
+to remove this overuse of <code>--force</code>.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_partial_history_rewrites">Partial history rewrites</h3>
+<div class="paragraph"><p>To rewrite the history on just one branch (which may cause it to no longer
+share any common history with other branches), use <code>--refs</code>.  For example,
+to remove a file named <em>extraneous.txt</em> from the <em>master</em> branch:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --invert-paths --path extraneous.txt --refs master</code></pre>
+</div></div>
+<div class="paragraph"><p>To rewrite just some recent commits:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --invert-paths --path extraneous.txt --refs master~3..master</code></pre>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CALLBACKS">CALLBACKS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>For flexibility, filter-repo allows you to specify functions on the
+command line to further filter all changes.  Please note that there
+are some API compatibility caveats associated with these callbacks
+that you should be aware of before using them; see the "API BACKWARD
+COMPATIBILITY CAVEAT" comment near the top of git-filter-repo source
+code.</p></div>
+<div class="paragraph"><p>Most callback functions are of the same general format
+(--file-info-callback is an exception which will be noted later).  For
+a command line argument like</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>--foo-callback 'BODY'</code></pre>
+</div></div>
+<div class="paragraph"><p>the following code will be compiled and called:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>def foo_callback(foo):
+  BODY</code></pre>
+</div></div>
+<div class="paragraph"><p>Thus, you just need to make sure your <em>BODY</em> modifies and returns
+<em>foo</em> appropriately.  One important thing to note for all callbacks is
+that filter-repo uses bytestrings (see
+<a href="https://docs.python.org/3/library/stdtypes.html#bytes">https://docs.python.org/3/library/stdtypes.html#bytes</a>) everywhere
+instead of strings.</p></div>
+<div class="paragraph"><p>There are four callbacks that allow you to operate directly on raw
+objects that contain data that&#8217;s easy to write in
+<a href="git-fast-import.html">git-fast-import(1)</a> format:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>--blob-callback
+--commit-callback
+--tag-callback
+--reset-callback</code></pre>
+</div></div>
+<div class="paragraph"><p>We&#8217;ll come back to these later because it is often the case that the
+other callbacks are more convenient.  The other callbacks operate on a
+small piece of the raw objects or operate on pieces across multiple
+types of raw object (e.g. author names and committer names and tagger
+names across commits and tags, or refnames across commits, tags, and
+resets, or messages across commits and tags).  The convenience
+callbacks are:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>--filename-callback
+--message-callback
+--name-callback
+--email-callback
+--refname-callback
+--file-info-callback</code></pre>
+</div></div>
+<div class="paragraph"><p>in each you are expected to simply return a new value based on the one
+passed in.  For example,</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --name-callback 'return name.replace(b"Wiliam", b"William")'</code></pre>
+</div></div>
+<div class="paragraph"><p>would result in the following function being called:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>def name_callback(name):
+  return name.replace(b"Wiliam", b"William")</code></pre>
+</div></div>
+<div class="paragraph"><p>The email callback is quite similar:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --email-callback 'return email.replace(b".cm", b".com")'</code></pre>
+</div></div>
+<div class="paragraph"><p>The refname callback is also similar, but note that the refname passed in
+and returned are expected to be fully qualified (e.g. b"refs/heads/master"
+instead of just b"master" and b"refs/tags/v1.0.7" instead of b"1.0.7"):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --refname-callback '
+  # Change e.g. refs/heads/master to refs/heads/prefix-master
+  rdir,rpath = os.path.split(refname)
+  return rdir + b"/prefix-" + rpath'</code></pre>
+</div></div>
+<div class="paragraph"><p>The message callback is quite similar to the previous three callbacks,
+though it operates on a bytestring that is likely more than one line:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --message-callback '
+  if b"Signed-off-by:" not in message:
+    message += b"\nSigned-off-by: Me My &lt;self@and.eye&gt;"
+  return re.sub(b"[Ee]-?[Mm][Aa][Ii][Ll]", b"email", message)'</code></pre>
+</div></div>
+<div class="paragraph"><p>The filename callback is slightly more interesting.  Returning None means
+the file should be removed from all commits, returning the filename
+unmodified marks the file to be kept, and returning a different name means
+the file should be renamed.  An example:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --filename-callback '
+  if b"/src/" in filename:
+    # Remove all files with a directory named "src" in their path
+    # (except when "src" appears at the toplevel).
+    return None
+  elif filename.startswith(b"tools/"):
+    # Rename tools/ -&gt; scripts/misc/
+    return b"scripts/misc/" + filename[6:]
+  else:
+    # Keep the filename and do not rename it
+    return filename
+  '</code></pre>
+</div></div>
+<div class="paragraph"><p>The file-info callback is more involved.  It is designed to be used in
+cases where filtering depends on both filename and contents (and maybe
+mode).  It is called for file changes other than deletions (since
+deletions have no file contents to operate on).  The file info
+callback takes four parameters (filename, mode, blob_id, and value),
+and expects three to be returned (filename, mode, blob_id).  The
+filename is handled similar to the filename callback; it can be used
+to rename the file (or set to None to drop the change).  The mode is a
+simple bytestring (b"100644" for regular non-executable files,
+b"100755" for executable files/scripts, b"120000" for symlinks, and
+b"160000" for submodules).  The blob_id is most useful in conjunction
+with the value parameter.  The value parameter is an instance of a
+class that has the following functions
+  value.get_contents_by_identifier(blob_id) &#8594; contents (bytestring)
+  value.get_size_by_identifier(blob_id) &#8594; size_of_blob (int)
+  value.insert_file_with_contents(contents) &#8594; blob_id
+  value.is_binary(contents) &#8594; bool
+  value.apply_replace_text(contents) &#8594; new_contents (bytestring)
+and has the following member data you can write to
+  value.data (dict)
+These functions allow you to get the contents of the file, or its
+size, create a new file in the stream whose blob_id you can return,
+check whether some given contents are binary (using the heuristic from
+the grep(1) command), and apply the replacement rules from --replace-text
+(note that --file-info-callback makes the changes from --replace-text not
+auto-apply).  You could use this for example to only apply the changes
+from --replace-text to certain file types and simultaneously rename the
+files it applies the changes to:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --file-info-callback '
+  if not filename.endswith(b".config"):
+    # Make no changes to the file; return as-is
+    return (filename, mode, blob_id)
+
+  new_filename = filename[0:-7] + b".cfg"
+
+  contents = value.get_contents_by_identifier(blob_id)
+  new_contents = value.apply_replace_text(contents)
+  new_blob_id = value.insert_file_with_contents(new_contents)
+
+  return (new_filename, mode, new_blob_id)</code></pre>
+</div></div>
+<div class="paragraph"><p>Note that if history has multiple revisions with the same file
+(e.g. it was cherry-picked to multiple branches or there were a number
+of reverts), then the --file-info-callback will be called multiple
+times.  If you want to avoid processing the same file multiple times,
+then you can stash transformation results in the value.data dict.
+For, example, we could modify the above example to make it only apply
+transformations on blob_ids we have not seen before:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --file-info-callback '
+  if not filename.endswith(b".config"):
+    # Make no changes to the file; return as-is
+    return (filename, mode, blob_id)
+
+  new_filename = filename[0:-7] + b".cfg"
+
+  if blob_id in value.data:
+    return (new_filename, mode, value.data[blob_id])
+
+  contents = value.get_contents_by_identifier(blob_id)
+  new_contents = value.apply_replace_text(contents)
+  new_blob_id = value.insert_file_with_contents(new_contents)
+  value.data[blob_id] = new_blob_id
+
+  return (new_filename, mode, new_blob_id)</code></pre>
+</div></div>
+<div class="paragraph"><p>An alternative example for the --file-info-callback is to make all
+.sh files executable and add an extra trailing newline to the .sh
+files:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git-filter-repo --file-info-callback '
+  if not filename.endswith(b".sh"):
+    # Make no changes to the file; return as-is
+    return (filename, mode, blob_id)
+
+  # There are only 4 valid modes in git:
+  #   - 100644, for regular non-executable files
+  #   - 100755, for executable files/scripts
+  #   - 120000, for symlinks
+  #   - 160000, for submodules
+  new_mode = b"100755"
+
+  contents = value.get_contents_by_identifier(blob_id)
+  new_contents = contents + b"\n"
+  new_blob_id = value.insert_file_with_contents(new_contents)
+
+  return (filename, new_mode, new_blob_id)</code></pre>
+</div></div>
+<div class="paragraph"><p>In contrast to the previous callback types, the blob, reset, tag, and
+commit callbacks are not expected to return a value, but are instead
+expected to modify the object passed in.  Major fields for these
+objects are (subject to API backward compatibility caveats mentioned
+previously):</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Blob: <code>original_id</code> (original hash) and <code>data</code>
+</p>
+</li>
+<li>
+<p>
+Reset: <code>ref</code> (name of reference) and <code>from_ref</code> (hash or integer mark)
+</p>
+</li>
+<li>
+<p>
+Tag: <code>ref</code>, <code>from_ref</code>, <code>original_id</code>, <code>tagger_name</code>, <code>tagger_email</code>,
+         <code>tagger_date</code>, <code>message</code>
+</p>
+</li>
+<li>
+<p>
+Commit: <code>branch</code>, <code>original_id</code>, <code>author_name</code>, <code>author_email</code>,
+            <code>author_date</code>, <code>committer_name</code>, <code>committer_email</code>,
+            <code>committer_date</code>, <code>message</code>, <code>file_changes</code> (list of
+            FileChange objects, each containing a <code>type</code>, <code>filename</code>,
+            <code>mode</code>, and <code>blob_id</code>), <code>parents</code> (list of hashes or integer
+            marks)
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>An example of each:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --blob-callback '
+  if len(blob.data) &gt; 25:
+    # Mark this blob for removal from all commits
+    blob.skip()
+  else:
+    blob.data = blob.data.replace(b"Hello", b"Goodbye")
+  '</code></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --reset-callback 'reset.ref = reset.ref.replace(b"master", b"dev")'</code></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --tag-callback '
+  if tag.tagger_name == b"Jim Williams":
+    # Omit this tag
+    tag.skip()
+  else:
+    tag.message = tag.message + b"\n\nTag of %s by %s on %s" % (tag.ref, tag.tagger_email, tag.tagger_date)'</code></pre>
+</div></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git filter-repo --commit-callback '
+  # Remove executable files with three 6s in their name (including
+  # from leading directories).
+  # Also, undo deletion of sources/foo/bar.txt (change types are
+  # either b"D" (deletion) or b"M" (add or modify); renames are
+  # handled by deleting the old file and adding a new one)
+  commit.file_changes = [
+         change for change in commit.file_changes
+         if not (change.mode == b"100755" and
+                 change.filename.count(b"6") == 3) and
+            not (change.type == b"D" and
+                 change.filename == b"sources/foo/bar.txt")]
+  # Mark all .sh files as executable; modes in git are always one of
+  # 100644 (normal file), 100755 (executable), 120000 (symlink), or
+  # 160000 (submodule)
+  for change in commit.file_changes:
+    if change.filename.endswith(b".sh"):
+      change.mode = b"100755"
+  '</code></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="INTERNALS">INTERNALS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>You probably don&#8217;t need to read this section unless you are just very
+curious or you are trying to do a very complex history rewrite.</p></div>
+<div class="sect2">
+<h3 id="_how_filter_repo_works">How filter-repo works</h3>
+<div class="paragraph"><p>Roughly, filter-repo works by running</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>git fast-export &lt;options&gt; | filter | git fast-import &lt;options&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>where filter-repo not only launches the whole pipeline but also serves as
+the <em>filter</em> in the middle.  However, filter-repo does a few additional
+things on top in order to make it into a well-rounded filtering tool.  A
+sequence that more accurately reflects what filter-repo runs is:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Verify we&#8217;re in a fresh clone
+</p>
+</li>
+<li>
+<p>
+<code>git fetch -u . refs/remotes/origin/*:refs/heads/*</code>
+</p>
+</li>
+<li>
+<p>
+<code>git remote rm origin</code>
+</p>
+</li>
+<li>
+<p>
+<code>git fast-export --show-original-ids --reference-excluded-parents --fake-missing-tagger --signed-tags=strip --tag-of-filtered-object=rewrite --use-done-feature --no-data --reencode=yes --mark-tags --all | filter | git -c core.ignorecase=false fast-import --date-format=raw-permissive --force --quiet</code>
+</p>
+</li>
+<li>
+<p>
+<code>git update-ref --no-deref --stdin</code>, fed with a list of refs to nuke, and a list of replace refs to delete, create, or update.
+</p>
+</li>
+<li>
+<p>
+<code>git reset --hard</code>
+</p>
+</li>
+<li>
+<p>
+<code>git reflog expire --expire=now --all</code>
+</p>
+</li>
+<li>
+<p>
+<code>git gc --prune=now</code>
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Some notes or exceptions on each of the above:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+If we&#8217;re not in a fresh clone, users will not be able to recover if
+     they used the wrong command or ran in the wrong repo.  (Though
+     <code>--force</code> overrides this check, and it&#8217;s also off if you&#8217;ve already
+     ran filter-repo once in this repo.)
+</p>
+</li>
+<li>
+<p>
+Technically, we actually use a <code>git update-ref</code> command fed with a lot
+     of input due to the fact that users can use <code>--force</code> when local
+     branches might not match remote branches.  But this fetch command
+     catches the intent rather succinctly.
+</p>
+</li>
+<li>
+<p>
+We don&#8217;t want users accidentally pushing back to the original repo, as
+     discussed in <a href="#DISCUSSION">[DISCUSSION]</a>.  It also reminds users that since history
+     has been rewritten, this repo is no longer compatible with the
+     original.  Finally, another minor benefit is this allows users to push
+     with the <code>--mirror</code> option to their new home without accidentally
+     sending remote tracking branches.
+</p>
+</li>
+<li>
+<p>
+Some of these flags are always used but others are actually
+     conditional.  For example, filter-repo&#8217;s <code>--replace-text</code> and
+     <code>--blob-callback</code> options need to work on blobs so <code>--no-data</code> cannot
+     be passed to fast-export.  But when we don&#8217;t need to work on blobs,
+     passing <code>--no-data</code> speeds things up.  Also, other flags may change
+     the structure of the pipeline as well (e.g. <code>--dry-run</code> and <code>--debug</code>)
+</p>
+</li>
+<li>
+<p>
+We use this step to write replace refs for accessing the newly written
+     commit hashes using their previous names.  Also, if refs were renamed
+     by various steps, we need to delete the old refnames in order to avoid
+     mixing old and new history.
+</p>
+</li>
+<li>
+<p>
+Users also have old versions of files in their working tree and index;
+     we want those cleaned up to match the rewritten history as well.  Note
+     that this step is skipped in bare repos.
+</p>
+</li>
+<li>
+<p>
+Reflogs will hold on to old history, so we need to expire them.
+</p>
+</li>
+<li>
+<p>
+We need to gc to avoid mixing new and old history.  Also, it shrinks
+     the repository for users, so they don&#8217;t have to do extra work.  (Odds
+     are that they&#8217;ve only rewritten trees and commits and maybe a few
+     blobs, so <code>--aggressive</code> isn&#8217;t needed and would be too slow.)
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Information about these steps is printed out when <code>--debug</code> is passed
+to filter-repo.  When doing a <code>--partial</code> history rewrite, steps 2, 3,
+7, and 8 are unconditionally skipped, step 5 is skipped if
+<code>--replace-refs</code> is <code>update-no-add</code>, and just the nuke-unused-refs
+portion of step 5 is skipped if <code>--replace-refs</code> is something else.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_limitations">Limitations</h3>
+<div class="sect3">
+<h4 id="_inherited_limitations">Inherited limitations</h4>
+<div class="paragraph"><p>Since git filter-repo calls fast-export and fast-import to do a lot of the
+heavy lifting, it inherits limitations from those systems:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+extended commit headers, if any, are stripped
+</p>
+</li>
+<li>
+<p>
+commits get rewritten meaning they will have new hashes; therefore,
+    signatures on commits and tags cannot continue to work and instead are
+    just removed (thus signed tags become annotated tags)
+</p>
+</li>
+<li>
+<p>
+tags of commits are supported.  Prior to git-2.24.0, tags of blobs and
+    tags of tags are not supported (fast-export would die on such tags).
+    tags of trees are not supported in any git version (since fast-export
+    ignores tags of trees with a warning and fast-import provides no way to
+    import them).
+</p>
+</li>
+<li>
+<p>
+annotated and signed tags outside of the refs/tags/ namespace are not
+    supported (their location will be mangled in weird ways)
+</p>
+</li>
+<li>
+<p>
+fast-import will die on various forms of invalid input, such as a
+    timezone with more than four digits
+</p>
+</li>
+<li>
+<p>
+fast-export cannot reencode commit messages into UTF-8 if the commit
+    message is not valid in its specified encoding (in such cases, it&#8217;ll
+    leave the commit message and the encoding header alone).
+</p>
+</li>
+<li>
+<p>
+commits without an author will be given one matching the committer
+</p>
+</li>
+<li>
+<p>
+tags without a tagger will be given a fake tagger
+</p>
+</li>
+<li>
+<p>
+references that include commit cycles in their history (which can be
+    created with <a href="git-replace.html">git-replace(1)</a>) will not be flagged to the user as
+    an error but will be silently deleted by fast-export as though the
+    branch or tag contained no interesting files
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>There are also some limitations due to the design of these systems:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Trying to insert additional files into the stream can be tricky; since
+    fast-export only lists file changes in a merge relative to its first
+    parent, if you insert additional files into a commit that is in the
+    second (or third or fourth) parent history of a merge, then you also
+    need to add it to the merge manually.  (Similarly, if you change which
+    parent is the first parent in a merge commit, you need to manually
+    update the list of file changes to be relative to the new first
+    parent.)
+</p>
+</li>
+<li>
+<p>
+fast-export and fast-import work with exact file contents, not patches.
+    (e.g. "Whatever the current contents of this file, update them to now
+    have these contents") Because of this, removing the changes made in a
+    single commit or inserting additional changes to a file in some commit
+    and expecting them to propagate forward is not something that can be
+    done with these tools.  Use <a href="git-rebase.html">git-rebase(1)</a> for that.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="_intrinsic_limitations">Intrinsic limitations</h4>
+<div class="paragraph"><p>Some types of filtering have limitations that would affect any tool
+attempting to perform them; the most any tool can do is attempt to notify
+the user when it detects an issue:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+When rewriting commit hashes in commit messages, there are a variety
+    of cases when the hash will not be updated (whenever this happens, a
+    note is written to <code>.git/filter-repo/suboptimal-issues</code>):
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+if a commit hash does not correspond to a commit in the old repo
+</p>
+</li>
+<li>
+<p>
+if a commit hash corresponds to a commit that gets pruned
+</p>
+</li>
+<li>
+<p>
+if an abbreviated hash is not unique
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Pruning of empty commits can cause a merge commit to lose an entire
+    ancestry line and become a non-merge.  If the merge commit had no
+    changes then it can be pruned too, but if it still has changes it needs
+    to be kept.  This might cause minor confusion since the commit will
+    likely have a commit message that makes it sound like a merge commit
+    even though it&#8217;s not.  (Whenever a merge commit becomes a non-merge
+    commit, a note is written to <code>.git/filter-repo/suboptimal-issues</code>)
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="_issues_specific_to_filter_repo">Issues specific to filter-repo</h4>
+<div class="ulist"><ul>
+<li>
+<p>
+Multiple repositories in the wild have been observed which use a bogus
+    timezone (<code>+051800</code>); google will find you some reports.  The intended
+    timezone wasn&#8217;t clear or wasn&#8217;t always the same.  Replace with a
+    different bogus timezone that fast-import will accept (<code>+0261</code>).
+</p>
+</li>
+<li>
+<p>
+<code>--path-rename</code> can result in pathname collisions; to avoid excessive
+    memory requirements of tracking which files are in all commits or
+    looking up what files exist with either every commit or every usage of
+    --path-rename, we just tell the user that they might clobber other
+    changes if they aren&#8217;t careful.  We can check if the clobbering comes
+    from another --path-rename without much overhead.  (Perhaps in the
+    future it&#8217;s worth adding a slow mode to --path-rename that will do the
+    more exhaustive checks?)
+</p>
+</li>
+<li>
+<p>
+There is no mechanism for directly controlling which flags are passed
+    to fast-export (or fast-import); only pre-defined flags can be turned
+    on or off as a side-effect of other options.  Direct control would make
+    little sense because some options like <code>--full-tree</code> would require
+    additional code in filter-repo (to parse new directives), and others
+    such as <code>-M</code> or <code>-C</code> would break assumptions used in other places of
+    filter-repo.
+</p>
+</li>
+<li>
+<p>
+Partial-repo filtering, while supported, runs counter to filter-repo&#8217;s
+    "avoid mixing old and new history" design.  This support has required
+    improvements to core git as well (e.g. it depends upon the
+    <code>--reference-excluded-parents</code> option to fast-export that was added
+    specifically for this usage within filter-repo).  The <code>--partial</code> and
+    <code>--refs</code> options will continue to be supported since there are people
+    with usecases for them; however, I am concerned that this inconsistency
+    about mixing old and new history seems likely to lead to user mistakes.
+    For now, I just hope that long explanations of caveats in the
+    documentation of these options suffice to curtail any such problems.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect3">
+<h4 id="_comments_on_reversibility">Comments on reversibility</h4>
+<div class="paragraph"><p>Some people are interested in reversibility of a rewrite; e.g. rewrite
+history, possibly add some commits, then unrewrite and get the original
+history back plus a few new "unrewritten" commits.  Obviously this is
+impossible if your rewrite involves throwing away information
+(e.g. filtering out files or replacing several different strings with
+<code>***REMOVED***</code>), but may be possible with some rewrites.  filter-repo is
+likely to be a poor fit for this type of workflow for a few reasons:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+most of the limitations inherited from fast-export and fast-import
+    are of a type that cause reversibility issues
+</p>
+</li>
+<li>
+<p>
+grafts and replace refs, if present, are used in the rewrite and made
+    permanent
+</p>
+</li>
+<li>
+<p>
+rewriting of commit hashes will probably be reversible, but it is
+    possible for rewritten abbreviated hashes to not be unique even if the
+    original abbreviated hashes were.
+</p>
+</li>
+<li>
+<p>
+filter-repo defaults to several forms of irreversible rewriting that
+    you may need to turn off (e.g. the last two bullet points above or
+    reencoding commit messages into UTF-8); it&#8217;s possible that additional
+    forms of irreversible rewrites will be added in the future.
+</p>
+</li>
+<li>
+<p>
+I assume that people use filter-repo for one-shot conversions, not
+    ongoing data transfers.  I explicitly reserve the right to change any
+    API in filter-repo based on this presumption (and a comment to this
+    effect is found in multiple places in the code and examples).  You
+    have been warned.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see_also">SEE ALSO</h2>
+<div class="sectionbody">
+<div class="paragraph"><p><a href="git-rebase.html">git-rebase(1)</a>, <a href="git-filter-branch.html">git-filter-branch(1)</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_git">GIT</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Part of the <a href="git.html">git(1)</a> suite</p></div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated
+ 2024-11-22 15:06:41 PST
+</div>
+</div>
+</body>
+</html>
