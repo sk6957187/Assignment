@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 import java.util.List;
@@ -21,8 +22,10 @@ public class ServiceClass {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private ReadFile readFile;
+
     public ResponseEntity<ResponseStructure<List<Map<String, Object>>>> runSQLQuery(String query) {
-        System.err.println("bvnmjkl");
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         ResponseStructure<List<Map<String, Object>>>  str = new ResponseStructure<>();
         if(result != null){
@@ -91,4 +94,19 @@ public class ServiceClass {
     }
 
 
+    public ResponseEntity<ResponseStructure<List<Map<String, Object>>>> readFile(String link, MultipartFile file) {
+        ResponseStructure<List<Map<String, Object>>>  str = new ResponseStructure<>();
+        List<Map<String, Object>> result = null;
+        if(link != null){
+            file = file = readFile.downloadFile(link);
+            result = readFile.readExcel(file);
+        } else {
+            result = readFile.readExcel(file);
+        }
+        String filePath = readFile.saveFile(file);
+        str.setData(result);
+        str.setMsg("Data read successfully");
+        str.setStatusCode(HttpStatus.OK.value());
+        return new ResponseEntity<>(str, HttpStatus.OK);
+    }
 }
