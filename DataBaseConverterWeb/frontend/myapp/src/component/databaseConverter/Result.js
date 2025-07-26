@@ -4,12 +4,26 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const Result = ({ data, tableName }) => {
-    const [sqldata, setSqlData] = useState(data);
+    const [sqlData, setSqlData] = useState(data);
     const [filterText, setFilterText] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const totalPages = Math.ceil(sqlData.length / rowsPerPage);
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = sqlData.slice(indexOfFirstRow, indexOfLastRow);
+
 
     useEffect(() => {
         setSqlData(data);
     }, [data]);
+
+    const goToPage = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
 
     const handleFilter = (e) => {
         const text = e.target.value.toLowerCase();
@@ -55,7 +69,7 @@ const Result = ({ data, tableName }) => {
         }
         const csvContent =
             "data:text/csv;charset=utf-8," +
-            [headers.join(","), ...sqldata.map(row => headers.map(h => row[h]).join(","))].join("\n");
+            [headers.join(","), ...sqlData.map(row => headers.map(h => row[h]).join(","))].join("\n");
 
         const link = document.createElement("a");
         link.setAttribute("href", csvContent);
@@ -75,7 +89,7 @@ const Result = ({ data, tableName }) => {
         if (!fileName.toLowerCase().endsWith(".xlsx")) {
             fileName += ".xlsx";
         }
-        const worksheet = XLSX.utils.json_to_sheet(sqldata);
+        const worksheet = XLSX.utils.json_to_sheet(sqlData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
         XLSX.writeFile(workbook, fileName);
@@ -91,7 +105,7 @@ const Result = ({ data, tableName }) => {
             fileName += ".pdf";
         }
 
-        const tableRows = sqldata.map(row => headers.map(h => row[h]));
+        const tableRows = sqlData.map(row => headers.map(h => row[h]));
         // Use landscape if too wide
         const estimatedTableWidth = headers.length * 30;    // Estimate width per column (30mm per column)
         const portraitPageWidth = 210 - 20; // A4 width - margins (~10mm each side)
@@ -130,7 +144,7 @@ const Result = ({ data, tableName }) => {
         }
 
         const formData = new FormData();
-        formData.append("data", JSON.stringify(sqldata));
+        formData.append("data", JSON.stringify(sqlData));
         formData.append("tableName", name);
 
         fetch("http://localhost:8080/databaseconvert/uploadSql", {
@@ -139,7 +153,7 @@ const Result = ({ data, tableName }) => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                data: sqldata,
+                data: sqlData,
                 tableName: name
             })
         })
@@ -160,9 +174,9 @@ const Result = ({ data, tableName }) => {
 
 
 
-    if (!sqldata) return <div>No data available</div>;
+    if (!sqlData) return <div>No data available</div>;
     console.log("table name: ", tableName);
-    const headers = Object.keys(sqldata[0]);
+    const headers = Object.keys(sqlData[0]);
     return (
         <>
             <div className="table-responsive">
@@ -197,9 +211,9 @@ const Result = ({ data, tableName }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {sqldata.map((row, rowIndex) => (
+                        {currentRows.map((row, rowIndex) => (
                             <tr key={rowIndex}>
-                                <td>{rowIndex + 1}</td>
+                                <td>{indexOfFirstRow + rowIndex + 1}</td>
                                 {headers.map(header => (
                                     <td key={header}>{highlightMatch(String(row[header]))}</td>
                                 ))}
@@ -207,6 +221,66 @@ const Result = ({ data, tableName }) => {
                         ))}
                     </tbody>
                 </table>
+                <div className="d-flex flex-wrap align-items-center justify-content-center gap-2 mt-3">
+                    <div className="d-flex align-items-center">
+                        <label className="form-label mb-0 me-2">Rows/Page:</label>
+                        <input
+                            type="number"
+                            min="1"
+                            value={rowsPerPage}
+                            onChange={(e) => {
+                                const value = parseInt(e.target.value, 10);
+                                setRowsPerPage(value > 0 ? value : 1);
+                                setCurrentPage(1);
+                            }}
+                            className="form-control form-control-sm"
+                            style={{ width: "70px" }}
+                        />
+                    </div>
+                    <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={() => goToPage(1)}
+                        disabled={currentPage === 1}
+                    >
+                        1st
+                    </button>
+                    {[...Array(totalPages)].map((_, index) => index + 1)
+                        .filter(pageNum => {
+                            const start = Math.max(1, currentPage - 2);
+                            const end = Math.min(totalPages, currentPage + 2);
+                            return pageNum >= start && pageNum <= end;
+                        })
+                        .map(pageNum => (
+                            <button
+                                key={pageNum}
+                                className={`btn btn-sm ${currentPage === pageNum ? 'btn-primary' : 'btn-outline-primary'}`}
+                                onClick={() => goToPage(pageNum)}
+                            >
+                                {pageNum}
+                            </button>
+                        ))}
+                    <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={() => goToPage(totalPages)}
+                    >
+                        last
+                    </button>
+                    <div className="d-flex align-items-center">
+                        <label className="form-label mb-0 ms-2 me-2">Go to:</label>
+                        <input
+                            type="number"
+                            min="1"
+                            max={totalPages}
+                            value={currentPage}
+                            onChange={(e) => {
+                                const value = parseInt(e.target.value, 10);
+                                if (!isNaN(value)) goToPage(value);
+                            }}
+                            className="form-control form-control-sm"
+                            style={{ width: "70px" }}
+                        />
+                    </div>
+                </div>
             </div>
         </>
     );
