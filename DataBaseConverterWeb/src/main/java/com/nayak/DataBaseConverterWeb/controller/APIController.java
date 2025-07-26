@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class APIController {
         return null;
     }
 
-    @PostMapping("/uploadSql")
+    @PostMapping("/uploadsql")
     public ResponseEntity<ResponseStructure<String>> updateSQL(@RequestBody Map<String, Object> payload) throws JsonProcessingException {
         String tableName = (String) payload.get("tableName");
         ObjectMapper mapper = new ObjectMapper();
@@ -55,6 +56,12 @@ public class APIController {
         return serviceClass.UpdateSQL(dataJson, tableName);
     }
 
-
-
+    @PostMapping("/uploadfile")
+    public ResponseEntity<ResponseStructure<List<Map<String, Object>>>> readFile(
+            @RequestPart(value = "link", required = false) String link,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        logger.info("file: {}", file);
+        logger.info("file link: {}", link);
+        return serviceClass.readFile(link, file);
+    }
 }
