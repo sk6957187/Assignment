@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,9 @@
 
     <title>Document</title>
 </head>
+
 <body>
-    create 3td 
+    create 3td
     <h3>4 X 4 Signal Matrix</h3>
     <table>
         <tr>
@@ -24,14 +26,15 @@
             <th><button id="i1o2">&nbsp;</button></th>
             <th><button id="i1o3">&nbsp;</button></th>
             <th><button id="i1o4">&nbsp;</button></th>
-        
+
         </tr>
-        <tr><th><button id="i2">I_2</button></th>
+        <tr>
+            <th><button id="i2">I_2</button></th>
             <th><button id="i2o1">&nbsp;</button></th>
             <th><button id="i2o2">&nbsp;</button></th>
             <th><button id="i2o3">&nbsp;</button></th>
             <th><button id="i2o4">&nbsp;</button></th>
-            
+
         </tr>
         <tr>
             <th><button id="i3">I_3</button></th>
@@ -39,29 +42,37 @@
             <th><button id="i3o2">&nbsp;</button></th>
             <th><button id="i3o3">&nbsp;</button></th>
             <th><button id="i3o4">&nbsp;</button></th>
-        
+
         </tr>
         <tr>
-            <th><button id="i4" class="btn btn-danger">I_4</button></th>
+            <th><button id="i4">I_4</button></th>
             <th><button id="i4o1">&nbsp;</button></th>
             <th><button id="i4o2">&nbsp;</button></th>
             <th><button id="i4o3">&nbsp;</button></th>
             <th><button id="i4o4">&nbsp;</button></th>
-            
+
         </tr>
-        
     </table>
 
-    <table className="table table-bordered table-hover" id="logTable">
-        <tr><th colspan="2">Log Book</th></tr>
+    <table class="table table-bordered table-hover text-center" id="logTable">
+    <thead class="table-light">
+        <tr>
+            <th colspan="2">Log Book</th>
+        </tr>
         <tr>
             <th>Button</th>
             <th>Activity</th>
         </tr>
-    </table>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
 
 
     <script src="../static/libs/jquery-3.7.1/jquery-3.7.1.js"></script>
     <script src="4x4_matrix.js"></script>
 </body>
+
 </html>
