@@ -36,12 +36,13 @@ csvConfig:
     - "ADDED_DATE"
     - "UPDATE_TIME"
 #  fileName: "Daily_Report.csv"
-  fileName: "TestData.csv"
+  fileName: "TestData30L.csv"
   writeFileName: "FilterData.csv"
-  column: "2"
+#  fileName: "deliveries.csv"
+#  writeFileName: "R_Ashwin.csv"
+  column: "9"   #Human readable
   searchData:
-    - '"KDLTD0590"'
-    - '"KDLTD0589"'
+    - "R Ashwin"
 
 
 
