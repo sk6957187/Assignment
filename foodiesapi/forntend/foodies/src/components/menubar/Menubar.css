@@ -9,7 +9,6 @@
   padding: 10px 20px;
 }
 
-.navbar .nav-link,
 .navbar .navbar-brand,
 .navbar .dropdown-toggle {
   color: #fff !important;
@@ -23,3 +22,8 @@
 .dropdown-menu {
   background-color: #f8f9fa;
 }
+
+.active {
+  color: tomato !important;
+}
+
