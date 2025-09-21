@@ -90,7 +90,7 @@ public class Match {
         this.result = result;
     }
 
-    public int isDlApplied() {
+    public int getDlApplied() {
         return dlApplied;
     }
 
