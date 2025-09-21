@@ -6,6 +6,9 @@ import ExploreFood from './pages/exploreFood/ExploreFood';
 import Contact from './pages/contact/Contact';
 import FoodDetails from './pages/foodDetails/FoodDetails';
 import Cart from './pages/cart/Cart';
+import PlaceOrder from './pages/placeOrder/PlaceOrder';
+import Login from './pages/login/Login';
+import Register from './pages/register/Register';
 
 const HomeComponent = () => {
     return (
@@ -18,6 +21,11 @@ const HomeComponent = () => {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/food/:id" element={<FoodDetails />} />
                     <Route path="/cart" element={<Cart />} />
+                    <Route path='/order' element={<PlaceOrder />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
             </div>
         </>
