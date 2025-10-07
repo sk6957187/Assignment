@@ -9,11 +9,13 @@ import Cart from './pages/cart/Cart';
 import PlaceOrder from './pages/placeOrder/PlaceOrder';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
+import {ToastContainer} from "react-toastify";
 
 const HomeComponent = () => {
     return (
         <>
             <Menubar />
+            <ToastContainer />
             <div className="container mt-3">
                 <Routes>
                     <Route path="/" element={<Home />} />

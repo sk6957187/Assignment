@@ -5,11 +5,18 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext.jsx';
 
 const Menubar = () => {
-    const { quantities } = useContext(StoreContext);
+    const { quantities, setQuantities, token, setToken } = useContext(StoreContext);
     const location = useLocation();
     const currentPath = location.pathname;
     const totalItems = Object.values(quantities).reduce((acc, curr) => acc + curr, 0);
     const navigate = useNavigate();
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        setToken("");
+        setQuantities({});
+        navigate("/");
+    };
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
@@ -18,8 +25,15 @@ const Menubar = () => {
                     <img src={assets.logo} alt="logo" className="logo navbar-brand mx-4" height={45} width={45} />
                 </Link>
 
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
@@ -47,12 +61,34 @@ const Menubar = () => {
                                 </span>
                             </div>
                         </Link>
-                        <button className="btn btn-outline-primary me-2" onClick={() => navigate('/login')}>
-                            <i className="bi bi-person-circle me-1"></i> Login
-                        </button>
-                        <button className="btn btn-outline-success" onClick={() => navigate('/register')}>
-                            <i className="bi bi-box-arrow-right me-1"></i> Register
-                        </button>
+
+                        {!token ? (
+                            <>
+                                <button className="btn btn-outline-primary me-2" onClick={() => navigate('/login')}>
+                                    <i className="bi bi-person-circle me-1"></i> Login
+                                </button>
+                                <button className="btn btn-outline-success" onClick={() => navigate('/register')}>
+                                    <i className="bi bi-box-arrow-right me-1"></i> Register
+                                </button>
+                            </>
+                        ) : (
+                            <div className="dropdown text-end">
+                                <img
+                                    src={assets.profile || ""}
+                                    alt="user"
+                                    height={32}
+                                    width={32}
+                                    className="rounded-circle dropdown-toggle"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                />
+                                <ul className="dropdown-menu text-small">
+                                    <li className="dropdown-item" onClick={() => navigate('/myorders')}>Orders</li>
+                                    <li className="dropdown-item" onClick={logout}>Logout</li>
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad48f944-6e46-4e35-b88d-aa7330951e75" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../DataBaseConverter/src/main/java/com/project/main/org/java/DataBaseConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DataBaseConverter/src/main/java/com/project/main/org/java/DataBaseConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microserves/Welcome-service/Welcome-service/src/main/java/in/ashokit/controller/WelcomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Microserves/Welcome-service/Welcome-service/src/main/java/in/ashokit/controller/WelcomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Microserves/Welcome-service/Welcome-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Microserves/Welcome-service/Welcome-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DailyReport/meta-data/app_env_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyReport/meta-data/app_env_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodiesapi/forntend/foodies/src/HomeComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../foodiesapi/forntend/foodies/src/HomeComponent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodiesapi/forntend/foodies/src/context/StoreContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../foodiesapi/forntend/foodies/src/context/StoreContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodiesapi/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../foodiesapi/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodiesapi/src/main/java/in/nayak/foodiesapi/repository/FoodRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../foodiesapi/src/main/java/in/nayak/foodiesapi/repository/FoodRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../foodiesapi/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../foodiesapi/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -36,4 +36,4 @@ oracleSqlConfig:
 cloudConfig:
   folderId: "1cWMQFLwrB3xOoFQC2VD-Q6RO4hJEyqc8"
   applicationName: "CloudStorageApp"
-  fileDirectory: "meta-data/googleKey.json"
+  fileDirectory: "googleKey.json"

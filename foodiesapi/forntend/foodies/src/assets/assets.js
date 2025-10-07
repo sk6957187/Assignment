@@ -7,10 +7,11 @@ import cake from './cake.jpg';
 import rolls from './rolls.jpg';
 import salad from './salad.jpg';
 import icecream from './icecream.jpg';   
-
+import profile from './profile.png'
 export const assets = {
     logo,
-    cart
+    cart,
+    profile
 };
 
 export const categories = [
