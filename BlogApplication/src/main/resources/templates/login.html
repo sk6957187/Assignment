@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #000;
+            border-radius: 15px;
+            width: 22rem;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 7px;
+            margin-bottom: 10px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 7px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            background: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 15px;
+        }
+
+        .text-decoration-none {
+            text-decoration: none;
+        }
+
+        #login-failed {
+            display: block;
+            text-align: center;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h3>Login</h3>
+        <span id="login-failed"></span>
+
+        <form id="loginForm">
+            <label for="email">Email address</label>
+            <input type="email" name="email" id="email" placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+
+            <button type="submit">Login</button>
+
+            <div class="text-center mt-3">
+                <small>Don't have an account?
+                    <a href="/register" class="text-decoration-none">Register</a>
+                </small>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let loginForm = document.getElementById('loginForm');
+        let loginFail = document.getElementById('login-failed');
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            fetch('auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, password: password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        localStorage.setItem("token", data.token);
+                        localStorage.setItem("userName", data.name);
+                        localStorage.setItem("userId", data.id);
+                        window.location.href = '/';
+                    } else {
+                        loginFail.innerHTML = 'Login failed. Check credentials.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loginFail.innerHTML = 'Something went wrong. Try again.';
+                });
+        });
+
+        console.log(localStorage.getItem("token"));
+        console.log(localStorage.getItem("userName"));
+        console.log(localStorage.getItem("userId"));
+    </script>
+</body>
+
+</html>

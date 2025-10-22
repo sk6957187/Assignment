@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Blog Post</title>
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin-left: 5px;
+            border: 1px solid #000;
+            background: none;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .d-none {
+            display: none;
+        }
+
+        hr {
+            border: 1px solid #000;
+        }
+
+        .blog-card,
+        .comment-card {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment-card textarea {
+            width: 100%;
+            padding: 5px;
+            font-size: 0.9em;
+        }
+
+        .comment-actions button {
+            margin-right: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 5px;
+            border: 1px solid #000;
+            margin-right: 3px;
+            font-size: 0.8em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            padding: 15px;
+            border: 1px solid #000;
+            max-width: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div style="text-align: right; margin-bottom: 10px;">
+            <button id="editBtn" class="btn btn-warning d-none">Edit</button>
+            <button id="deletePostBtn" class="btn btn-danger d-none">Delete</button>
+            <a href="/" class="btn btn-secondary">Back</a>
+        </div>
+
+        <h2 th:text="${post.title}">Post Title</h2>
+        <p><strong>Author:</strong> <span th:text="${post.author.name}">Author</span></p>
+        <p>
+            <strong>Published At:</strong> <span th:text="${post.publishedAt}">Date</span> ||
+            <strong>Last Updated:</strong> <span th:text="${post.updatedAt}">Date</span>
+        </p>
+
+        <p><strong>Tags:</strong>
+            <span th:each="tag : ${post.tags}" class="badge" th:text="${tag.name}">Tag</span>
+        </p>
+
+        <p th:text="${post.content}">Content goes here...</p>
+        <hr>
+
+        <!-- Comments Section -->
+        <div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h4>Comments</h4>
+                <button id="addCommentBtn" class="btn btn-primary">+ Comment</button>
+            </div>
+
+            <div th:if="${#lists.isEmpty(post.comments)}">
+                <p>No comments yet.</p>
+            </div>
+
+            <div th:each="comment : ${post.comments}" class="comment-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h6 th:text="${comment.name}">Commenter Name</h6>
+                    <div class="comment-actions">
+                        <button class="btn btn-warning edit-comment-btn" th:attr="data-id=${comment.id}">Edit</button>
+                        <button class="btn btn-success save-comment-btn d-none"
+                            th:attr="data-id=${comment.id}">Save</button>
+                        <button class="btn btn-danger delete-comment-btn"
+                            th:attr="data-id=${comment.id}">Delete</button>
+                    </div>
+                </div>
+                <textarea class="comment-text" rows="3" readonly th:text="${comment.comment}">Comment text</textarea>
+                <p style="font-size:0.8em;">Posted: <span th:text="${comment.createdAt}"></span> | Updated: <span
+                        th:text="${comment.updatedAt}"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Post Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Post</h3>
+            <div>
+                <label>Title</label>
+                <input type="text" id="modalTitle" style="width:100%; margin-bottom:5px;">
+            </div>
+            <div>
+                <label>Content</label>
+                <textarea id="modalContent" rows="6" style="width:100%; margin-bottom:5px;"></textarea>
+            </div>
+            <div>
+                <label>Tags (comma-separated)</label>
+                <input type="text" id="modalTags" style="width:100%; margin-bottom:5px;">
+            </div>
+            <div style="text-align:right;">
+                <button id="saveModalBtn" class="btn btn-success">Save</button>
+                <button onclick="document.getElementById('editModal').style.display='none'"
+                    class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Comment Modal -->
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+            <h3>Add Comment</h3>
+            <div>
+                <label>Name</label>
+                <input type="text" id="commentName" style="width:100%; margin-bottom:5px;">
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="email" id="commentEmail" style="width:100%; margin-bottom:5px;">
+            </div>
+            <div>
+                <label>Comment</label>
+                <textarea id="commentText" rows="4" style="width:100%; margin-bottom:5px;"></textarea>
+            </div>
+            <div style="text-align:right;">
+                <button id="saveCommentBtn" class="btn btn-success">Submit</button>
+                <button onclick="document.getElementById('commentModal').style.display='none'"
+                    class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const post = [[${ post }]];
+
+        // Show Edit/Delete only if logged-in user is author
+        const loggedInUserId = localStorage.getItem("userId");
+        const editBtn = document.getElementById("editBtn");
+        const deleteBtn = document.getElementById("deletePostBtn");
+
+        if (loggedInUserId && post.author && loggedInUserId == post.author.id) {
+            editBtn.classList.remove("d-none");
+            deleteBtn.classList.remove("d-none");
+        } else {
+            editBtn.classList.add("d-none");
+            deleteBtn.classList.add("d-none");
+        }
+
+        // Edit post
+        const editModal = document.getElementById('editModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalTags = document.getElementById('modalTags');
+        const saveModalBtn = document.getElementById('saveModalBtn');
+
+        editBtn.addEventListener('click', () => {
+            modalTitle.value = post.title || '';
+            modalContent.value = post.content || '';
+            modalTags.value = post.tags ? post.tags.map(t => t.name).join(', ') : '';
+            editModal.style.display = 'flex';
+        });
+
+        saveModalBtn.addEventListener('click', async () => {
+            const updatedPost = {
+                id: post.id,
+                title: modalTitle.value.trim(),
+                content: modalContent.value.trim(),
+                tags: modalTags.value.split(',').map(t => ({ name: t.trim() })).filter(t => t.name)
+            };
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`/post`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updatedPost)
+                });
+                if (response.ok) {
+                    editModal.style.display = 'none';
+                    location.reload();
+                } else alert('Failed to update post');
+            } catch (e) {
+                console.error(e);
+                alert('Error updating post');
+            }
+        });
+
+        // Delete post
+        deleteBtn.addEventListener('click', async () => {
+            if (!confirm('Delete this post?')) return;
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`/post/${post.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                if (response.ok) {
+                    window.location.href = '/';
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Error deleting post');
+            }
+        });
+
+        // Add comment
+        const commentModal = document.getElementById('commentModal');
+        const addCommentBtn = document.getElementById('addCommentBtn');
+        const saveCommentBtn = document.getElementById('saveCommentBtn');
+
+        addCommentBtn.addEventListener('click', () => { commentModal.style.display = 'flex'; });
+
+        saveCommentBtn.addEventListener('click', async () => {
+            const newComment = {
+                name: document.getElementById('commentName').value.trim(),
+                email: document.getElementById('commentEmail').value.trim(),
+                comment: document.getElementById('commentText').value.trim()
+            };
+            if (!newComment.name || !newComment.email || !newComment.comment) { alert('All fields required'); return; }
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`/comments/post/add/${post.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(newComment)
+                });
+                if (response.ok) {
+                    alert('Comment added');
+                    commentModal.style.display = 'none';
+                    location.reload();
+                }
+                else alert('Failed to add comment');
+            } catch (e) {
+                console.error(e);
+                alert('Error adding comment');
+            }
+        });
+
+        // Edit/Save comment
+        document.querySelectorAll('.edit-comment-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.comment-card');
+                const textarea = card.querySelector('.comment-text');
+                const saveBtn = card.querySelector('.save-comment-btn');
+                textarea.removeAttribute('readonly'); textarea.focus();
+                btn.classList.add('d-none'); saveBtn.classList.remove('d-none');
+            });
+        });
+
+        document.querySelectorAll('.save-comment-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const commentId = btn.getAttribute('data-id');
+                const card = btn.closest('.comment-card');
+                const textarea = card.querySelector('.comment-text');
+                const editBtn = card.querySelector('.edit-comment-btn');
+                const updatedComment = { comment: textarea.value.trim() };
+                if (!updatedComment.comment) { alert('Cannot be empty'); return; }
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`/comments/update/${commentId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json',
+                         'Authorization': `Bearer ${token}` 
+                        },
+                        body: JSON.stringify(updatedComment)
+                    });
+                    if (response.ok) { 
+                        alert('Updated'); textarea.setAttribute('readonly', true); 
+                        btn.classList.add('d-none'); 
+                        editBtn.classList.remove('d-none'); 
+                        location.reload();
+                     }
+                    else alert('Failed to update comment');
+                } catch (e) { 
+                    console.error(e); 
+                    alert('Error updating comment');
+                 }
+            });
+        });
+
+        // Delete comment
+        document.querySelectorAll('.delete-comment-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const commentId = btn.getAttribute('data-id');
+                if (!confirm('Delete this comment?')) return;
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`/comments/delete/${commentId}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (response.ok) { 
+                        alert('Deleted');
+                         location.reload();
+                         }
+                    else alert('Failed to delete comment');
+                } catch (e) { 
+                    console.error(e); 
+                    alert('Error deleting comment'); 
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

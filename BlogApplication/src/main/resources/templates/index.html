@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Posts</title>
+  <style>
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .auth-section {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .auth-section button,
+    .auth-section a {
+      padding: 5px 10px;
+      margin-left: 5px;
+      border: 1px solid #000;
+      background: none;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .search-create {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-create form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .search-create input,
+    .search-create select,
+    .search-create button,
+    .search-create a {
+      padding: 5px;
+      font-size: 0.9em;
+      border: 1px solid #000;
+      background: none;
+    }
+
+    .blog-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .blog-card {
+      background-color: #fff;
+      padding: 15px;
+      border: 1px solid #000;
+      width: calc(50% - 15px);
+      box-sizing: border-box;
+    }
+
+    .blog-card h4 {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+
+    .blog-card p {
+      margin: 5px 0;
+    }
+
+    .blog-card a {
+      text-decoration: none;
+      padding: 5px 10px;
+      border: 1px solid #000;
+      display: inline-block;
+      font-size: 0.9em;
+      margin-top: 10px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .pagination a {
+      padding: 5px 10px;
+      border: 1px solid #000;
+      text-decoration: none;
+      font-size: 0.9em;
+    }
+
+    .pagination .active a {
+      font-weight: bold;
+    }
+
+    .pagination .disabled a {
+      color: #888;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h2>All Blog Posts</h2>
+
+  <!-- Auth Section -->
+  <div class="auth-section">
+    <a href="/login" id="loginBtn">Login</a>
+    <a href="/register" id="registerBtn">Register</a>
+    <span id="userSection" style="display:none;">
+      <span id="userName">User</span>
+      <button id="logoutBtn">Logout</button>
+    </span>
+  </div>
+
+  <!-- Search and Create -->
+  <div class="search-create">
+    <button id="createBlogBtn">+ Create Blog</button>
+    <form method="get" th:action="@{/}">
+      <input type="number" name="authorId" placeholder="Author ID" th:value="${authorId}">
+      <input type="text" name="tagName" placeholder="Tag names (comma-separated)" th:value="${tagName != null} ? ${#strings.arrayJoin(tagName, ',')} : ''">
+      <input type="text" name="search" placeholder="Search..." th:value="${search}">
+      <select name="sortField">
+        <option value="" th:selected="${sortField == null}">Sort By</option>
+        <option value="title" th:selected="${sortField == 'title'}">Title</option>
+        <option value="publishedAt" th:selected="${sortField == 'publishedAt'}">Published At</option>
+      </select>
+      <select name="order">
+        <option value="asc" th:selected="${order == 'asc'}">Ascending</option>
+        <option value="desc" th:selected="${order == 'desc'}">Descending</option>
+      </select>
+      <button type="submit">Apply</button>
+      <a href="/">Refresh</a>
+    </form>
+  </div>
+
+  <!-- Blog List -->
+  <div class="blog-list">
+    <div class="blog-card" th:each="post : ${posts}">
+      <h4 th:text="${post.title}">Post Title</h4>
+      <div><strong th:text="${post.author.name}">Author Name</strong>, <span th:text="${post.publishedAt}">Date</span></div>
+      <p th:text="${post.excerpt}">Excerpt...</p>
+      <a th:href="@{post/{id}(id=${post.id})}">Read</a>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <span class="page-item" th:classappend="${start > 1} ? '' : 'disabled'">
+      <a th:href="@{/(
+          start=${start - limit > 0 ? start - limit : 1},
+          limit=${limit},
+          authorId=${authorId},
+          tagName=${tagName},
+          sortField=${sortField},
+          order=${order},
+          search=${search}
+      )}">Previous</a>
+    </span>
+
+    <span class="page-item" th:each="i : ${#numbers.sequence(1, (total + limit - 1) / limit)}"
+      th:classappend="${i == ((start - 1) / limit + 1)} ? 'active'">
+      <a th:href="@{/(
+          start=${(i - 1) * limit + 1},
+          limit=${limit},
+          authorId=${authorId},
+          tagName=${tagName},
+          sortField=${sortField},
+          order=${order},
+          search=${search}
+      )}" th:text="${i}">1</a>
+    </span>
+
+    <span class="page-item" th:classappend="${start + limit <= total} ? '' : 'disabled'">
+      <a th:href="@{/(
+          start=${start + limit},
+          limit=${limit},
+          authorId=${authorId},
+          tagName=${tagName},
+          sortField=${sortField},
+          order=${order},
+          search=${search}
+      )}">Next</a>
+    </span>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+  const name = localStorage.getItem('userName');
+  const uId = localStorage.getItem('userId');
+
+  const loginBtn = document.getElementById('loginBtn');
+  const registerBtn = document.getElementById('registerBtn');
+  const userSection = document.getElementById('userSection');
+  const userName = document.getElementById('userName');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (token && name) {
+    loginBtn.style.display = 'none';
+    registerBtn.style.display = 'none';
+    userSection.style.display = 'inline';
+    userName.textContent = `👤 ${name}`;
+    userName.setAttribute('title', `User ID: ${uId}`);
+  }
+
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userId');
+    window.location.href = '/';
+  });
+
+  const createBlogBtn = document.getElementById('createBlogBtn');
+  createBlogBtn.addEventListener('click', () => {
+    if (!token) {
+      alert('You must log in to create a blog!');
+      window.location.href = '/login';
+      return;
+    }
+    window.location.href = '/newblog';
+  });
+});
+</script>
+</body>
+
+</html>
