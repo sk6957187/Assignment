@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { fetchFoodList as fetchFoodListAPI } from "../service/FoodServices";
 import axios from "axios";
+import { addToCart, getCartData, removeQtyFromCart } from "../service/cartService";
 
 export const StoreContext = createContext(null);
 
@@ -21,16 +22,10 @@ export const StoreProvider = ({ children }) => {
 
   // Load cart data for logged-in user
   const loadCartData = async (token) => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/cart", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
 
-      // Assuming response.data.items is an object like { foodId: quantity }
-      setQuantities(response.data.items || {});
-    } catch (error) {
-      console.error("Error loading cart data:", error);
-    }
+   const items =  await getCartData(token);
+    setQuantities(items);
+
   };
 
   // On component mount
@@ -55,17 +50,7 @@ export const StoreProvider = ({ children }) => {
       [foodId]: (prev[foodId] || 0) + 1,
     }));
 
-    if (!token) return;
-
-    try {
-      await axios.post(
-        "http://localhost:8080/api/cart",
-        { foodId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    }
+    await addToCart(foodId, token);
   };
 
   // Decrease quantity
@@ -74,18 +59,9 @@ export const StoreProvider = ({ children }) => {
       ...prev,
       [foodId]: prev[foodId] > 0 ? prev[foodId] - 1 : 0,
     }));
+    await removeQtyFromCart(foodId, token);
 
-    if (!token) return;
 
-    try {
-      await axios.put(
-        "http://localhost:8080/api/cart/remove",
-        { foodId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    } catch (error) {
-      console.error("Error removing from cart:", error);
-    }
   };
 
   // Clear all items for one product
