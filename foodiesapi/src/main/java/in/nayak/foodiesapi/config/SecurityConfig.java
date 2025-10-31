@@ -3,6 +3,7 @@ package in.nayak.foodiesapi.config;
 import in.nayak.foodiesapi.filters.JwtAuthenticationFilter;
 import in.nayak.foodiesapi.service.AppUserDetailsService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +42,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/index.html", "/static/**", "/libs/**", "/api/register", "/api/login", "/api/foods/**"
+                                "/", "/index.html", "/static/**", "/libs/**", "/api/register", "/api/login", "/api/foods/**","/api/orders/all","/api/orders/status/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
