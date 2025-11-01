@@ -13,5 +13,6 @@ public class OrderResponse {
     private double amount;
     private String currency;
     private String status;
+    private String userAddress;
     private List<OrderItem> orderItemList;
 }

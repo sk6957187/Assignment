@@ -26,6 +26,7 @@ public class OrderController {
 
     @PostMapping("/verify")
     public void verifyPayment(@RequestBody Map<String, String> paymentData){
+        System.err.println(paymentData);
         orderService.verifyPayment(paymentData, "paid");
     }
 

@@ -3,6 +3,7 @@ package in.nayak.foodiesapi.service;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import in.nayak.foodiesapi.entity.CartEntity;
 import in.nayak.foodiesapi.entity.OrderEntity;
 import in.nayak.foodiesapi.io.OrderRequest;
 import in.nayak.foodiesapi.io.OrderResponse;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,10 +72,21 @@ public class OrderServiceImpl implements OrderService {
         existingOrder.setPaymentStatus(status);
         existingOrder.setRazorpayPaymentId(paymentData.get("razorpay_payment_id"));
         existingOrder.setRazorpaySignature(paymentData.get("razorpay_signature"));
+        String loggedInUserId = userService.findByUserId();
+        existingOrder.setUserId(loggedInUserId);
+
         orderRepository.save(existingOrder);
-        if("paid".equalsIgnoreCase(status)){
-            cartRespository.deleteByUserId(existingOrder.getUserId());
+
+        if ("paid".equalsIgnoreCase(status)) {
+            Optional<CartEntity> cartOpt = cartRespository.findByUserId(existingOrder.getUserId());
+            if (cartOpt.isPresent()) {
+                CartEntity cart = cartOpt.get();
+                cart.getItems().clear();
+                cartRespository.save(cart);
+                System.out.println("Cart cleared after payment, order history retained.");
+            }
         }
+
 
     }
 
@@ -111,6 +124,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderId(newOrder.getId())
                 .razorpayOrderId(newOrder.getRazorpayOrderId())
                 .amount(newOrder.getAmount())
+                .userAddress(newOrder.getUserAddress())
                 .currency("INR")
                 .status(newOrder.getOrderStatus())
                 .orderItemList(newOrder.getOrderItemList())

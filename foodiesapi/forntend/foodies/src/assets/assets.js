@@ -7,11 +7,14 @@ import cake from './cake.jpg';
 import rolls from './rolls.jpg';
 import salad from './salad.jpg';
 import icecream from './icecream.jpg';   
-import profile from './profile.png'
+import profile from './profile.png';
+import delivery from './delivery.png';
+
 export const assets = {
     logo,
     cart,
-    profile
+    profile,
+    delivery
 };
 
 export const categories = [
@@ -42,5 +45,5 @@ export const categories = [
     {
         name: "Ice cream",
         image: icecream,
-    }
+    },
 ];

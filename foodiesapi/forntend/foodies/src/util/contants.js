@@ -1,0 +1,1 @@
+export const RAZORPAY_KEY = "rzp_test_RZgrW6f8bU0v7f";
