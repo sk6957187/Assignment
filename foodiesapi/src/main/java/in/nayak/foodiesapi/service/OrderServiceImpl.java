@@ -36,27 +36,23 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse createOrderWithPayment(OrderRequest request) {
         try {
-            // Step 1️⃣ Save initial order
             OrderEntity newOrder = convertToEntity(request);
             newOrder.setPaymentStatus("PENDING");
             newOrder.setOrderStatus("CREATED");
             newOrder = orderRepository.save(newOrder);
 
-            // Step 2️⃣ Create Razorpay order
             RazorpayClient razorpayClient = new RazorpayClient(RAZORPAY_KEY, RAZORPAY_SECRET);
             JSONObject orderRequest = new JSONObject();
-            orderRequest.put("amount", (int) (newOrder.getAmount() * 100)); // in paise
+            orderRequest.put("amount", (newOrder.getAmount() * 100));
             orderRequest.put("currency", "INR");
             orderRequest.put("receipt", "txn_" + newOrder.getId());
             orderRequest.put("payment_capture", 1);
 
             Order razorpayOrder = razorpayClient.orders.create(orderRequest);
 
-            // Step 3️⃣ Update with Razorpay order details
             newOrder.setRazorpayOrderId(razorpayOrder.get("id"));
             newOrder = orderRepository.save(newOrder);
 
-            // Step 4️⃣ Return response
             return convertToResponse(newOrder);
 
         } catch (RazorpayException e) {
