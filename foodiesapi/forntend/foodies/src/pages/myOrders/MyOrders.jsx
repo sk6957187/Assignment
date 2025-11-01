@@ -20,10 +20,8 @@ const MyOrders = () => {
     };
 
     useEffect(() => {
-        if (token) {
-            fetchOrder();
-        }
-    }, [token]);
+        if (token) fetchOrder();
+    }, [token, fetchOrder]);
 
     return (
         <div className="container">
