@@ -35,16 +35,8 @@ public class APIController {
         logger.info("database: {}", requestBody.get("database"));
         String query = (String) requestBody.get("query");
         String database = (String) requestBody.get("database");
-        if(database.equals("mysql")){
-            return serviceClass.runSQLQuery(query);
-        }
-        else if(database.equals("oraclesql")){
-            return serviceClass.runSQLQuery(query);
-        }
-        else if(database.equals("postgresql")){
-            return serviceClass.runSQLQuery(query);
-        }
-        return null;
+
+        return serviceClass.runSQLQuery(query, database);
     }
 
     @PostMapping("/uploadsql")

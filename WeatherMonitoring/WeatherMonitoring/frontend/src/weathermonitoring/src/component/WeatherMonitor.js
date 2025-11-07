@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-im
+import ReactGA from "react-ga4";
 
 class WeatherMonitor extends Component {
     constructor(props) {
@@ -99,6 +99,11 @@ class WeatherMonitor extends Component {
             this.fetchCurrentWeather();
             this.fetchDailySummary();
         });
+        ReactGA.event({
+            category: "WeatherMonitor",
+            action: "City Changed",
+            label: city
+        });
     };
 
     handleThresholdChange = (event) => {
@@ -158,7 +163,7 @@ class WeatherMonitor extends Component {
                         <button type="button" className="btn btn-primary" onClick={this.setTemperatureAlert}>
                             Set Alert
                         </button>
-                        </div>
+                    </div>
                     {alertMessage && <p className={alertMessageClass}>{alertMessage}</p>}
                 </div>
             </div>

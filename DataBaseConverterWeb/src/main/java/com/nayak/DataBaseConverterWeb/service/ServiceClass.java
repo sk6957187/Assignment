@@ -3,6 +3,7 @@ package com.nayak.DataBaseConverterWeb.service;
 import com.nayak.DataBaseConverterWeb.entity.ResponseStructure;
 import com.nayak.DataBaseConverterWeb.exception.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,13 +20,27 @@ import java.util.stream.Collectors;
 
 @Service
 public class ServiceClass {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+
+    @Autowired @Qualifier("mysqlJdbcTemplate")
+    private JdbcTemplate mysqlTemplate;
+
+    @Autowired @Qualifier("oracleJdbcTemplate")
+    private JdbcTemplate oracleTemplate;
+
+    @Autowired @Qualifier("postgresJdbcTemplate")
+    private JdbcTemplate postgresTemplate;
+
 
     @Autowired
     private ReadFile readFile;
 
-    public ResponseEntity<ResponseStructure<List<Map<String, Object>>>> runSQLQuery(String query) {
+    public ResponseEntity<ResponseStructure<List<Map<String, Object>>>> runSQLQuery(String query, String database) {
+        JdbcTemplate jdbcTemplate = switch (database.toLowerCase()) {
+            case "mysql" -> mysqlTemplate;
+            case "oraclesql" -> oracleTemplate;
+            case "postgresql" -> postgresTemplate;
+            default -> throw new IllegalArgumentException("Unsupported database: " + database);
+        };
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         ResponseStructure<List<Map<String, Object>>>  str = new ResponseStructure<>();
         if(result != null){
