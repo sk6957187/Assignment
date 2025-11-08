@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
+    <script th:inline="javascript">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', [[${gaId}]], {
+            'page_title': 'Google Analytics Home',
+            'page_path': '/google-analytics'
+        });
+    </script>
+
+    <style>
+        .header {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<header class="header">
+    <h2>Google Analytics</h2>
+    <hr>
+</header>
+
+<h2 th:text="${message}">Default Message</h2>
+<div th:text="${gaId}"></div>
+<button id="readme">Readme file</button>
+
+<script>
+    const readmeBtn = document.getElementById("readme");
+
+    readmeBtn.addEventListener("click", function () {
+
+    gtag('event', 'readme_click', {
+    'event_category': 'Button',
+    'event_label': 'Readme File Button',
+    'value': 1
+      });
+
+    // Wait 300ms to let GA send the event
+    setTimeout(() => {
+        window.location.href = "/google-analytics/readme";
+    }, 300);
+});
+
+</script>
+
+</body>
+
+</html>
