@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="${statusCode} + ' - ' + ${statusText}">Error</title>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .error-container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        .error-code {
+            font-size: 80px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .error-description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .btn-home {
+            background-color: #667eea;
+            color: white;
+            padding: 12px 40px;
+            font-size: 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .btn-home:hover {
+            background-color: #764ba2;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <div class="error-code" th:text="${statusCode}">404</div>
+    <div class="error-message" th:text="${statusText}">Page Not Found</div>
+    <div class="error-description">
+        <p th:text="${errorMessage}">The requested page does not exist or an error occurred.</p>
+        <p style="font-size: 14px; color: #999; margin-top: 15px;" th:if="${errorCode}">Error code: <strong th:text="${errorCode}">ERR_HTTP_404</strong></p>
+        <p style="font-size: 12px; color: #999; margin-top: 10px;" th:if="${timestamp}">Timestamp: <span th:text="${timestamp}">0</span></p>
+    </div>
+    <a href="http://localhost:3000" class="btn-home">Go to Home Page</a>
+    <p><span style="color: red;">Note:</span> Please ensure frontend is running if you expect UI served from React.</p>
+</div>
+</body>
+</html>
