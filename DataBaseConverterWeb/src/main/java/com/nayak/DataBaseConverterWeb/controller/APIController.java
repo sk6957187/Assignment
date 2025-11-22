@@ -23,8 +23,6 @@ import java.util.Map;
 public class APIController {
     private static final Logger logger = LoggerFactory.getLogger(APIController.class);
 
-
-
     @Autowired
     private ServiceClass serviceClass;
 
@@ -56,4 +54,5 @@ public class APIController {
         logger.info("file link: {}", link);
         return serviceClass.readFile(link, file);
     }
+
 }
