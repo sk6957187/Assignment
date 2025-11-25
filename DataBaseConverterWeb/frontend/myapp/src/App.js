@@ -1,4 +1,4 @@
-import  './App.css';
+import './App.css';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './component/Home';
 import Converter from './component/databaseConverter/Converter';

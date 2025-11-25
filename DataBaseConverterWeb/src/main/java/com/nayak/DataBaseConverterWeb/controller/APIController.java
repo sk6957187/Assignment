@@ -4,8 +4,6 @@ package com.nayak.DataBaseConverterWeb.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nayak.DataBaseConverterWeb.entity.ResponseStructure;
-import com.nayak.DataBaseConverterWeb.entity.SQLConn;
-import com.nayak.DataBaseConverterWeb.entity.SQLData;
 import com.nayak.DataBaseConverterWeb.service.ServiceClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
