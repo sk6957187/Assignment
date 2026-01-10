@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import Pagination from './Pagination';
+import ReactGA from 'react-ga4';
+import { initGA } from './GoogleAnalytics';
 
 class View extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -34,6 +38,16 @@ class View extends Component {
   };
 
   componentDidMount() {
+    const gaID = process.env.REACT_APP_GA_MEASUREMENT_ID;
+    initGA(gaID);
+    console.log("GA ID:", gaID);
+
+    ReactGA.send({
+      hitType: "pageview",
+      page: window.location.pathname,
+      title: "View.jsx",
+    });
+
     this.fetchData();
   }
 
@@ -214,9 +228,9 @@ class View extends Component {
                       this.highlightText(cell, searchQuerySno)
                     ) : cellIndex === 3 ? (
                       this.highlightText(cell, searchQuerySub)
-                      ) : cellIndex === 9 && cell && cell.trim() !== "" ? (
-                        <span style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.handleLinkToggle(index)}>🔗</span>
-                      ) : (
+                    ) : cellIndex === 9 && cell && cell.trim() !== "" ? (
+                      <span style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.handleLinkToggle(index)}>🔗</span>
+                    ) : (
                       cell
                     )}
                   </td>
@@ -230,26 +244,26 @@ class View extends Component {
                   <button type="button" className="btn btn-danger" onClick={() => this.handleDelete(row[0])}>Delete</button>
                 </td>
               </tr>
-                  {row[9] && row[9].trim() !== "" && linkVisibleIndex === index && (
-                    <tr>
-                      <td colSpan={12}>
-                        <strong>Links:</strong>
-                        <ul style={{ paddingLeft: '1.2rem' }}>
-                          {row[9]
-                            .split(',')
-                            .map(link => link.trim())
-                            .filter(link => link !== "")
-                            .map((link, idx) => (
-                              <li key={idx}>
-                                <a href={link} target="_blank" rel="noopener noreferrer">
-                                  {link}
-                                </a>
-                              </li>
-                            ))}
-                        </ul>
-                      </td>
-                    </tr>
-                  )}
+              {row[9] && row[9].trim() !== "" && linkVisibleIndex === index && (
+                <tr>
+                  <td colSpan={12}>
+                    <strong>Links:</strong>
+                    <ul style={{ paddingLeft: '1.2rem' }}>
+                      {row[9]
+                        .split(',')
+                        .map(link => link.trim())
+                        .filter(link => link !== "")
+                        .map((link, idx) => (
+                          <li key={idx}>
+                            <a href={link} target="_blank" rel="noopener noreferrer">
+                              {link}
+                            </a>
+                          </li>
+                        ))}
+                    </ul>
+                  </td>
+                </tr>
+              )}
 
 
             </React.Fragment>
