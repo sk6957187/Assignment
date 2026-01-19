@@ -20,6 +20,17 @@ public class AWSConfig {
     @Value("${aws.region}")
     private String region;
 
+    @Value("${google.cloudConfig.folderId}")
+    private String googleFolderId;
+
+    @Value("${google.cloudConfig.applicationName}")
+    private String googleApplicationName;
+
+    @Value("${google.cloudConfig.fileDirectorykey}")
+    private String fileDirectoryKey;
+
+
+
     @Bean
     public S3Client s3Client() {
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
