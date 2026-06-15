@@ -1,0 +1,43 @@
+2026-06-13T02:33:38.429+05:30  INFO 19996 --- [company-portal] [restartedMain] c.A.c.CompanyPortalApplication           : Starting CompanyPortalApplication using Java 21.0.10 with PID 19996 (A:\workspace\Assignment\AryabhattTech\company-portal\target\classes started by ASUS in A:\workspace\Assignment\AryabhattTech\company-portal)
+2026-06-13T02:33:38.431+05:30  INFO 19996 --- [company-portal] [restartedMain] c.A.c.CompanyPortalApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-06-13T02:33:38.493+05:30  INFO 19996 --- [company-portal] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-13T02:33:38.493+05:30  INFO 19996 --- [company-portal] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-13T02:33:39.303+05:30  INFO 19996 --- [company-portal] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-13T02:33:39.334+05:30  INFO 19996 --- [company-portal] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 0 JPA repository interfaces.
+2026-06-13T02:33:40.038+05:30  INFO 19996 --- [company-portal] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-06-13T02:33:40.070+05:30  INFO 19996 --- [company-portal] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-13T02:33:40.073+05:30  INFO 19996 --- [company-portal] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-06-13T02:33:40.139+05:30  INFO 19996 --- [company-portal] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1646 ms
+2026-06-13T02:33:40.440+05:30  INFO 19996 --- [company-portal] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-13T02:33:40.512+05:30  INFO 19996 --- [company-portal] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-06-13T02:33:41.095+05:30  INFO 19996 --- [company-portal] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-13T02:33:41.145+05:30  INFO 19996 --- [company-portal] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-13T02:33:41.402+05:30  INFO 19996 --- [company-portal] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2b8dec6b
+2026-06-13T02:33:41.402+05:30  INFO 19996 --- [company-portal] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-13T02:33:41.477+05:30  WARN 19996 --- [company-portal] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-13T02:33:41.515+05:30  INFO 19996 --- [company-portal] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/AryabhataTechDB]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.13
+	Default catalog/schema: AryabhataTechDB/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-13T02:33:42.012+05:30  INFO 19996 --- [company-portal] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-13T02:33:42.024+05:30  INFO 19996 --- [company-portal] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-13T02:33:42.102+05:30  WARN 19996 --- [company-portal] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-13T02:33:42.140+05:30  INFO 19996 --- [company-portal] [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page template: index
+2026-06-13T02:33:42.785+05:30  INFO 19996 --- [company-portal] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-06-13T02:33:42.804+05:30  INFO 19996 --- [company-portal] [restartedMain] c.A.c.CompanyPortalApplication           : Started CompanyPortalApplication in 5.011 seconds (process running for 5.759)
+2026-06-13T02:33:55.866+05:30  INFO 19996 --- [company-portal] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-13T02:33:55.868+05:30  INFO 19996 --- [company-portal] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-13T02:33:55.869+05:30  INFO 19996 --- [company-portal] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-06-13T02:36:56.278+05:30  INFO 19996 --- [company-portal] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-13T02:36:56.288+05:30  INFO 19996 --- [company-portal] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-06-13T02:36:56.296+05:30  INFO 19996 --- [company-portal] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-13T02:36:56.302+05:30  INFO 19996 --- [company-portal] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-06-13T02:36:56.306+05:30  INFO 19996 --- [company-portal] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
