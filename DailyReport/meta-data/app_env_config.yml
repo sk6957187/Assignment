@@ -12,8 +12,8 @@ logging:
       timeZone: UTC
       archive: true
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      archivedLogFilenamePattern: C:/log/java/application/DailyReport-%d{yyyy-MM-dd}.log
-      currentLogFilename: C:/log/java/application/DailyReport.log
+      archivedLogFilenamePattern: A:/workspace/logs/DailyReport/application-%d{yyyy-MM-dd}.log
+      currentLogFilename: A:/workspace/logs/DailyReport/application.log
       #      archivedLogFilenamePattern: C:/log/java/application-%d{yyyy-MM-dd}-%i.log
       #      maxFileSize: 1MB
       archivedFileCount: 5 #Number of day archived file to be present
@@ -29,11 +29,13 @@ server:
 
 oracleSqlConfig:
   driver: "oracle.jdbc.driver.OracleDriver"
-  url: "jdbc:oracle:thin:@Sumit11:1521:xe"
-  username: "System"
+#  url: "jdbc:oracle:thin:@Sumit11:1521:xe"
+  url: "jdbc:oracle:thin:@localhost:1521:XE"
+  username: "system"
   password: "tiger"
 
 cloudConfig:
-  folderId: "1cWMQFLwrB3xOoFQC2VD-Q6RO4hJEyqc8"
+#  folderId: "1cWMQFLwrB3xOoFQC2VD-Q6RO4hJEyqc8"
+  folderId: "11hcK4FOKeAl21QjjRs7xuP-WBF-XTri_"
   applicationName: "CloudStorageApp"
   fileDirectory: "googleKey.json"

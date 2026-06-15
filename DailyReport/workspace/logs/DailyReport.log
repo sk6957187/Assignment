@@ -1,0 +1,264 @@
+2026-06-13 01:33:10.569 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:33:10.571 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:33:10.573 [main] INFO  [ - ] - i.d.a.AssetsBundle - Registering AssetBundle with name: assets for path /assets/*
+2026-06-13 01:33:10.574 [main] INFO  [ - ] - c.p.DailyReportApplication - Registering REST resources
+2026-06-13 01:33:10.579 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get driver:oracle.jdbc.driver.OracleDriver
+2026-06-13 01:33:10.579 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get name: system
+2026-06-13 01:33:10.579 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get pass: tiger
+2026-06-13 01:33:10.579 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get url: jdbc:oracle:thin:@localhost:1521:XE
+2026-06-13 01:33:10.585 [main] INFO  [ - ] - c.p.m.CloudConfig - Application name: CloudStorageApp
+2026-06-13 01:33:10.585 [main] INFO  [ - ] - c.p.m.CloudConfig - folderId: 11hcK4FOKeAl21QjjRs7xuP-WBF-XTri_
+2026-06-13 01:33:10.585 [main] INFO  [ - ] - c.p.m.CloudConfig - File directory: googleKey.json
+2026-06-13 01:33:10.654 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:33:10.654 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:33:10.655 [main] INFO  [ - ] - i.d.s.ServerFactory - Starting DailyReportApplication
+2026-06-13 01:33:10.724 [main] INFO  [ - ] - o.e.j.s.SetUIDListener - Opened DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:33:10.726 [main] INFO  [ - ] - o.e.j.s.Server - jetty-9.4.24.v20191120; built: 2019-11-20T21:37:49.771Z; git: 363d5f2df3a8a28de40604320230664b9c793c16; jvm 21.0.10+8-LTS-217
+2026-06-13 01:33:10.733 [main] INFO  [ - ] - i.d.s.AdminEnvironment - tasks = 
+
+    POST    /tasks/log-level (io.dropwizard.servlets.tasks.LogConfigurationTask)
+    POST    /tasks/gc (io.dropwizard.servlets.tasks.GarbageCollectionTask)
+
+2026-06-13 01:33:10.734 [main] WARN  [ - ] - i.d.s.AdminEnvironment - 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !
+!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !
+!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !
+!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2026-06-13 01:33:10.743 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@748d2277{/admin,null,AVAILABLE}
+2026-06-13 01:33:11.209 [main] INFO  [ - ] - i.d.j.DropwizardResourceConfig - The following paths were found for the configured resources:
+
+    GET     / (com.project.controller.DailyReportController)
+    GET     /app-view/edit/sno/{sno} (com.project.controller.DailyReportController)
+    POST    /daily-report/add (com.project.controller.DailyReportController)
+    POST    /daily-report/delete (com.project.controller.DailyReportController)
+    POST    /daily-report/update (com.project.controller.DailyReportController)
+    GET     /daily-report/view (com.project.controller.DailyReportController)
+    GET     /favicon.ico (com.project.controller.DailyReportController)
+    GET     /view (com.project.controller.DailyReportController)
+    GET     /{default: .*} (com.project.controller.DailyReportController)
+
+2026-06-13 01:33:11.211 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@57e5396b{/,null,AVAILABLE}
+2026-06-13 01:33:11.246 [main] INFO  [ - ] - o.e.j.s.AbstractConnector - Started DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:33:11.246 [main] INFO  [ - ] - o.e.j.s.Server - Started @2581ms
+2026-06-13 01:33:22.994 [dw-40 - GET /react-build-1.0.0/453.9c5a6f31.chunk.js] INFO  [ - ] - c.p.f.ResponseFilter - Requested origin: null
+2026-06-13 01:33:25.912 [dw-41 - GET /] INFO  [ - ] - c.p.v.TableDataRepository - Loading: /Home-page
+2026-06-13 01:33:25.915 [dw-41 - GET /] INFO  [ - ] - c.p.f.ResponseFilter - Requested origin: null
+2026-06-13 01:34:32.261 [dw-37 - GET /daily-report/view] INFO  [ - ] - c.p.v.TableDataRepository - Error during sql: ORA-12505: Cannot connect to database. SID XE is not registered with the listener at host localhost port 1521. (CONNECTION_ID=5w8eLSwfQdm7rf+xWu3x8g==)
+https://docs.oracle.com/error-help/db/ora-12505/
+2026-06-13 01:34:32.261 [dw-37 - GET /daily-report/view] INFO  [ - ] - c.p.v.TableDataRepository - Connection error..
+2026-06-13 01:34:32.261 [dw-37 - GET /daily-report/view] INFO  [ - ] - c.p.f.ResponseFilter - Requested origin: null
+2026-06-13 01:34:46.149 [Thread-11] INFO  [ - ] - o.e.j.s.AbstractConnector - Stopped DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:34:46.155 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@57e5396b{/,null,UNAVAILABLE}
+2026-06-13 01:34:46.155 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@748d2277{/admin,null,UNAVAILABLE}
+2026-06-13 01:34:48.698 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:34:48.700 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:34:48.702 [main] INFO  [ - ] - i.d.a.AssetsBundle - Registering AssetBundle with name: assets for path /assets/*
+2026-06-13 01:34:48.703 [main] INFO  [ - ] - c.p.DailyReportApplication - Registering REST resources
+2026-06-13 01:34:48.705 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get driver:oracle.jdbc.driver.OracleDriver
+2026-06-13 01:34:48.705 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get name: system
+2026-06-13 01:34:48.705 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get pass: tiger
+2026-06-13 01:34:48.705 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get url: jdbc:oracle:thin:@localhost:1521:XE
+2026-06-13 01:34:48.709 [main] INFO  [ - ] - c.p.m.CloudConfig - Application name: CloudStorageApp
+2026-06-13 01:34:48.709 [main] INFO  [ - ] - c.p.m.CloudConfig - folderId: 11hcK4FOKeAl21QjjRs7xuP-WBF-XTri_
+2026-06-13 01:34:48.709 [main] INFO  [ - ] - c.p.m.CloudConfig - File directory: googleKey.json
+2026-06-13 01:34:48.776 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:34:48.776 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:34:48.776 [main] INFO  [ - ] - i.d.s.ServerFactory - Starting DailyReportApplication
+2026-06-13 01:34:48.837 [main] INFO  [ - ] - o.e.j.s.SetUIDListener - Opened DailyReportApplication@76ad6715{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:34:48.838 [main] INFO  [ - ] - o.e.j.s.Server - jetty-9.4.24.v20191120; built: 2019-11-20T21:37:49.771Z; git: 363d5f2df3a8a28de40604320230664b9c793c16; jvm 21.0.10+8-LTS-217
+2026-06-13 01:34:48.844 [main] INFO  [ - ] - i.d.s.AdminEnvironment - tasks = 
+
+    POST    /tasks/log-level (io.dropwizard.servlets.tasks.LogConfigurationTask)
+    POST    /tasks/gc (io.dropwizard.servlets.tasks.GarbageCollectionTask)
+
+2026-06-13 01:34:48.844 [main] WARN  [ - ] - i.d.s.AdminEnvironment - 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !
+!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !
+!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !
+!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2026-06-13 01:34:48.851 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@1687eb01{/admin,null,AVAILABLE}
+2026-06-13 01:34:49.266 [main] INFO  [ - ] - i.d.j.DropwizardResourceConfig - The following paths were found for the configured resources:
+
+    GET     / (com.project.controller.DailyReportController)
+    GET     /app-view/edit/sno/{sno} (com.project.controller.DailyReportController)
+    POST    /daily-report/add (com.project.controller.DailyReportController)
+    POST    /daily-report/delete (com.project.controller.DailyReportController)
+    POST    /daily-report/update (com.project.controller.DailyReportController)
+    GET     /daily-report/view (com.project.controller.DailyReportController)
+    GET     /favicon.ico (com.project.controller.DailyReportController)
+    GET     /view (com.project.controller.DailyReportController)
+    GET     /{default: .*} (com.project.controller.DailyReportController)
+
+2026-06-13 01:34:49.267 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@3cdff901{/,null,AVAILABLE}
+2026-06-13 01:34:49.302 [main] INFO  [ - ] - o.e.j.s.AbstractConnector - Started DailyReportApplication@76ad6715{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:34:49.302 [main] INFO  [ - ] - o.e.j.s.Server - Started @2328ms
+2026-06-13 01:34:56.573 [dw-40 - GET /view] INFO  [ - ] - c.p.v.TableDataRepository - Loading: /app-view
+2026-06-13 01:34:56.585 [dw-40 - GET /view] INFO  [ - ] - c.p.f.ResponseFilter - Requested origin: null
+2026-06-13 01:34:57.353 [dw-35 - GET /daily-report/view] INFO  [ - ] - c.p.v.TableDataRepository - Error during sql: ORA-12505: Cannot connect to database. SID XE is not registered with the listener at host localhost port 1521. (CONNECTION_ID=Q69pdL5ySASDn19ZHc0egA==)
+https://docs.oracle.com/error-help/db/ora-12505/
+2026-06-13 01:34:57.353 [dw-35 - GET /daily-report/view] INFO  [ - ] - c.p.v.TableDataRepository - Connection error..
+2026-06-13 01:34:57.353 [dw-35 - GET /daily-report/view] INFO  [ - ] - c.p.f.ResponseFilter - Requested origin: null
+2026-06-13 01:52:24.280 [Thread-11] INFO  [ - ] - o.e.j.s.AbstractConnector - Stopped DailyReportApplication@76ad6715{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:52:24.288 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@3cdff901{/,null,UNAVAILABLE}
+2026-06-13 01:52:24.288 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@1687eb01{/admin,null,UNAVAILABLE}
+2026-06-13 01:53:20.965 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:53:20.968 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:53:20.971 [main] INFO  [ - ] - i.d.a.AssetsBundle - Registering AssetBundle with name: assets for path /assets/*
+2026-06-13 01:53:20.973 [main] INFO  [ - ] - c.p.DailyReportApplication - Registering REST resources
+2026-06-13 01:53:20.984 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get driver:oracle.jdbc.driver.OracleDriver
+2026-06-13 01:53:20.984 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get name: system
+2026-06-13 01:53:20.984 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get pass: tiger
+2026-06-13 01:53:20.984 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get url: jdbc:oracle:thin:@localhost:1521:XE
+2026-06-13 01:53:20.991 [main] INFO  [ - ] - c.p.m.CloudConfig - Application name: CloudStorageApp
+2026-06-13 01:53:20.991 [main] INFO  [ - ] - c.p.m.CloudConfig - folderId: 11hcK4FOKeAl21QjjRs7xuP-WBF-XTri_
+2026-06-13 01:53:20.991 [main] INFO  [ - ] - c.p.m.CloudConfig - File directory: googleKey.json
+2026-06-13 01:53:21.077 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:53:21.077 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:53:21.077 [main] INFO  [ - ] - i.d.s.ServerFactory - Starting DailyReportApplication
+2026-06-13 01:53:21.189 [main] INFO  [ - ] - o.e.j.s.SetUIDListener - Opened DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:53:21.191 [main] INFO  [ - ] - o.e.j.s.Server - jetty-9.4.24.v20191120; built: 2019-11-20T21:37:49.771Z; git: 363d5f2df3a8a28de40604320230664b9c793c16; jvm 21.0.10+8-LTS-217
+2026-06-13 01:53:21.205 [main] INFO  [ - ] - i.d.s.AdminEnvironment - tasks = 
+
+    POST    /tasks/log-level (io.dropwizard.servlets.tasks.LogConfigurationTask)
+    POST    /tasks/gc (io.dropwizard.servlets.tasks.GarbageCollectionTask)
+
+2026-06-13 01:53:21.205 [main] WARN  [ - ] - i.d.s.AdminEnvironment - 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !
+!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !
+!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !
+!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2026-06-13 01:53:21.216 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@748d2277{/admin,null,AVAILABLE}
+2026-06-13 01:53:21.899 [main] INFO  [ - ] - i.d.j.DropwizardResourceConfig - The following paths were found for the configured resources:
+
+    GET     / (com.project.controller.DailyReportController)
+    GET     /app-view/edit/sno/{sno} (com.project.controller.DailyReportController)
+    POST    /daily-report/add (com.project.controller.DailyReportController)
+    POST    /daily-report/delete (com.project.controller.DailyReportController)
+    POST    /daily-report/update (com.project.controller.DailyReportController)
+    GET     /daily-report/view (com.project.controller.DailyReportController)
+    GET     /favicon.ico (com.project.controller.DailyReportController)
+    GET     /view (com.project.controller.DailyReportController)
+    GET     /{default: .*} (com.project.controller.DailyReportController)
+
+2026-06-13 01:53:21.903 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@57e5396b{/,null,AVAILABLE}
+2026-06-13 01:53:21.939 [main] INFO  [ - ] - o.e.j.s.AbstractConnector - Started DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:53:21.939 [main] INFO  [ - ] - o.e.j.s.Server - Started @3485ms
+2026-06-13 01:53:55.290 [dw-38 - GET /view] INFO  [ - ] - c.p.v.TableDataRepository - Loading: /app-view
+2026-06-13 01:53:55.303 [dw-38 - GET /view] INFO  [ - ] - c.p.f.ResponseFilter - Requested origin: null
+2026-06-13 01:53:56.600 [dw-35 - GET /daily-report/view] INFO  [ - ] - c.p.v.TableDataRepository - Error during sql: ORA-12505: Cannot connect to database. SID XE is not registered with the listener at host localhost port 1521. (CONNECTION_ID=+cfevv/iToqkyWbrdyUcyA==)
+https://docs.oracle.com/error-help/db/ora-12505/
+2026-06-13 01:53:56.600 [dw-35 - GET /daily-report/view] INFO  [ - ] - c.p.v.TableDataRepository - Connection error..
+2026-06-13 01:53:56.600 [dw-35 - GET /daily-report/view] INFO  [ - ] - c.p.f.ResponseFilter - Requested origin: null
+2026-06-13 01:57:25.102 [Thread-11] INFO  [ - ] - o.e.j.s.AbstractConnector - Stopped DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:57:25.110 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@57e5396b{/,null,UNAVAILABLE}
+2026-06-13 01:57:25.110 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@748d2277{/admin,null,UNAVAILABLE}
+2026-06-13 01:57:28.550 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:57:28.560 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:57:28.562 [main] INFO  [ - ] - i.d.a.AssetsBundle - Registering AssetBundle with name: assets for path /assets/*
+2026-06-13 01:57:28.564 [main] INFO  [ - ] - c.p.DailyReportApplication - Registering REST resources
+2026-06-13 01:57:28.574 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get driver:oracle.jdbc.driver.OracleDriver
+2026-06-13 01:57:28.574 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get name: system
+2026-06-13 01:57:28.574 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get pass: tiger
+2026-06-13 01:57:28.574 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get url: jdbc:oracle:thin:@localhost:1521:XE
+2026-06-13 01:57:28.582 [main] INFO  [ - ] - c.p.m.CloudConfig - Application name: CloudStorageApp
+2026-06-13 01:57:28.584 [main] INFO  [ - ] - c.p.m.CloudConfig - folderId: 11hcK4FOKeAl21QjjRs7xuP-WBF-XTri_
+2026-06-13 01:57:28.584 [main] INFO  [ - ] - c.p.m.CloudConfig - File directory: googleKey.json
+2026-06-13 01:57:28.677 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 01:57:28.677 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 01:57:28.677 [main] INFO  [ - ] - i.d.s.ServerFactory - Starting DailyReportApplication
+2026-06-13 01:57:28.764 [main] INFO  [ - ] - o.e.j.s.SetUIDListener - Opened DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:57:28.768 [main] INFO  [ - ] - o.e.j.s.Server - jetty-9.4.24.v20191120; built: 2019-11-20T21:37:49.771Z; git: 363d5f2df3a8a28de40604320230664b9c793c16; jvm 21.0.10+8-LTS-217
+2026-06-13 01:57:28.778 [main] INFO  [ - ] - i.d.s.AdminEnvironment - tasks = 
+
+    POST    /tasks/log-level (io.dropwizard.servlets.tasks.LogConfigurationTask)
+    POST    /tasks/gc (io.dropwizard.servlets.tasks.GarbageCollectionTask)
+
+2026-06-13 01:57:28.778 [main] WARN  [ - ] - i.d.s.AdminEnvironment - 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !
+!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !
+!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !
+!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2026-06-13 01:57:28.799 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@748d2277{/admin,null,AVAILABLE}
+2026-06-13 01:57:29.301 [main] INFO  [ - ] - i.d.j.DropwizardResourceConfig - The following paths were found for the configured resources:
+
+    GET     / (com.project.controller.DailyReportController)
+    GET     /app-view/edit/sno/{sno} (com.project.controller.DailyReportController)
+    POST    /daily-report/add (com.project.controller.DailyReportController)
+    POST    /daily-report/delete (com.project.controller.DailyReportController)
+    POST    /daily-report/update (com.project.controller.DailyReportController)
+    GET     /daily-report/view (com.project.controller.DailyReportController)
+    GET     /favicon.ico (com.project.controller.DailyReportController)
+    GET     /view (com.project.controller.DailyReportController)
+    GET     /{default: .*} (com.project.controller.DailyReportController)
+
+2026-06-13 01:57:29.303 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@57e5396b{/,null,AVAILABLE}
+2026-06-13 01:57:29.342 [main] INFO  [ - ] - o.e.j.s.AbstractConnector - Started DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:57:29.342 [main] INFO  [ - ] - o.e.j.s.Server - Started @3144ms
+2026-06-13 01:58:36.942 [Thread-11] INFO  [ - ] - o.e.j.s.AbstractConnector - Stopped DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 01:58:36.945 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@57e5396b{/,null,UNAVAILABLE}
+2026-06-13 01:58:36.945 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@748d2277{/admin,null,UNAVAILABLE}
+2026-06-13 02:47:39.323 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 02:47:39.332 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 02:47:39.332 [main] INFO  [ - ] - i.d.a.AssetsBundle - Registering AssetBundle with name: assets for path /assets/*
+2026-06-13 02:47:39.332 [main] INFO  [ - ] - c.p.DailyReportApplication - Registering REST resources
+2026-06-13 02:47:39.332 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get driver:oracle.jdbc.driver.OracleDriver
+2026-06-13 02:47:39.332 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get name: system
+2026-06-13 02:47:39.332 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get pass: tiger
+2026-06-13 02:47:39.332 [main] INFO  [ - ] - c.p.m.OracleSqlConfig - get url: jdbc:oracle:thin:@localhost:1521:XE
+2026-06-13 02:47:39.346 [main] INFO  [ - ] - c.p.m.CloudConfig - Application name: CloudStorageApp
+2026-06-13 02:47:39.346 [main] INFO  [ - ] - c.p.m.CloudConfig - folderId: 11hcK4FOKeAl21QjjRs7xuP-WBF-XTri_
+2026-06-13 02:47:39.346 [main] INFO  [ - ] - c.p.m.CloudConfig - File directory: googleKey.json
+2026-06-13 02:47:39.425 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering jersey handler with root path prefix: /
+2026-06-13 02:47:39.425 [main] INFO  [ - ] - i.d.s.SimpleServerFactory - Registering admin handler with root path prefix: /admin
+2026-06-13 02:47:39.425 [main] INFO  [ - ] - i.d.s.ServerFactory - Starting DailyReportApplication
+2026-06-13 02:47:39.525 [main] INFO  [ - ] - o.e.j.s.SetUIDListener - Opened DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 02:47:39.528 [main] INFO  [ - ] - o.e.j.s.Server - jetty-9.4.24.v20191120; built: 2019-11-20T21:37:49.771Z; git: 363d5f2df3a8a28de40604320230664b9c793c16; jvm 21.0.10+8-LTS-217
+2026-06-13 02:47:39.545 [main] INFO  [ - ] - i.d.s.AdminEnvironment - tasks = 
+
+    POST    /tasks/log-level (io.dropwizard.servlets.tasks.LogConfigurationTask)
+    POST    /tasks/gc (io.dropwizard.servlets.tasks.GarbageCollectionTask)
+
+2026-06-13 02:47:39.545 [main] WARN  [ - ] - i.d.s.AdminEnvironment - 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    THIS APPLICATION HAS NO HEALTHCHECKS. THIS MEANS YOU WILL NEVER KNOW      !
+!     IF IT DIES IN PRODUCTION, WHICH MEANS YOU WILL NEVER KNOW IF YOU'RE      !
+!    LETTING YOUR USERS DOWN. YOU SHOULD ADD A HEALTHCHECK FOR EACH OF YOUR    !
+!         APPLICATION'S DEPENDENCIES WHICH FULLY (BUT LIGHTLY) TESTS IT.       !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2026-06-13 02:47:39.562 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@748d2277{/admin,null,AVAILABLE}
+2026-06-13 02:47:40.167 [main] INFO  [ - ] - i.d.j.DropwizardResourceConfig - The following paths were found for the configured resources:
+
+    GET     / (com.project.controller.DailyReportController)
+    GET     /app-view/edit/sno/{sno} (com.project.controller.DailyReportController)
+    POST    /daily-report/add (com.project.controller.DailyReportController)
+    POST    /daily-report/delete (com.project.controller.DailyReportController)
+    POST    /daily-report/update (com.project.controller.DailyReportController)
+    GET     /daily-report/view (com.project.controller.DailyReportController)
+    GET     /favicon.ico (com.project.controller.DailyReportController)
+    GET     /view (com.project.controller.DailyReportController)
+    GET     /{default: .*} (com.project.controller.DailyReportController)
+
+2026-06-13 02:47:40.168 [main] INFO  [ - ] - o.e.j.s.h.ContextHandler - Started i.d.j.MutableServletContextHandler@57e5396b{/,null,AVAILABLE}
+2026-06-13 02:47:40.213 [main] INFO  [ - ] - o.e.j.s.AbstractConnector - Started DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 02:47:40.216 [main] INFO  [ - ] - o.e.j.s.Server - Started @3002ms
+2026-06-13 02:50:40.062 [Thread-11] INFO  [ - ] - o.e.j.s.AbstractConnector - Stopped DailyReportApplication@56637cff{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2026-06-13 02:50:40.069 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@57e5396b{/,null,UNAVAILABLE}
+2026-06-13 02:50:40.069 [Thread-11] INFO  [ - ] - o.e.j.s.h.ContextHandler - Stopped i.d.j.MutableServletContextHandler@748d2277{/admin,null,UNAVAILABLE}
