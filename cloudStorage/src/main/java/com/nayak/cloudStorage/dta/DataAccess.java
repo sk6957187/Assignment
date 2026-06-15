@@ -1,19 +1,31 @@
 package com.nayak.cloudStorage.dta;
 
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.FileContent;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
+import com.google.auth.Credentials;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.nayak.cloudStorage.model.BioData;
 import com.nayak.cloudStorage.repositry.CloudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,8 +35,8 @@ import java.util.List;
 
 @Component
 public class DataAccess {
-    private static final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-    private static final String serviceAccountKeyPath = getPathToGoogleCredentials();
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static final String SERVICE_ACCOUNT_KEY_PATH = getPathToGoogleCredentials();
     private static final String APPLICATION_NAME = "CloudStorageApp";
 
     @Autowired
@@ -32,28 +44,86 @@ public class DataAccess {
 
     private static String getPathToGoogleCredentials() {
         String currentDirectory = System.getProperty("user.dir");
-        Path filePath = Paths.get(currentDirectory, "googleKey.json");
+        Path filePath = Paths.get(currentDirectory, "google.json");
         return filePath.toString();
     }
+
+//    private Drive createDriveService() throws GeneralSecurityException, IOException {
+//        GoogleCredentials credentials = GoogleCredentials.newBuilder()
+//                .setClientId(CLIENT_ID)
+//                .setClientSecret(CLIENT_SECRET)
+//                .setRefreshToken(refreshToken)
+//                .build();
+//
+//        credentials.refreshIfExpired();
+//
+//        String newAccessToken = credentials.getAccessToken().getTokenValue();
+
+////        return new Drive.Builder(
+////                GoogleNetHttpTransport.newTrustedTransport(),
+////                JSON_FACTORY,
+////                credential)
+////                .build();
+//
+////        GoogleCredentials credentials = GoogleCredentials
+////                .create(new AccessToken(accessToken, null));
+//
+//        return new Drive.Builder(
+//                GoogleNetHttpTransport.newTrustedTransport(),
+//                JSON_FACTORY,
+//                new HttpCredentialsAdapter(credentials))
+//                .setApplicationName("My App")
+//                .build();
+//    }
+
     private Drive createDriveService() throws GeneralSecurityException, IOException {
         GoogleCredential credential = GoogleCredential
-                .fromStream(new FileInputStream(serviceAccountKeyPath))
+                .fromStream(new FileInputStream(SERVICE_ACCOUNT_KEY_PATH))
                 .createScoped(Collections.singletonList("https://www.googleapis.com/auth/drive"));
 
         return new Drive.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
-                jsonFactory,
+                JSON_FACTORY,
                 credential
         ).setApplicationName(APPLICATION_NAME)
                 .build();
     }
 
+//    private Drive createDriveService() throws Exception {
+//
+//        NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+//
+//        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
+//                JSON_FACTORY,
+//                new InputStreamReader(new FileInputStream("credentials.json"))
+//        );
+//
+//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+//                httpTransport,
+//                JSON_FACTORY,
+//                clientSecrets,
+//                Collections.singletonList("https://www.googleapis.com/auth/drive.file")
+//        )
+//                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File("tokens")))
+//                .setAccessType("offline")
+//                .build();
+//
+//        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+//
+//        Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+//
+//        return new Drive.Builder(httpTransport, JSON_FACTORY, credential)
+//                .setApplicationName(APPLICATION_NAME)
+//                .build();
+//    }
+
     public String uploadFile(File file) {
         String fileUrl = null;
         try {
-            String folderId = "1cWMQFLwrB3xOoFQC2VD-Q6RO4hJEyqc8";
+//            String folderId = "1cWMQFLwrB3xOoFQC2VD-Q6RO4hJEyqc8";
+            String folderId = "11hcK4FOKeAl21QjjRs7xuP-WBF-XTri_";
             Drive drive = createDriveService();
-
+            drive.files().get(folderId).execute();  // check folder are exits in drive or not using folderId.
             com.google.api.services.drive.model.File fileMetaData = new com.google.api.services.drive.model.File();
             fileMetaData.setName(file.getName());
             fileMetaData.setParents(Collections.singletonList(folderId));
@@ -77,7 +147,8 @@ public class DataAccess {
             }
             System.out.println(mimeType+" File uploaded URL: " + fileUrl);
         } catch (Exception e) {
-            return e.getMessage();
+            e.printStackTrace();
+            return null;
         } finally {
             file.delete();
         }

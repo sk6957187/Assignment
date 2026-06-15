@@ -5,6 +5,7 @@ googleKey.json
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+foodiesapi/metadata/
 
 ### STS ###
 .apt_generated

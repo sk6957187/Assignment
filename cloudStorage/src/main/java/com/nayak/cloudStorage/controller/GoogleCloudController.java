@@ -32,8 +32,8 @@ public class GoogleCloudController {
         }
         File temFile = File.createTempFile("temp", null);
         try {
+            logger.info("Received Image: {}", file.getOriginalFilename());
             file.transferTo(temFile);
-//            Res res = service.uploadImageToDrive(temFile);
             String imageLink = service.uploadFile(temFile);
             return imageLink;
         } finally {

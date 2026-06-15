@@ -32,3 +32,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+cloudStorage/credentials1.json
+cloudStorage/cred.json
+cloudStorage/credentials.json
+
+
+
