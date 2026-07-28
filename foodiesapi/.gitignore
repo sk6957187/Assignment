@@ -7,6 +7,8 @@ googleKey.json
 !**/src/test/**/target/
 **/metadata/**
 
+**/react-build-1.0.0/**
+
 ### STS ###
 .apt_generated
 .classpath
